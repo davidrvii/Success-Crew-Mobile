@@ -24,15 +24,17 @@ class Validators {
   static String? minLength(String? value, int min, {String? fieldName}) {
     final v = value ?? '';
     if (v.trim().isEmpty) return '${fieldName ?? "This field"} is required.';
-    if (v.length < min)
+    if (v.length < min) {
       return '${fieldName ?? "This field"} must be at least $min characters.';
+    }
     return null;
   }
 
   static String? maxLength(String? value, int max, {String? fieldName}) {
     final v = value ?? '';
-    if (v.length > max)
+    if (v.length > max) {
       return '${fieldName ?? "This field"} must be at most $max characters.';
+    }
     return null;
   }
 
