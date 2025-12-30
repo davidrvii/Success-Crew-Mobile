@@ -1,29 +1,33 @@
+import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class UserSession {
-  static const _kUserId = 'user_id';
-  static const _kRole = 'user_role';
+import '../../features/auth/domain/entities/auth_session.dart';
 
+class UserSession {
+  static const _kSessionKey = 'user_session';
   final FlutterSecureStorage _storage;
 
   UserSession(this._storage);
 
-  Future<void> setUserId(String userId) =>
-      _storage.write(key: _kUserId, value: userId);
+  Future<void> saveSession(AuthSession s) async {
+    final jsonStr = jsonEncode({
+      'user_id': s.userId,
+      'user_name': s.userName,
+      'user_email': s.userEmail,
+      'role_id': s.roleId,
+      'role_name': s.roleName,
+      'office_id': s.officeId,
+      'office_name': s.officeName,
+    });
 
-  Future<String?> getUserId() => _storage.read(key: _kUserId);
-
-  Future<void> setRole(String role) => _storage.write(key: _kRole, value: role);
-
-  Future<String?> getRole() => _storage.read(key: _kRole);
-
-  Future<bool> isLoggedIn() async {
-    final userId = await getUserId();
-    return userId != null && userId.isNotEmpty;
+    await _storage.write(key: _kSessionKey, value: jsonStr);
   }
 
-  Future<void> clear() async {
-    await _storage.delete(key: _kUserId);
-    await _storage.delete(key: _kRole);
+  Future<Map<String, dynamic>?> readSession() async {
+    final raw = await _storage.read(key: _kSessionKey);
+    if (raw == null || raw.isEmpty) return null;
+    return jsonDecode(raw) as Map<String, dynamic>;
   }
+
+  Future<void> clear() => _storage.delete(key: _kSessionKey);
 }
