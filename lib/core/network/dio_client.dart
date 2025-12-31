@@ -120,4 +120,19 @@ class DioClient {
       rethrow;
     }
   }
+
+  Future<Response<T>> patchMultipart<T>(
+    String path, {
+    required FormData formData,
+    Map<String, dynamic>? queryParameters,
+  }) {
+    return _safeCall<T>(
+      () => _dio.patch<T>(
+        path,
+        data: formData,
+        queryParameters: queryParameters,
+        options: Options(contentType: 'multipart/form-data'),
+      ),
+    );
+  }
 }
