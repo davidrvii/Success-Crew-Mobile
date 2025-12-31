@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import '../../features/profile/presentation/pages/profile_page.dart';
+//import '../../features/home/presentation/pages/home_page.dart';
 //import '../../features/visitor_tracker/presentation/pages/visit_page.dart';
 //import '../../features/attendance/presentation/pages/absence_page.dart';
 
@@ -15,7 +15,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
   late int _index;
 
   final List<Widget> _pages = const [
-    //ProfilePage(),
+    //HomePage(),
 
     //VisitorTrackerPage(),
 

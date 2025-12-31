@@ -5,8 +5,9 @@ import '../../features/auth/domain/entities/auth_session.dart';
 
 class UserSession {
   static const _kSessionKey = 'user_session';
-  final FlutterSecureStorage _storage;
+  static const _kTodayAttendanceId = 'today_attendance_id';
 
+  final FlutterSecureStorage _storage;
   UserSession(this._storage);
 
   Future<void> saveSession(AuthSession s) async {
@@ -29,5 +30,28 @@ class UserSession {
     return jsonDecode(raw) as Map<String, dynamic>;
   }
 
-  Future<void> clear() => _storage.delete(key: _kSessionKey);
+  Future<String?> readUserId() async {
+    final s = await readSession();
+    final id = s?['user_id'];
+    return id?.toString();
+  }
+
+  Future<String?> readUserName() async {
+    final s = await readSession();
+    return (s?['user_name'])?.toString();
+  }
+
+  Future<void> clear() async {
+    await _storage.delete(key: _kSessionKey);
+    await _storage.delete(key: _kTodayAttendanceId);
+  }
+
+  Future<String?> readTodayAttendanceId() =>
+      _storage.read(key: _kTodayAttendanceId);
+
+  Future<void> saveTodayAttendanceId(String id) =>
+      _storage.write(key: _kTodayAttendanceId, value: id);
+
+  Future<void> clearTodayAttendanceId() =>
+      _storage.delete(key: _kTodayAttendanceId);
 }
