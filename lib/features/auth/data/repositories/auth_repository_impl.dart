@@ -7,7 +7,7 @@ import '../../../../core/storage/token_storage.dart';
 import '../../../../core/storage/user_session.dart';
 
 import '../../domain/repositories/auth_repository.dart';
-import '../datasources/auth_api.dart';
+import '../datasources/auth_remote_datasource.dart';
 import '../models/login_request.dart';
 import '../models/register_request.dart';
 
