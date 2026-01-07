@@ -60,7 +60,7 @@ class ApiPaths {
 
   // Follow-up
   static String visitFollowUps(String visitId) => '/visit/$visitId/follow-up';
-  static String visitFollowUpUpdate(String visitId, String followUpId) =>
+  static String visitFollowUpById(String visitId, String followUpId) =>
       '/visit/$visitId/follow-up/$followUpId';
 
   // Products sold

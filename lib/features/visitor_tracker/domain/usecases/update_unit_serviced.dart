@@ -3,14 +3,15 @@ import '../../data/models/unit_serviced_request.dart';
 import '../entities/unit_serviced.dart';
 import '../repositories/visit_repository.dart';
 
-class CreateUnitServicedUseCase {
+class UpdateUnitServicedUseCase {
   final VisitRepository _repo;
-  const CreateUnitServicedUseCase(this._repo);
+  const UpdateUnitServicedUseCase(this._repo);
 
   Future<ApiResponse<UnitServiced>> call(
     String visitId,
+    String unitServicedId,
     UnitServicedRequest request,
   ) {
-    return _repo.createUnitServiced(visitId, request);
+    return _repo.updateUnitServiced(visitId, unitServicedId, request);
   }
 }
