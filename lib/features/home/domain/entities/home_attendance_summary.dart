@@ -1,35 +1,40 @@
 class HomeAttendanceSummary {
   final HomeTodayAbsence today;
-  final int hadirCount;
-  final int telatCount;
-  final int cutiCount;
-  final int lemburCount;
+  final int presentCount;
+  final int lateCount;
+  final int leaveCount;
+  final int overtimeCount;
 
   const HomeAttendanceSummary({
     required this.today,
-    required this.hadirCount,
-    required this.telatCount,
-    required this.cutiCount,
-    required this.lemburCount,
+    required this.presentCount,
+    required this.lateCount,
+    required this.leaveCount,
+    required this.overtimeCount,
   });
 }
 
-/// Status absensi hari ini:
-/// - Belum check-in => NotCheckedIn
-/// - Sudah check-in => CheckedIn
-sealed class HomeTodayAbsence {
+abstract class HomeTodayAbsence {
   const HomeTodayAbsence();
 
   bool get hasCheckedIn;
 
-  factory HomeTodayAbsence.notCheckedIn() = HomeTodayAbsenceNotCheckedIn;
+  factory HomeTodayAbsence.notCheckedIn() =>
+      const HomeTodayAbsenceNotCheckedIn();
 
   factory HomeTodayAbsence.checkedIn({
     required int attendanceId,
     required DateTime? checkInAt,
     required DateTime? checkOutAt,
     required String? status,
-  }) = HomeTodayAbsenceCheckedIn;
+  }) {
+    return HomeTodayAbsenceCheckedIn(
+      attendanceId: attendanceId,
+      checkInAt: checkInAt,
+      checkOutAt: checkOutAt,
+      status: status,
+    );
+  }
 }
 
 class HomeTodayAbsenceNotCheckedIn extends HomeTodayAbsence {

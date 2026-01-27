@@ -2,6 +2,7 @@ import '../../../../core/config/api_paths.dart';
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/dio_client.dart';
 
+// DTOs
 import '../models/home_absence_response.dart';
 import '../models/home_attendance_response.dart';
 import '../models/home_leave_response.dart';
@@ -17,6 +18,8 @@ abstract class HomeRemoteDataSource {
     String userId,
   );
 
+  Future<ApiResponse<HomeNotificationResponse>> getNotificationAdmin();
+
   Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(String userId);
 
   Future<ApiResponse<HomeAbsenceResponse>> getAbsenceDetail(
@@ -25,7 +28,11 @@ abstract class HomeRemoteDataSource {
 
   Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(String userId);
 
+  Future<ApiResponse<HomeLeaveResponse>> getLeaveAdmin();
+
   Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(String userId);
+
+  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAdmin();
 
   Future<ApiResponse<HomeVisitSummaryResponse>> getVisitSummary();
 }
@@ -37,10 +44,9 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<ApiResponse<HomeUserBasicResponse>> getUserBasic(String userId) {
-    return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.userBasic(userId)),
-      parser: (json) =>
-          HomeUserBasicResponse.fromJson(json as Map<String, dynamic>),
+    return _get(
+      path: ApiPaths.userBasic(userId),
+      parser: HomeUserBasicResponse.fromJson,
     );
   }
 
@@ -48,19 +54,25 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   Future<ApiResponse<HomeNotificationResponse>> getNotificationHistory(
     String userId,
   ) {
-    return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.notificationHistory(userId)),
-      parser: (json) =>
-          HomeNotificationResponse.fromJson(json as Map<String, dynamic>),
+    return _get(
+      path: ApiPaths.notificationHistory(userId),
+      parser: HomeNotificationResponse.fromJson,
+    );
+  }
+
+  @override
+  Future<ApiResponse<HomeNotificationResponse>> getNotificationAdmin() {
+    return _get(
+      path: '/notification/admin',
+      parser: HomeNotificationResponse.fromJson,
     );
   }
 
   @override
   Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(String userId) {
-    return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.attendanceCrew(userId)),
-      parser: (json) =>
-          HomeAttendanceResponse.fromJson(json as Map<String, dynamic>),
+    return _get(
+      path: ApiPaths.attendanceCrew(userId),
+      parser: HomeAttendanceResponse.fromJson,
     );
   }
 
@@ -68,37 +80,54 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   Future<ApiResponse<HomeAbsenceResponse>> getAbsenceDetail(
     String attendanceId,
   ) {
-    return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.attendanceDetail(attendanceId)),
-      parser: (json) =>
-          HomeAbsenceResponse.fromJson(json as Map<String, dynamic>),
+    return _get(
+      path: ApiPaths.attendanceDetail(attendanceId),
+      parser: HomeAbsenceResponse.fromJson,
     );
   }
 
   @override
   Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(String userId) {
-    return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.leaveCrew(userId)),
-      parser: (json) =>
-          HomeLeaveResponse.fromJson(json as Map<String, dynamic>),
+    return _get(
+      path: ApiPaths.leaveCrew(userId),
+      parser: HomeLeaveResponse.fromJson,
     );
+  }
+
+  @override
+  Future<ApiResponse<HomeLeaveResponse>> getLeaveAdmin() {
+    return _get(path: '/leave/admin', parser: HomeLeaveResponse.fromJson);
   }
 
   @override
   Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(String userId) {
-    return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.overtimeCrew(userId)),
-      parser: (json) =>
-          HomeOvertimeResponse.fromJson(json as Map<String, dynamic>),
+    return _get(
+      path: ApiPaths.overtimeCrew(userId),
+      parser: HomeOvertimeResponse.fromJson,
     );
   }
 
   @override
+  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAdmin() {
+    return _get(path: '/overtime/admin', parser: HomeOvertimeResponse.fromJson);
+  }
+
+  @override
   Future<ApiResponse<HomeVisitSummaryResponse>> getVisitSummary() {
+    return _get(
+      path: ApiPaths.visitAdmin,
+      parser: HomeVisitSummaryResponse.fromJson,
+    );
+  }
+
+  // PRIVATE HELPER
+  Future<ApiResponse<T>> _get<T>({
+    required String path,
+    required T Function(Map<String, dynamic> json) parser,
+  }) {
     return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.visitAdmin),
-      parser: (json) =>
-          HomeVisitSummaryResponse.fromJson(json as Map<String, dynamic>),
+      request: () => _client.get(path),
+      parser: (json) => parser(json as Map<String, dynamic>),
     );
   }
 }
