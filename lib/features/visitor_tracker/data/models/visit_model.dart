@@ -3,42 +3,38 @@ int? _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v');
 
 class VisitModel {
   final int visitId;
+  final int? visitorId;
   final int? userId;
 
-  final String? customerName;
-  final String? customerPhone;
-  final String? customerAddress;
-
-  final String? purpose;
-  final String? status;
-  final String? notes;
+  final String? visitorInterest;
+  final String? visitorStatus;
+  final String? visitType;
+  final String? visitDesc;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   const VisitModel({
     required this.visitId,
+    this.visitorId,
     this.userId,
-    this.customerName,
-    this.customerPhone,
-    this.customerAddress,
-    this.purpose,
-    this.status,
-    this.notes,
+    this.visitorInterest,
+    this.visitorStatus,
+    this.visitType,
+    this.visitDesc,
     this.createdAt,
     this.updatedAt,
   });
 
   factory VisitModel.fromJson(Map<String, dynamic> json) {
     return VisitModel(
-      visitId: _int(json['visit_id'] ?? json['id']) ?? 0,
+      visitId: _int(json['visit_id']) ?? 0,
+      visitorId: _int(json['visitor_id']),
       userId: _int(json['user_id']),
-      customerName: json['customer_name'] as String?,
-      customerPhone: json['customer_phone'] as String?,
-      customerAddress: json['customer_address'] as String?,
-      purpose: json['purpose'] as String?,
-      status: json['status'] as String?,
-      notes: json['notes'] as String?,
+      visitorInterest: json['visitor_interest'] as String?,
+      visitorStatus: json['visitor_status'] as String?,
+      visitType: json['visit_type'] as String?,
+      visitDesc: json['visit_desc'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
     );

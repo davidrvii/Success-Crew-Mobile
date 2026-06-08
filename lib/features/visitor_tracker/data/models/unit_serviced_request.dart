@@ -15,11 +15,16 @@ class UnitServicedRequest {
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
+
     if (unitName != null) data['unit_name'] = unitName;
     if (issue != null) data['issue'] = issue;
     if (action != null) data['action'] = action;
     if (status != null) data['status'] = status;
     if (notes != null) data['notes'] = notes;
+
+    if (unitName != null) data['unit_serviced_type'] = unitName;
+    if (notes != null) data['unit_serviced_category'] = notes;
+
     return data;
   }
 }

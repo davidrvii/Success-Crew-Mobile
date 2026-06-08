@@ -6,11 +6,9 @@ import '../models/notification_model.dart';
 
 abstract class NotificationRemoteDataSource {
   Future<ApiResponse<NotificationListResponse>> getNotificationHistory(
-    String userId,
+    int userId,
   );
-  Future<ApiResponse<NotificationDetailResponse>> getNotificationDetail(
-    String id,
-  );
+  Future<ApiResponse<NotificationDetailResponse>> getNotificationDetail(int id);
 
   Future<ApiResponse<NotificationListResponse>> getAllNotificationsAdmin();
 
@@ -19,11 +17,11 @@ abstract class NotificationRemoteDataSource {
   );
 
   Future<ApiResponse<UpdateNotificationResponse>> updateNotification(
-    String id,
+    int id,
     UpdateNotificationRequest request,
   );
 
-  Future<ApiResponse<DeleteNotificationResponse>> deleteNotification(String id);
+  Future<ApiResponse<DeleteNotificationResponse>> deleteNotification(int id);
 }
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
@@ -32,7 +30,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<ApiResponse<NotificationListResponse>> getNotificationHistory(
-    String userId,
+    int userId,
   ) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.notificationHistory(userId)),
@@ -43,7 +41,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<ApiResponse<NotificationDetailResponse>> getNotificationDetail(
-    String id,
+    int id,
   ) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.notificationDetail(id)),
@@ -75,7 +73,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
 
   @override
   Future<ApiResponse<UpdateNotificationResponse>> updateNotification(
-    String id,
+    int id,
     UpdateNotificationRequest request,
   ) {
     return ApiResponse.guard(
@@ -89,9 +87,7 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<DeleteNotificationResponse>> deleteNotification(
-    String id,
-  ) {
+  Future<ApiResponse<DeleteNotificationResponse>> deleteNotification(int id) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.notificationDelete(id)),
       parser: (json) =>

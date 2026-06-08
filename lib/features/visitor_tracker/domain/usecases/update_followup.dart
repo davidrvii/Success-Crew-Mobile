@@ -8,8 +8,8 @@ class UpdateFollowUpUseCase {
   const UpdateFollowUpUseCase(this._repo);
 
   Future<ApiResponse<FollowUp>> call(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
     FollowUpRequest request,
   ) {
     return _repo.updateFollowUp(visitId, followUpId, request);

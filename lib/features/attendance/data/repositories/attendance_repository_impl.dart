@@ -38,7 +38,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
-  Future<ApiResponse<Attendance>> getAttendanceDetail(String id) async {
+  Future<ApiResponse<Attendance>> getAttendanceDetail(int id) async {
     final res = await _remote.getAttendanceDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -70,14 +70,14 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       );
     }
 
-    await _session.saveTodayAttendanceId(dto.id.toString());
+    await _session.saveTodayAttendanceId(dto.id);
 
     return ApiResponse.success(_mapDtoToEntity(dto));
   }
 
   @override
   Future<ApiResponse<Attendance>> checkOut(
-    String attendanceId,
+    int attendanceId,
     CheckOutRequest request,
   ) async {
     final res = await _remote.checkOut(attendanceId, request);
@@ -97,9 +97,9 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
 
   // ========= helpers =========
 
-  Future<String?> _requireUserId() async {
+  Future<int?> _requireUserId() async {
     final session = await _session.readSession();
-    final userId = session?['user_id']?.toString();
+    final userId = session?['user_id'];
     if (userId == null || userId.isEmpty) return null;
     return userId;
   }

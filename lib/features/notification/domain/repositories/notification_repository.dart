@@ -3,5 +3,5 @@ import '../entities/notification.dart';
 
 abstract class NotificationRepository {
   Future<ApiResponse<List<AppNotification>>> getNotifications();
-  Future<ApiResponse<AppNotification>> getNotificationDetail(String id);
+  Future<ApiResponse<AppNotification>> getNotificationDetail(int id);
 }

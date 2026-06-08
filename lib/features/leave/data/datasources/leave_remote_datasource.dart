@@ -6,16 +6,16 @@ import '../models/leave_model.dart';
 import '../models/leave_request.dart';
 
 abstract class LeaveRemoteDataSource {
-  Future<ApiResponse<LeaveListResponse>> getLeaveList(String userId);
-  Future<ApiResponse<LeaveDetailResponse>> getLeaveDetail(String id);
+  Future<ApiResponse<LeaveListResponse>> getLeaveList(int userId);
+  Future<ApiResponse<LeaveDetailResponse>> getLeaveDetail(int id);
 
   Future<ApiResponse<CreateLeaveResponse>> createLeave(LeaveRequest request);
   Future<ApiResponse<UpdateLeaveResponse>> updateLeave(
-    String id,
+    int id,
     LeaveRequest request,
   );
 
-  Future<ApiResponse<DeleteLeaveResponse>> deleteLeave(String id);
+  Future<ApiResponse<DeleteLeaveResponse>> deleteLeave(int id);
 
   Future<ApiResponse<LeaveListResponse>> getAllLeaveAdmin();
 }
@@ -25,7 +25,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   LeaveRemoteDataSourceImpl(this._client);
 
   @override
-  Future<ApiResponse<LeaveListResponse>> getLeaveList(String userId) {
+  Future<ApiResponse<LeaveListResponse>> getLeaveList(int userId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.leaveCrew(userId)),
       parser: (json) =>
@@ -34,7 +34,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<LeaveDetailResponse>> getLeaveDetail(String id) {
+  Future<ApiResponse<LeaveDetailResponse>> getLeaveDetail(int id) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.leaveDetail(id)),
       parser: (json) =>
@@ -53,7 +53,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
 
   @override
   Future<ApiResponse<UpdateLeaveResponse>> updateLeave(
-    String id,
+    int id,
     LeaveRequest request,
   ) {
     return ApiResponse.guard(
@@ -65,7 +65,7 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<DeleteLeaveResponse>> deleteLeave(String id) {
+  Future<ApiResponse<DeleteLeaveResponse>> deleteLeave(int id) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.leaveDelete(id)),
       parser: (json) =>

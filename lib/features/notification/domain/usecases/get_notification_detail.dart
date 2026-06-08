@@ -6,7 +6,7 @@ class GetNotificationDetailUseCase {
   final NotificationRepository _repo;
   const GetNotificationDetailUseCase(this._repo);
 
-  Future<ApiResponse<AppNotification>> call(String id) {
+  Future<ApiResponse<AppNotification>> call(int id) {
     return _repo.getNotificationDetail(id);
   }
 }

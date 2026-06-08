@@ -12,25 +12,23 @@ import '../models/home_user_basic_response.dart';
 import '../models/home_visit_summary_response.dart';
 
 abstract class HomeRemoteDataSource {
-  Future<ApiResponse<HomeUserBasicResponse>> getUserBasic(String userId);
+  Future<ApiResponse<HomeUserBasicResponse>> getUserBasic(int userId);
 
   Future<ApiResponse<HomeNotificationResponse>> getNotificationHistory(
-    String userId,
+    int userId,
   );
 
   Future<ApiResponse<HomeNotificationResponse>> getNotificationAdmin();
 
-  Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(String userId);
+  Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(int userId);
 
-  Future<ApiResponse<HomeAbsenceResponse>> getAbsenceDetail(
-    String attendanceId,
-  );
+  Future<ApiResponse<HomeAbsenceResponse>> getAbsenceDetail(int attendanceId);
 
-  Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(String userId);
+  Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(int userId);
 
   Future<ApiResponse<HomeLeaveResponse>> getLeaveAdmin();
 
-  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(String userId);
+  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(int userId);
 
   Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAdmin();
 
@@ -43,7 +41,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   HomeRemoteDataSourceImpl(this._client);
 
   @override
-  Future<ApiResponse<HomeUserBasicResponse>> getUserBasic(String userId) {
+  Future<ApiResponse<HomeUserBasicResponse>> getUserBasic(int userId) {
     return _get(
       path: ApiPaths.userBasic(userId),
       parser: HomeUserBasicResponse.fromJson,
@@ -52,7 +50,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
 
   @override
   Future<ApiResponse<HomeNotificationResponse>> getNotificationHistory(
-    String userId,
+    int userId,
   ) {
     return _get(
       path: ApiPaths.notificationHistory(userId),
@@ -69,7 +67,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(String userId) {
+  Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(int userId) {
     return _get(
       path: ApiPaths.attendanceCrew(userId),
       parser: HomeAttendanceResponse.fromJson,
@@ -77,9 +75,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeAbsenceResponse>> getAbsenceDetail(
-    String attendanceId,
-  ) {
+  Future<ApiResponse<HomeAbsenceResponse>> getAbsenceDetail(int attendanceId) {
     return _get(
       path: ApiPaths.attendanceDetail(attendanceId),
       parser: HomeAbsenceResponse.fromJson,
@@ -87,7 +83,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(String userId) {
+  Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(int userId) {
     return _get(
       path: ApiPaths.leaveCrew(userId),
       parser: HomeLeaveResponse.fromJson,
@@ -100,7 +96,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(String userId) {
+  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(int userId) {
     return _get(
       path: ApiPaths.overtimeCrew(userId),
       parser: HomeOvertimeResponse.fromJson,

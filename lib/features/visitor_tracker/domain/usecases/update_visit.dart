@@ -7,7 +7,7 @@ class UpdateVisitUseCase {
   final VisitRepository _repo;
   const UpdateVisitUseCase(this._repo);
 
-  Future<ApiResponse<Visit>> call(String visitId, VisitRequest request) {
+  Future<ApiResponse<Visit>> call(int visitId, VisitRequest request) {
     return _repo.updateVisit(visitId, request);
   }
 }

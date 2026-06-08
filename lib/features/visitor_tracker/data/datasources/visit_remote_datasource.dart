@@ -17,62 +17,60 @@ import '../models/unit_serviced_response.dart';
 abstract class VisitRemoteDataSource {
   // VISIT
   Future<ApiResponse<VisitListResponse>> getAdminVisits();
-  Future<ApiResponse<VisitDetailResponse>> getVisitDetail(String visitId);
+  Future<ApiResponse<VisitDetailResponse>> getVisitDetail(int visitId);
   Future<ApiResponse<VisitMutationResponse>> createVisit(VisitRequest request);
   Future<ApiResponse<VisitMutationResponse>> updateVisit(
-    String visitId,
+    int visitId,
     VisitRequest request,
   );
-  Future<ApiResponse<VisitDeleteResponse>> deleteVisit(String visitId);
+  Future<ApiResponse<VisitDeleteResponse>> deleteVisit(int visitId);
 
   // FOLLOW-UP
-  Future<ApiResponse<FollowUpListResponse>> getFollowUps(String visitId);
+  Future<ApiResponse<FollowUpListResponse>> getFollowUps(int visitId);
   Future<ApiResponse<FollowUpMutationResponse>> createFollowUp(
-    String visitId,
+    int visitId,
     FollowUpRequest request,
   );
   Future<ApiResponse<FollowUpMutationResponse>> updateFollowUp(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
     FollowUpRequest request,
   );
   Future<ApiResponse<FollowUpDeleteResponse>> deleteFollowUp(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
   );
 
   // PRODUCTS SOLD
-  Future<ApiResponse<ProductSoldListResponse>> getProductsSold(String visitId);
+  Future<ApiResponse<ProductSoldListResponse>> getProductsSold(int visitId);
   Future<ApiResponse<ProductSoldMutationResponse>> createProductSold(
-    String visitId,
+    int visitId,
     ProductSoldRequest request,
   );
   Future<ApiResponse<ProductSoldMutationResponse>> updateProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
     ProductSoldRequest request,
   );
   Future<ApiResponse<ProductSoldDeleteResponse>> deleteProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
   );
 
   // UNITS SERVICED
-  Future<ApiResponse<UnitServicedListResponse>> getUnitsServiced(
-    String visitId,
-  );
+  Future<ApiResponse<UnitServicedListResponse>> getUnitsServiced(int visitId);
   Future<ApiResponse<UnitServicedMutationResponse>> createUnitServiced(
-    String visitId,
+    int visitId,
     UnitServicedRequest request,
   );
   Future<ApiResponse<UnitServicedMutationResponse>> updateUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
     UnitServicedRequest request,
   );
   Future<ApiResponse<UnitServicedDeleteResponse>> deleteUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
   );
 }
 
@@ -91,7 +89,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<VisitDetailResponse>> getVisitDetail(String visitId) {
+  Future<ApiResponse<VisitDetailResponse>> getVisitDetail(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitDetail(visitId)),
       parser: (json) =>
@@ -110,7 +108,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<VisitMutationResponse>> updateVisit(
-    String visitId,
+    int visitId,
     VisitRequest request,
   ) {
     return ApiResponse.guard(
@@ -122,7 +120,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<VisitDeleteResponse>> deleteVisit(String visitId) {
+  Future<ApiResponse<VisitDeleteResponse>> deleteVisit(int visitId) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.visitDelete(visitId)),
       parser: (json) =>
@@ -132,7 +130,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   // FOLLOW-UP
   @override
-  Future<ApiResponse<FollowUpListResponse>> getFollowUps(String visitId) {
+  Future<ApiResponse<FollowUpListResponse>> getFollowUps(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitFollowUps(visitId)),
       parser: (json) =>
@@ -142,7 +140,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<FollowUpMutationResponse>> createFollowUp(
-    String visitId,
+    int visitId,
     FollowUpRequest request,
   ) {
     return ApiResponse.guard(
@@ -157,8 +155,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<FollowUpMutationResponse>> updateFollowUp(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
     FollowUpRequest request,
   ) {
     return ApiResponse.guard(
@@ -173,8 +171,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<FollowUpDeleteResponse>> deleteFollowUp(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
   ) {
     return ApiResponse.guard(
       request: () =>
@@ -186,7 +184,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   // PRODUCTS SOLD
   @override
-  Future<ApiResponse<ProductSoldListResponse>> getProductsSold(String visitId) {
+  Future<ApiResponse<ProductSoldListResponse>> getProductsSold(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitProductsSold(visitId)),
       parser: (json) =>
@@ -196,7 +194,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<ProductSoldMutationResponse>> createProductSold(
-    String visitId,
+    int visitId,
     ProductSoldRequest request,
   ) {
     return ApiResponse.guard(
@@ -211,8 +209,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<ProductSoldMutationResponse>> updateProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
     ProductSoldRequest request,
   ) {
     return ApiResponse.guard(
@@ -227,8 +225,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<ProductSoldDeleteResponse>> deleteProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
   ) {
     return ApiResponse.guard(
       request: () =>
@@ -240,9 +238,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   // UNITS SERVICED
   @override
-  Future<ApiResponse<UnitServicedListResponse>> getUnitsServiced(
-    String visitId,
-  ) {
+  Future<ApiResponse<UnitServicedListResponse>> getUnitsServiced(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitUnitsServiced(visitId)),
       parser: (json) =>
@@ -252,7 +248,7 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<UnitServicedMutationResponse>> createUnitServiced(
-    String visitId,
+    int visitId,
     UnitServicedRequest request,
   ) {
     return ApiResponse.guard(
@@ -267,8 +263,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<UnitServicedMutationResponse>> updateUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
     UnitServicedRequest request,
   ) {
     return ApiResponse.guard(
@@ -283,8 +279,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   @override
   Future<ApiResponse<UnitServicedDeleteResponse>> deleteUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
   ) {
     return ApiResponse.guard(
       request: () => _client.delete(

@@ -7,27 +7,19 @@ import '../models/checkin_request.dart';
 import '../models/checkout_request.dart';
 
 abstract class AttendanceRemoteDataSource {
-  /// GET /attendance/crew/:userId
-  Future<ApiResponse<AttendanceListResponse>> getAttendanceHistory(
-    String userId,
-  );
+  Future<ApiResponse<AttendanceListResponse>> getAttendanceHistory(int userId);
 
-  /// GET /attendance/detail/:id
-  Future<ApiResponse<AttendanceDetailResponse>> getAttendanceDetail(String id);
+  Future<ApiResponse<AttendanceDetailResponse>> getAttendanceDetail(int id);
 
-  /// POST /attendance/check-in
   Future<ApiResponse<CheckInResponse>> checkIn(CheckInRequest request);
 
-  /// PATCH /attendance/check-out/:id
   Future<ApiResponse<CheckOutResponse>> checkOut(
-    String attendanceId,
+    int attendanceId,
     CheckOutRequest request,
   );
 
-  /// DELETE /attendance/delete/:id
-  Future<ApiResponse<DeleteAttendanceResponse>> deleteAttendance(String id);
+  Future<ApiResponse<DeleteAttendanceResponse>> deleteAttendance(int id);
 
-  /// GET /attendance/admin (optional, for admin dashboard)
   Future<ApiResponse<AttendanceListResponse>> getAllAttendanceAdmin();
 }
 
@@ -36,9 +28,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   AttendanceRemoteDataSourceImpl(this._client);
 
   @override
-  Future<ApiResponse<AttendanceListResponse>> getAttendanceHistory(
-    String userId,
-  ) {
+  Future<ApiResponse<AttendanceListResponse>> getAttendanceHistory(int userId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.attendanceCrew(userId)),
       parser: (json) =>
@@ -47,7 +37,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<AttendanceDetailResponse>> getAttendanceDetail(String id) {
+  Future<ApiResponse<AttendanceDetailResponse>> getAttendanceDetail(int id) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.attendanceDetail(id)),
       parser: (json) =>
@@ -66,7 +56,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
 
   @override
   Future<ApiResponse<CheckOutResponse>> checkOut(
-    String attendanceId,
+    int attendanceId,
     CheckOutRequest request,
   ) {
     return ApiResponse.guard(
@@ -79,7 +69,7 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<DeleteAttendanceResponse>> deleteAttendance(String id) {
+  Future<ApiResponse<DeleteAttendanceResponse>> deleteAttendance(int id) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.attendanceDelete(id)),
       parser: (json) =>

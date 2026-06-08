@@ -6,5 +6,5 @@ class GetOvertimeDetailUseCase {
   final OvertimeRepository _repo;
   const GetOvertimeDetailUseCase(this._repo);
 
-  Future<ApiResponse<Overtime>> call(String id) => _repo.getOvertimeDetail(id);
+  Future<ApiResponse<Overtime>> call(int id) => _repo.getOvertimeDetail(id);
 }

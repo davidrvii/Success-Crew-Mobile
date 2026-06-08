@@ -7,6 +7,6 @@ class UpdateOvertimeUseCase {
   final OvertimeRepository _repo;
   const UpdateOvertimeUseCase(this._repo);
 
-  Future<ApiResponse<Overtime>> call(String id, OvertimeRequest request) =>
+  Future<ApiResponse<Overtime>> call(int id, OvertimeRequest request) =>
       _repo.updateOvertime(id, request);
 }

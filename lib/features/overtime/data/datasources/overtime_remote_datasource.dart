@@ -6,17 +6,17 @@ import '../models/overtime_model.dart';
 import '../models/overtime_request.dart';
 
 abstract class OvertimeRemoteDataSource {
-  Future<ApiResponse<OvertimeListResponse>> getOvertimeList(String userId);
-  Future<ApiResponse<OvertimeDetailResponse>> getOvertimeDetail(String id);
+  Future<ApiResponse<OvertimeListResponse>> getOvertimeList(int userId);
+  Future<ApiResponse<OvertimeDetailResponse>> getOvertimeDetail(int id);
 
   Future<ApiResponse<CreateOvertimeResponse>> createOvertime(
     OvertimeRequest request,
   );
   Future<ApiResponse<UpdateOvertimeResponse>> updateOvertime(
-    String id,
+    int id,
     OvertimeRequest request,
   );
-  Future<ApiResponse<DeleteOvertimeResponse>> deleteOvertime(String id);
+  Future<ApiResponse<DeleteOvertimeResponse>> deleteOvertime(int id);
 
   Future<ApiResponse<OvertimeListResponse>> getAllOvertimeAdmin();
 }
@@ -26,7 +26,7 @@ class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
   OvertimeRemoteDataSourceImpl(this._client);
 
   @override
-  Future<ApiResponse<OvertimeListResponse>> getOvertimeList(String userId) {
+  Future<ApiResponse<OvertimeListResponse>> getOvertimeList(int userId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.overtimeCrew(userId)),
       parser: (json) =>
@@ -35,7 +35,7 @@ class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<OvertimeDetailResponse>> getOvertimeDetail(String id) {
+  Future<ApiResponse<OvertimeDetailResponse>> getOvertimeDetail(int id) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.overtimeDetail(id)),
       parser: (json) =>
@@ -56,7 +56,7 @@ class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
 
   @override
   Future<ApiResponse<UpdateOvertimeResponse>> updateOvertime(
-    String id,
+    int id,
     OvertimeRequest request,
   ) {
     return ApiResponse.guard(
@@ -68,7 +68,7 @@ class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<DeleteOvertimeResponse>> deleteOvertime(String id) {
+  Future<ApiResponse<DeleteOvertimeResponse>> deleteOvertime(int id) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.overtimeDelete(id)),
       parser: (json) =>

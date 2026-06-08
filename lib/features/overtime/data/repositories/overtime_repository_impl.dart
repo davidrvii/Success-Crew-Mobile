@@ -17,15 +17,12 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
 
   @override
   Future<ApiResponse<List<Overtime>>> getOvertimeList() async {
-    final userId = await _requireUserId();
-    if (userId == null) {
-      return ApiResponse.failure(
-        NetworkException(
-          type: NetworkErrorType.unauthorized,
-          message: 'Session not found. Please login again.',
-        ),
-      );
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) {
+      return ApiResponse.failure(userIdRes.error!);
     }
+
+    final int userId = userIdRes.data!;
 
     final res = await _remote.getOvertimeList(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -35,7 +32,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
-  Future<ApiResponse<Overtime>> getOvertimeDetail(String id) async {
+  Future<ApiResponse<Overtime>> getOvertimeDetail(int id) async {
     final res = await _remote.getOvertimeDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -74,7 +71,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
 
   @override
   Future<ApiResponse<Overtime>> updateOvertime(
-    String id,
+    int id,
     OvertimeRequest request,
   ) async {
     final ensured = await _ensureUserIdInRequest(request);
@@ -96,7 +93,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
-  Future<ApiResponse<int>> deleteOvertime(String id) async {
+  Future<ApiResponse<int>> deleteOvertime(int id) async {
     final res = await _remote.deleteOvertime(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -115,19 +112,28 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
 
   // ========= helpers =========
 
-  Future<String?> _requireUserId() async {
-    final session = await _session.readSession();
-    final userId = session?['user_id']?.toString();
-    if (userId == null || userId.isEmpty) return null;
-    return userId;
+  Future<ApiResponse<int>> _requireUserId() async {
+    final int? userId = await _session.readUserId();
+    if (userId == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unauthorized,
+          message: 'Session not found. Please login again.',
+        ),
+      );
+    }
+    return ApiResponse.success(userId);
   }
 
   Future<OvertimeRequest> _ensureUserIdInRequest(OvertimeRequest req) async {
     if (req.userId != null) return req;
 
-    final userIdStr = await _requireUserId();
-    final userId = int.tryParse(userIdStr ?? '');
-    if (userId == null) return req;
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) {
+      return req;
+    }
+
+    final int userId = userIdRes.data!;
 
     return OvertimeRequest(
       userId: userId,

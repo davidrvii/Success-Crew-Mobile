@@ -34,6 +34,7 @@ class HomeRepositoryImpl implements HomeRepository {
     if (!userBasicRes.isSuccess) {
       return ApiResponse.failure(userBasicRes.error!);
     }
+
     final userBasic = userBasicRes.data!;
     final isOwner = _isOwnerRole(userBasic.roleName);
 
@@ -97,9 +98,9 @@ class HomeRepositoryImpl implements HomeRepository {
   // SESSION HELPERS
   // =========================
 
-  Future<ApiResponse<String>> _requireUserId() async {
-    final userId = await _session.readUserId();
-    if (userId == null || userId.trim().isEmpty) {
+  Future<ApiResponse<int>> _requireUserId() async {
+    final int? userId = await _session.readUserId();
+    if (userId == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unauthorized,
@@ -118,15 +119,15 @@ class HomeRepositoryImpl implements HomeRepository {
   // =========================
 
   Future<ApiResponse<HomeTodayAbsence>> _resolveTodayAbsence(
-    String? attendanceId,
+    int? attendanceId,
   ) async {
     final now = DateTime.now();
 
-    if (attendanceId == null || attendanceId.trim().isEmpty) {
+    if (attendanceId == null) {
       return ApiResponse.success(HomeTodayAbsence.notCheckedIn());
     }
 
-    final detailRes = await _remote.getAbsenceDetail(attendanceId.trim());
+    final detailRes = await _remote.getAbsenceDetail(attendanceId);
 
     if (!detailRes.isSuccess) {
       final err = detailRes.error!;

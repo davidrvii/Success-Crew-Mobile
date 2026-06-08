@@ -5,7 +5,7 @@ class DeleteUnitServicedUseCase {
   final VisitRepository _repo;
   const DeleteUnitServicedUseCase(this._repo);
 
-  Future<ApiResponse<int>> call(String visitId, String unitServicedId) {
+  Future<ApiResponse<int>> call(int visitId, int unitServicedId) {
     return _repo.deleteUnitServiced(visitId, unitServicedId);
   }
 }

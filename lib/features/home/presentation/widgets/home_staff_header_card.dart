@@ -6,6 +6,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
   final int unreadCount;
   final VoidCallback? onTapNotifications;
   final VoidCallback? onTapCheckIn;
+  final VoidCallback? onTapProfile;
 
   const HomeStaffHeaderCard({
     super.key,
@@ -14,14 +15,15 @@ class HomeStaffHeaderCard extends StatelessWidget {
     required this.unreadCount,
     this.onTapNotifications,
     this.onTapCheckIn,
+    this.onTapProfile,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: const Color(0xFF135CAE), // Match exact blue from design
         borderRadius: BorderRadius.circular(22),
         boxShadow: const [
           BoxShadow(
@@ -35,101 +37,117 @@ class HomeStaffHeaderCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              const CircleAvatar(
-                radius: 18,
-                backgroundColor: Color(0xFFE5E7EB),
-                child: Icon(
-                  Icons.person_outline_rounded,
-                  color: Color(0xFF6B7280),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      role,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFFE2E8F0),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(width: 10),
-              Expanded(
-                child: _Identity(name: name, role: role),
-              ),
-              const SizedBox(width: 10),
-              _BellButton(
+              _IconChip(
+                icon: Icons.notifications_none_rounded,
                 badge: unreadCount > 0 ? unreadCount : null,
                 onTap: onTapNotifications,
               ),
+              const SizedBox(width: 8),
+              _IconChip(
+                icon: Icons.person_outline_rounded,
+                onTap: onTapProfile,
+              ),
             ],
           ),
-          const SizedBox(height: 10),
-          _CheckInButton(onTap: onTapCheckIn),
+          const SizedBox(height: 16),
+          // Check In Button
+          Material(
+            color: const Color(0xFF22C55E), // Green
+            borderRadius: BorderRadius.circular(999),
+            child: InkWell(
+              onTap: onTapCheckIn,
+              borderRadius: BorderRadius.circular(999),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Check In',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.fingerprint,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class _Identity extends StatelessWidget {
-  final String name;
-  final String role;
-
-  const _Identity({required this.name, required this.role});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-            color: Color(0xFF0F172A),
-          ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          role,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF6B7280),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _BellButton extends StatelessWidget {
+class _IconChip extends StatelessWidget {
+  final IconData icon;
   final int? badge;
   final VoidCallback? onTap;
 
-  const _BellButton({this.badge, this.onTap});
+  const _IconChip({required this.icon, this.badge, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    const blue = Color(0xFF1C5AA6);
-
     return Material(
-      color: blue,
-      borderRadius: BorderRadius.circular(14),
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(12),
         child: SizedBox(
           width: 40,
           height: 40,
           child: Stack(
+            clipBehavior: Clip.none,
             children: [
-              const Center(
-                child: Icon(
-                  Icons.notifications_none_rounded,
-                  color: Colors.white,
-                ),
-              ),
+              Center(child: Icon(icon, color: const Color(0xFF0F172A), size: 22)),
               if (badge != null)
                 Positioned(
-                  right: 6,
-                  top: 6,
+                  right: -4,
+                  top: -4,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 6,
@@ -144,50 +162,11 @@ class _BellButton extends StatelessWidget {
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ),
                 ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CheckInButton extends StatelessWidget {
-  final VoidCallback? onTap;
-
-  const _CheckInButton({this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    const green = Color(0xFF22C55E);
-
-    return Material(
-      color: green,
-      borderRadius: BorderRadius.circular(16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Container(
-          height: 44,
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Row(
-            children: const [
-              Expanded(
-                child: Text(
-                  'Check In',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              Icon(Icons.fingerprint_rounded, color: Colors.white),
             ],
           ),
         ),

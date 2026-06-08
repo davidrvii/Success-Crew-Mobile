@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../features/home/presentation/widgets/app_error_view.dart';
-import '../../../../features/home/presentation/widgets/app_loading_view.dart';
+import '../../../../core/widgets/home_shimmer_view.dart';
 
 import '../controllers/home_controller.dart';
 import '../widgets/home_owner_header_card.dart';
@@ -16,6 +17,8 @@ class HomePage extends StatefulWidget {
   final VoidCallback? onTapProfile;
 
   final VoidCallback? onTapCheckIn;
+  final VoidCallback? onTapLeave;
+  final VoidCallback? onTapOvertime;
 
   const HomePage({
     super.key,
@@ -24,6 +27,8 @@ class HomePage extends StatefulWidget {
     this.onTapNotifications,
     this.onTapProfile,
     this.onTapCheckIn,
+    this.onTapLeave,
+    this.onTapOvertime,
   });
 
   @override
@@ -55,34 +60,111 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  Widget _buildHeaderCard({
-    required String name,
-    required String role,
-    required int unreadCount,
-    VoidCallback? onTapNotifications,
-    VoidCallback? onTapProfile,
-    VoidCallback? onTapCheckIn,
-  }) {
-    final roleLower = role.trim().toLowerCase();
-    final isOwner = roleLower == 'owner';
-
+  Widget _buildHeaderCard(bool isOwner) {
     if (isOwner) {
       return HomeOwnerHeaderCard(
-        name: name,
-        role: role,
-        unreadCount: unreadCount,
-        onTapNotifications: onTapNotifications,
-        onTapProfile: onTapProfile,
+        name: c.userName,
+        role: c.roleName,
+        unreadCount: c.unreadNotif,
+        onTapNotifications: widget.onTapNotifications,
+        onTapProfile: widget.onTapProfile,
       );
     }
 
     return HomeStaffHeaderCard(
-      name: name,
-      role: role,
-      unreadCount: unreadCount,
-      onTapNotifications: onTapNotifications,
-      onTapCheckIn: onTapCheckIn,
+      name: c.userName,
+      role: c.roleName,
+      unreadCount: c.unreadNotif,
+      onTapNotifications: widget.onTapNotifications,
+      onTapCheckIn: widget.onTapCheckIn ?? () => context.go('/absence'),
+      onTapProfile: widget.onTapProfile,
     );
+  }
+
+  List<Widget> _buildOwnerContent() {
+    return [
+      const _SectionTitle('Ringkasan Bisnis'),
+      const SizedBox(height: 12),
+      _OwnerSummaryGrid(
+        income: 24, // Dummy
+        visitors: 16,
+        inService: 12,
+        trip: 8,
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Kehadiran Karyawan'),
+      const SizedBox(height: 12),
+      _OwnerAttendanceCard(
+        present: c.present,
+        late: c.late,
+        leave: c.leave,
+        overtime: c.overtime,
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Pengajuan'),
+      const SizedBox(height: 12),
+      Row(
+        children: [
+          Expanded(
+            child: _RequestPill(
+              title: 'Cuti',
+              count: c.pendingLeave,
+              background: const Color(0xFFEF4444), // Red
+              onTap: widget.onTapLeave,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: _RequestPill(
+              title: 'Lembur',
+              count: c.pendingOvertime,
+              background: const Color(0xFF22C55E), // Green
+              onTap: widget.onTapOvertime,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Pemasukkan'),
+      const SizedBox(height: 12),
+      const _MockChartCard(),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Rata-rata Penyelesaian'),
+      const SizedBox(height: 12),
+      const _MockChartCard(),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Jam Datang'),
+      const SizedBox(height: 12),
+      const _MockChartCard(),
+    ];
+  }
+
+  List<Widget> _buildStaffContent() {
+    return [
+      const _SectionTitle('Ringkasan Kinerja'),
+      const SizedBox(height: 12),
+      _BusinessSummaryGrid(
+        visitors: c.visitorsToday,
+        approachingDeadline: 16, // Dummy for now
+        passedDeadline: 12, // Dummy for now
+        complaints: 8, // Dummy for now
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Service Melewati Batas'),
+      const SizedBox(height: 12),
+      const _ServiceList(isOverdue: true),
+
+      const SizedBox(height: 24),
+      const _SectionTitle('Service Mendekati Batas'),
+      const SizedBox(height: 12),
+      const _ServiceList(isOverdue: false),
+    ];
   }
 
   @override
@@ -105,12 +187,14 @@ class _HomePageState extends State<HomePage> {
     if (c.isInitialLoading) {
       return const Scaffold(
         backgroundColor: bg,
-        body: SafeArea(child: AppLoadingView(message: 'Loading home data...')),
+        body: SafeArea(child: HomeShimmerView()),
       );
     }
 
+    final isOwner = c.roleName.trim().toLowerCase() == 'owner';
+
     return Scaffold(
-      backgroundColor: bg,
+      backgroundColor: const Color(0xFFF8F9FE), // Light background
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: c.refresh,
@@ -119,74 +203,23 @@ class _HomePageState extends State<HomePage> {
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const _TopBrand(),
-                      const SizedBox(height: 14),
+                      const SizedBox(height: 16),
 
-                      _buildHeaderCard(
-                        name: c.userName,
-                        role: c.roleName,
-                        unreadCount: c.unreadNotif,
-                        onTapNotifications: widget.onTapNotifications,
-                        onTapProfile: widget.onTapProfile,
-                        onTapCheckIn:
-                            widget.onTapCheckIn ??
-                            () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text(
-                                    'TODO: Arahkan ke Absence/Check-in',
-                                  ),
-                                ),
-                              );
-                            },
-                      ),
-                      const SizedBox(height: 18),
+                      _buildHeaderCard(isOwner),
+                      const SizedBox(height: 24),
 
-                      const _SectionTitle('Ringkasan Bisnis'),
-                      const SizedBox(height: 12),
-                      _BusinessSummaryGrid(
-                        visitorsToday: c.visitorsToday,
-                        walkIn: null,
-                        callIn: null,
-                        chatIn: null,
-                      ),
-                      const SizedBox(height: 18),
-
-                      const _SectionTitle('Kehadiran Karyawan'),
-                      const SizedBox(height: 12),
-                      _AttendanceCard(
-                        present: c.present,
-                        late: c.late,
-                        leave: c.leave,
-                        overtime: c.overtime,
-                      ),
-                      const SizedBox(height: 18),
-
-                      const _SectionTitle('Pengajuan'),
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: _RequestPill(
-                              title: 'Cuti',
-                              count: c.pendingLeave,
-                              background: const Color(0xFFF04444),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: _RequestPill(
-                              title: 'Lembur',
-                              count: c.pendingOvertime,
-                              background: const Color(0xFF1DB954),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // ==========================================
+                      // CONDITIONAL RENDERING BASED ON ROLE
+                      // ==========================================
+                      if (isOwner)
+                        ..._buildOwnerContent()
+                      else
+                        ..._buildStaffContent(),
 
                       if (c.hasData && c.hasError) ...[
                         const SizedBox(height: 14),
@@ -194,8 +227,6 @@ class _HomePageState extends State<HomePage> {
                           text: c.errorMessage ?? 'Gagal memperbarui data.',
                         ),
                       ],
-
-                      const SizedBox(height: 24),
                     ],
                   ),
                 ),
@@ -236,7 +267,7 @@ class _SectionTitle extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: FontWeight.w800,
         color: Color(0xFF0F172A),
       ),
@@ -244,105 +275,120 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-class _BusinessSummaryGrid extends StatelessWidget {
-  final int visitorsToday;
-  final int? walkIn;
-  final int? callIn;
-  final int? chatIn;
+// ============================================================================
+// OWNER WIDGETS
+// ============================================================================
 
-  const _BusinessSummaryGrid({
-    required this.visitorsToday,
-    this.walkIn,
-    this.callIn,
-    this.chatIn,
+class _OwnerSummaryGrid extends StatelessWidget {
+  final int income;
+  final int visitors;
+  final int inService;
+  final int trip;
+
+  const _OwnerSummaryGrid({
+    required this.income,
+    required this.visitors,
+    required this.inService,
+    required this.trip,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 1.25,
+    return Column(
       children: [
-        _StatCard(
-          title: 'Pengunjung\nHari Ini',
-          value: visitorsToday.toString(),
-          background: const Color(0xFF1E88FF),
-          icon: Icons.group_outlined,
+        Row(
+          children: [
+            Expanded(
+              child: _OwnerGridCard(
+                title: 'Jumlah\nPemasukkan',
+                value: income.toString(),
+                subText: 'Total Pendapatan :\nRp. 100.000',
+                color: const Color(0xFF22C55E), // Green
+                icon: Icons.attach_money,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _OwnerGridCard(
+                title: 'Pengunjung\nHari Ini',
+                value: visitors.toString(),
+                subText: 'Jam Sibuk :\n13:00 - 14:00',
+                color: const Color(0xFF3B82F6), // Blue
+                icon: Icons.people_outline,
+              ),
+            ),
+          ],
         ),
-        _StatCard(
-          title: 'Walk-In',
-          value: (walkIn ?? 0).toString(),
-          background: const Color(0xFF2ED3A2),
-          icon: Icons.schedule_rounded,
-          valueHint: walkIn == null ? 'TODO' : null,
-        ),
-        _StatCard(
-          title: 'Call-In',
-          value: (callIn ?? 0).toString(),
-          background: const Color(0xFF5B5FEA),
-          icon: Icons.info_outline_rounded,
-          valueHint: callIn == null ? 'TODO' : null,
-        ),
-        _StatCard(
-          title: 'Chat-In',
-          value: (chatIn ?? 0).toString(),
-          background: const Color(0xFF9A7BFF),
-          icon: Icons.check_circle_outline_rounded,
-          valueHint: chatIn == null ? 'TODO' : null,
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _OwnerGridCard(
+                title: 'Sedang di\nService',
+                value: inService.toString(),
+                subText: 'Mendekati Batas :\n4 Item',
+                color: const Color(0xFF8B5CF6), // Purple
+                icon: Icons.build_circle_outlined,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _OwnerGridCard(
+                title: 'Perjalanan\nHari Ini',
+                value: trip.toString(),
+                subText: 'Total Jarak :\n80 km',
+                color: const Color(0xFF14B8A6), // Teal
+                icon: Icons.inventory_2_outlined,
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 }
 
-class _StatCard extends StatelessWidget {
+class _OwnerGridCard extends StatelessWidget {
   final String title;
   final String value;
-  final Color background;
+  final String subText;
+  final Color color;
   final IconData icon;
-  final String? valueHint;
 
-  const _StatCard({
+  const _OwnerGridCard({
     required this.title,
     required this.value,
-    required this.background,
+    required this.subText,
+    required this.color,
     required this.icon,
-    this.valueHint,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
       decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: const [
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
           BoxShadow(
-            blurRadius: 16,
-            offset: Offset(0, 10),
-            color: Color(0x1F000000),
+            color: color.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
       child: Stack(
         children: [
-          Positioned(
-            right: 0,
-            top: 0,
+          Align(
+            alignment: Alignment.topRight,
             child: Container(
-              width: 40,
-              height: 40,
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
-                // ignore: deprecated_member_use
-                color: Colors.white.withOpacity(0.22),
-                borderRadius: BorderRadius.circular(999),
+                color: Colors.white,
+                shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.white),
+              child: Icon(icon, color: color, size: 22),
             ),
           ),
           Column(
@@ -351,41 +397,31 @@ class _StatCard extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
                   color: Colors.white,
-                  height: 1.1,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
                 ),
               ),
-              const Spacer(),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    value,
-                    style: const TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.white,
-                      height: 1,
-                    ),
-                  ),
-                  if (valueHint != null) ...[
-                    const SizedBox(width: 8),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Text(
-                        valueHint!,
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w800,
-                          // ignore: deprecated_member_use
-                          color: Colors.white.withOpacity(0.85),
-                        ),
-                      ),
-                    ),
-                  ],
-                ],
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 34,
+                  fontWeight: FontWeight.w900,
+                  height: 1,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                subText,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 11,
+                  height: 1.2,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
@@ -395,13 +431,13 @@ class _StatCard extends StatelessWidget {
   }
 }
 
-class _AttendanceCard extends StatelessWidget {
+class _OwnerAttendanceCard extends StatelessWidget {
   final int present;
   final int late;
   final int leave;
   final int overtime;
 
-  const _AttendanceCard({
+  const _OwnerAttendanceCard({
     required this.present,
     required this.late,
     required this.leave,
@@ -410,68 +446,63 @@ class _AttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const purple = Color(0xFF5B5FEA);
-
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 16),
+      padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
-        color: purple,
+        color: const Color(0xFF6366F1), // Indigo
         borderRadius: BorderRadius.circular(22),
         boxShadow: const [
           BoxShadow(
+            color: Color(0x336366F1),
             blurRadius: 16,
-            offset: Offset(0, 10),
-            color: Color(0x1F000000),
+            offset: Offset(0, 8),
           ),
         ],
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _AttendanceItem(label: 'Present', value: present),
+          _AttItem(label: 'Hadir', value: present),
           _VLine(),
-          _AttendanceItem(label: 'Late', value: late),
+          _AttItem(label: 'Telat', value: late),
           _VLine(),
-          _AttendanceItem(label: 'Leave', value: leave),
+          _AttItem(label: 'Cuti', value: leave),
           _VLine(),
-          _AttendanceItem(label: 'Overtime', value: overtime),
+          _AttItem(label: 'Lembur', value: overtime),
         ],
       ),
     );
   }
 }
 
-class _AttendanceItem extends StatelessWidget {
+class _AttItem extends StatelessWidget {
   final String label;
   final int value;
 
-  const _AttendanceItem({required this.label, required this.value});
+  const _AttItem({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 13,
-              fontWeight: FontWeight.w700,
-              color: Color(0xDFFFFFFF),
-            ),
+    return Column(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+            color: Color(0xDFFFFFFF),
           ),
-          const SizedBox(height: 6),
-          Text(
-            value.toString(),
-            style: const TextStyle(
-              fontSize: 26,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-              height: 1,
-            ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value.toString(),
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -481,9 +512,8 @@ class _VLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 1,
-      height: 44,
-      // ignore: deprecated_member_use
-      color: Colors.white.withOpacity(0.30),
+      height: 32,
+      color: Colors.white.withValues(alpha: 0.5),
     );
   }
 }
@@ -492,51 +522,341 @@ class _RequestPill extends StatelessWidget {
   final String title;
   final int count;
   final Color background;
+  final VoidCallback? onTap;
 
   const _RequestPill({
     required this.title,
     required this.count,
     required this.background,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: background,
+      borderRadius: BorderRadius.circular(22),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+              Text(
+                count.toString(),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MockChartCard extends StatelessWidget {
+  const _MockChartCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 180,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: const Color(0xFFE5E7EB)),
+      ),
+      child: CustomPaint(
+        painter: _ChartPainter(),
+      ),
+    );
+  }
+}
+
+class _ChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint1 = Paint()
+      ..color = const Color(0xFF3B82F6)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    final paint2 = Paint()
+      ..color = const Color(0xFFF97316)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    final path1 = Path();
+    path1.moveTo(20, size.height - 40);
+    path1.lineTo(size.width * 0.3, size.height * 0.4);
+    path1.lineTo(size.width * 0.5, size.height * 0.7);
+    path1.lineTo(size.width * 0.7, size.height * 0.2);
+    path1.lineTo(size.width * 0.9, size.height * 0.6);
+
+    final path2 = Path();
+    path2.moveTo(20, size.height - 20);
+    path2.lineTo(size.width * 0.4, size.height * 0.3);
+    path2.lineTo(size.width * 0.6, size.height * 0.6);
+    path2.lineTo(size.width * 0.8, size.height * 0.3);
+    path2.lineTo(size.width * 0.9, size.height * 0.5);
+
+    canvas.drawPath(path1, paint1);
+    canvas.drawPath(path2, paint2);
+
+    // Draw dots
+    final paintDot1 = Paint()..color = const Color(0xFF3B82F6);
+    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.6), 4, paintDot1);
+
+    final paintDot2 = Paint()..color = const Color(0xFFF97316);
+    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.5), 4, paintDot2);
+    
+    // Axes
+    final axisPaint = Paint()
+      ..color = Colors.black87
+      ..strokeWidth = 2;
+    canvas.drawLine(Offset(20, 20), Offset(20, size.height - 20), axisPaint);
+    canvas.drawLine(Offset(20, size.height - 20), Offset(size.width - 20, size.height - 20), axisPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ============================================================================
+// STAFF WIDGETS
+// ============================================================================
+
+class _BusinessSummaryGrid extends StatelessWidget {
+  final int visitors;
+  final int approachingDeadline;
+  final int passedDeadline;
+  final int complaints;
+
+  const _BusinessSummaryGrid({
+    required this.visitors,
+    required this.approachingDeadline,
+    required this.passedDeadline,
+    required this.complaints,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _GridCard(
+                title: 'Pengunjung\nHari Ini',
+                value: visitors.toString(),
+                color: const Color(0xFF3B82F6), // Blue
+                icon: Icons.people_outline,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _GridCard(
+                title: 'Mendekati\nBatas',
+                value: approachingDeadline.toString(),
+                color: const Color(0xFFFACC15), // Yellow
+                icon: Icons.access_time,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _GridCard(
+                title: 'Melewati\nBatas',
+                value: passedDeadline.toString(),
+                color: const Color(0xFFEF4444), // Red
+                icon: Icons.error_outline,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _GridCard(
+                title: 'Komplain',
+                value: complaints.toString(),
+                color: const Color(0xFF6366F1), // Indigo
+                icon: Icons.thumb_down_alt_outlined,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _GridCard extends StatelessWidget {
+  final String title;
+  final String value;
+  final Color color;
+  final IconData icon;
+
+  const _GridCard({
+    required this.title,
+    required this.value,
+    required this.color,
+    required this.icon,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 62,
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
       decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: const [
+        color: color,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
           BoxShadow(
-            blurRadius: 16,
-            offset: Offset(0, 10),
-            color: Color(0x1F000000),
+            color: color.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Row(
+      child: Stack(
         children: [
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
+          Align(
+            alignment: Alignment.topRight,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.2),
+                shape: BoxShape.circle,
               ),
+              child: Icon(icon, color: Colors.white, size: 24),
             ),
           ),
-          Text(
-            count.toString(),
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w900,
-              color: Colors.white,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  height: 1.2,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  height: 1,
+                ),
+              ),
+            ],
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ServiceList extends StatelessWidget {
+  final bool isOverdue;
+
+  const _ServiceList({required this.isOverdue});
+
+  @override
+  Widget build(BuildContext context) {
+    // Dummy UI
+    return Column(
+      children: List.generate(3, (index) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 12),
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE5E7EB),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Printer - Epson G3730',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Color(0xFF0F172A),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    const Text(
+                      'Budi Suheru',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                    const Text(
+                      'Kerusakan : Tidak Menyala',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                    const Text(
+                      'Status : Diagnosa',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Color(0xFF6B7280),
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      isOverdue ? 'Batas dilewati : ${index + 1} hari' : 'Batas waktu : ${index + 2} hari lagi',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: isOverdue ? const Color(0xFFEF4444) : const Color(0xFFFACC15),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
     );
   }
 }
@@ -548,21 +868,24 @@ class _InlineWarning extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF4D6),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFFFD37A)),
+        color: const Color(0xFFFEF2F2),
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: const Color(0xFFFECACA)),
       ),
       child: Row(
         children: [
-          const Icon(Icons.info_outline_rounded, size: 18),
+          const Icon(Icons.error_outline, color: Color(0xFFDC2626), size: 18),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+              style: const TextStyle(
+                fontSize: 12,
+                color: Color(0xFF991B1B),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],

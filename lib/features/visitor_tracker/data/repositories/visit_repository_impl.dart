@@ -36,20 +36,19 @@ class VisitRepositoryImpl implements VisitRepository {
 
   Visit _mapVisit(VisitModel m) => Visit(
     visitId: m.visitId,
+    visitorId: m.visitorId,
     userId: m.userId,
-    customerName: m.customerName,
-    customerPhone: m.customerPhone,
-    customerAddress: m.customerAddress,
-    purpose: m.purpose,
-    status: m.status,
-    notes: m.notes,
+    visitorInterest: m.visitorInterest,
+    visitorStatus: m.visitorStatus,
+    visitType: m.visitType,
+    visitDesc: m.visitDesc,
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
   );
 
   FollowUp _mapFollowUp(FollowUpModel m) => FollowUp(
     followUpId: m.followUpId,
-    visitId: m.followUpId,
+    visitId: _requireInt(m.visitId, 'followUp.visitId'),
     stage: m.stage,
     notes: m.notes,
     status: m.status,
@@ -59,7 +58,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   ProductSold _mapProductSold(ProductSoldModel m) => ProductSold(
     productSoldId: m.productSoldId,
-    visitId: m.visitId!,
+    visitId: _requireInt(m.visitId, 'productSold.visitId'),
     productName: m.productName,
     quantity: m.quantity,
     price: m.price,
@@ -101,7 +100,7 @@ class VisitRepositoryImpl implements VisitRepository {
   }
 
   @override
-  Future<ApiResponse<Visit>> getVisitDetail(String visitId) async {
+  Future<ApiResponse<Visit>> getVisitDetail(int visitId) async {
     final res = await _remote.getVisitDetail(visitId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -132,7 +131,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<Visit>> updateVisit(
-    String visitId,
+    int visitId,
     VisitRequest request,
   ) async {
     final res = await _remote.updateVisit(visitId, request);
@@ -149,7 +148,7 @@ class VisitRepositoryImpl implements VisitRepository {
   }
 
   @override
-  Future<ApiResponse<int>> deleteVisit(String visitId) async {
+  Future<ApiResponse<int>> deleteVisit(int visitId) async {
     final res = await _remote.deleteVisit(visitId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -165,7 +164,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   // ---------- FOLLOW-UP ----------
   @override
-  Future<ApiResponse<List<FollowUp>>> getFollowUps(String visitId) async {
+  Future<ApiResponse<List<FollowUp>>> getFollowUps(int visitId) async {
     final res = await _remote.getFollowUps(visitId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -181,7 +180,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<FollowUp>> createFollowUp(
-    String visitId,
+    int visitId,
     FollowUpRequest request,
   ) async {
     final res = await _remote.createFollowUp(visitId, request);
@@ -199,8 +198,8 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<FollowUp>> updateFollowUp(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
     FollowUpRequest request,
   ) async {
     final res = await _remote.updateFollowUp(visitId, followUpId, request);
@@ -217,10 +216,7 @@ class VisitRepositoryImpl implements VisitRepository {
   }
 
   @override
-  Future<ApiResponse<int>> deleteFollowUp(
-    String visitId,
-    String followUpId,
-  ) async {
+  Future<ApiResponse<int>> deleteFollowUp(int visitId, int followUpId) async {
     final res = await _remote.deleteFollowUp(visitId, followUpId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -236,7 +232,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   // ---------- PRODUCTS SOLD ----------
   @override
-  Future<ApiResponse<List<ProductSold>>> getProductsSold(String visitId) async {
+  Future<ApiResponse<List<ProductSold>>> getProductsSold(int visitId) async {
     final res = await _remote.getProductsSold(visitId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -252,7 +248,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<ProductSold>> createProductSold(
-    String visitId,
+    int visitId,
     ProductSoldRequest request,
   ) async {
     final res = await _remote.createProductSold(visitId, request);
@@ -272,8 +268,8 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<ProductSold>> updateProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
     ProductSoldRequest request,
   ) async {
     final res = await _remote.updateProductSold(
@@ -297,8 +293,8 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<int>> deleteProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
   ) async {
     final res = await _remote.deleteProductSold(visitId, productSoldId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -317,9 +313,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   // ---------- UNITS SERVICED ----------
   @override
-  Future<ApiResponse<List<UnitServiced>>> getUnitsServiced(
-    String visitId,
-  ) async {
+  Future<ApiResponse<List<UnitServiced>>> getUnitsServiced(int visitId) async {
     final res = await _remote.getUnitsServiced(visitId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -335,7 +329,7 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<UnitServiced>> createUnitServiced(
-    String visitId,
+    int visitId,
     UnitServicedRequest request,
   ) async {
     final res = await _remote.createUnitServiced(visitId, request);
@@ -355,8 +349,8 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<UnitServiced>> updateUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
     UnitServicedRequest request,
   ) async {
     final res = await _remote.updateUnitServiced(
@@ -380,8 +374,8 @@ class VisitRepositoryImpl implements VisitRepository {
 
   @override
   Future<ApiResponse<int>> deleteUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
   ) async {
     final res = await _remote.deleteUnitServiced(visitId, unitServicedId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);

@@ -7,6 +7,6 @@ class UpdateLeaveUseCase {
   final LeaveRepository _repo;
   const UpdateLeaveUseCase(this._repo);
 
-  Future<ApiResponse<Leave>> call(String id, LeaveRequest request) =>
+  Future<ApiResponse<Leave>> call(int id, LeaveRequest request) =>
       _repo.updateLeave(id, request);
 }

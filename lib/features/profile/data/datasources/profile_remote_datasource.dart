@@ -7,11 +7,11 @@ import '../models/user_detail_model.dart';
 import '../models/update_profile_request.dart';
 
 abstract class ProfileRemoteDataSource {
-  Future<ApiResponse<UserBasicResponse>> getUserBasic(String userId);
-  Future<ApiResponse<UserDetailResponse>> getUserDetail(String userId);
+  Future<ApiResponse<UserBasicResponse>> getUserBasic(int userId);
+  Future<ApiResponse<UserDetailResponse>> getUserDetail(int userId);
 
   Future<ApiResponse<UserDetailResponse>> updateProfile(
-    String userId,
+    int userId,
     UpdateProfileRequest request,
   );
 }
@@ -21,7 +21,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   ProfileRemoteDataSourceImpl(this._client);
 
   @override
-  Future<ApiResponse<UserBasicResponse>> getUserBasic(String userId) {
+  Future<ApiResponse<UserBasicResponse>> getUserBasic(int userId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.userBasic(userId)),
       parser: (json) =>
@@ -30,7 +30,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<UserDetailResponse>> getUserDetail(String userId) {
+  Future<ApiResponse<UserDetailResponse>> getUserDetail(int userId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.userDetail(userId)),
       parser: (json) =>
@@ -40,7 +40,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<ApiResponse<UserDetailResponse>> updateProfile(
-    String userId,
+    int userId,
     UpdateProfileRequest request,
   ) {
     final hasFile = request.photoFile != null;

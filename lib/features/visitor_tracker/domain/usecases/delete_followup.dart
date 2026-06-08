@@ -5,7 +5,7 @@ class DeleteFollowUpUseCase {
   final VisitRepository _repo;
   const DeleteFollowUpUseCase(this._repo);
 
-  Future<ApiResponse<int>> call(String visitId, String followUpId) {
+  Future<ApiResponse<int>> call(int visitId, int followUpId) {
     return _repo.deleteFollowUp(visitId, followUpId);
   }
 }

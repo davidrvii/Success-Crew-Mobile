@@ -8,8 +8,8 @@ class UpdateUnitServicedUseCase {
   const UpdateUnitServicedUseCase(this._repo);
 
   Future<ApiResponse<UnitServiced>> call(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
     UnitServicedRequest request,
   ) {
     return _repo.updateUnitServiced(visitId, unitServicedId, request);

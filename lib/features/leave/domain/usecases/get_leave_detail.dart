@@ -6,5 +6,5 @@ class GetLeaveDetailUseCase {
   final LeaveRepository _repo;
   const GetLeaveDetailUseCase(this._repo);
 
-  Future<ApiResponse<Leave>> call(String id) => _repo.getLeaveDetail(id);
+  Future<ApiResponse<Leave>> call(int id) => _repo.getLeaveDetail(id);
 }

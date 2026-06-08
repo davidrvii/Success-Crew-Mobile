@@ -6,7 +6,7 @@ class GetProductsSoldUseCase {
   final VisitRepository _repo;
   const GetProductsSoldUseCase(this._repo);
 
-  Future<ApiResponse<List<ProductSold>>> call(String visitId) {
+  Future<ApiResponse<List<ProductSold>>> call(int visitId) {
     return _repo.getProductsSold(visitId);
   }
 }

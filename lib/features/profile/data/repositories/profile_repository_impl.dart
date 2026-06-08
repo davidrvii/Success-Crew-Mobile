@@ -2,6 +2,8 @@ import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
 
+import '../../../auth/domain/entities/auth_session.dart';
+
 import '../../domain/entities/user_basic.dart';
 import '../../domain/entities/user_detail.dart';
 import '../../domain/repositories/profile_repository.dart';
@@ -19,15 +21,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<ApiResponse<UserBasic>> getUserBasic() async {
-    final userId = await _requireUserId();
-    if (userId == null) {
-      return ApiResponse.failure(
-        NetworkException(
-          type: NetworkErrorType.unauthorized,
-          message: 'Session not found. Please login again.',
-        ),
-      );
-    }
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
+
+    final int userId = userIdRes.data!;
 
     final res = await _remote.getUserBasic(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -47,15 +44,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   @override
   Future<ApiResponse<UserDetail>> getUserDetail() async {
-    final userId = await _requireUserId();
-    if (userId == null) {
-      return ApiResponse.failure(
-        NetworkException(
-          type: NetworkErrorType.unauthorized,
-          message: 'Session not found. Please login again.',
-        ),
-      );
-    }
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
+
+    final int userId = userIdRes.data!;
 
     final res = await _remote.getUserDetail(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -77,15 +69,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<ApiResponse<UserDetail>> updateProfile(
     UpdateProfileRequest request,
   ) async {
-    final userId = await _requireUserId();
-    if (userId == null) {
-      return ApiResponse.failure(
-        NetworkException(
-          type: NetworkErrorType.unauthorized,
-          message: 'Session not found. Please login again.',
-        ),
-      );
-    }
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
+
+    final int userId = userIdRes.data!;
 
     final res = await _remote.updateProfile(userId, request);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -106,12 +93,17 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   // ========= helpers =========
-
-  Future<String?> _requireUserId() async {
-    final session = await _session.readSession();
-    final userId = session?['user_id']?.toString();
-    if (userId == null || userId.isEmpty) return null;
-    return userId;
+  Future<ApiResponse<int>> _requireUserId() async {
+    final int? userId = await _session.readUserId();
+    if (userId == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unauthorized,
+          message: 'Session not found. Please login again.',
+        ),
+      );
+    }
+    return ApiResponse.success(userId);
   }
 
   UserBasic _mapBasic(UserBasicDto dto) {
@@ -142,11 +134,23 @@ class ProfileRepositoryImpl implements ProfileRepository {
     final raw = await _session.readSession();
     if (raw == null) return;
 
-    raw['user_name'] = dto.userName;
-    raw['user_email'] = dto.userEmail;
-    raw['role_id'] = dto.roleId;
-    raw['role_name'] = dto.roleName;
-    raw['office_id'] = dto.officeId;
-    raw['office_name'] = dto.officeName;
+    final int userId = (raw['user_id'] as num).toInt();
+
+    final String roleName = (dto.roleName ?? raw['role_name'] ?? '').toString();
+    final String officeName = (dto.officeName ?? raw['office_name'] ?? '')
+        .toString();
+
+    final updated = AuthSession(
+      userId: userId,
+      userName: dto.userName,
+      userEmail: dto.userEmail,
+      roleId: dto.roleId,
+      roleName: roleName,
+      officeId: dto.officeId,
+      officeName: officeName,
+      token: (raw['token'] ?? '').toString(),
+    );
+
+    await _session.saveSession(updated);
   }
 }

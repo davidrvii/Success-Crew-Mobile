@@ -6,7 +6,7 @@ class GetFollowUpsUseCase {
   final VisitRepository _repo;
   const GetFollowUpsUseCase(this._repo);
 
-  Future<ApiResponse<List<FollowUp>>> call(String visitId) {
+  Future<ApiResponse<List<FollowUp>>> call(int visitId) {
     return _repo.getFollowUps(visitId);
   }
 }

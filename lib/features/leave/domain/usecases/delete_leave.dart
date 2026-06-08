@@ -5,5 +5,5 @@ class DeleteLeaveUseCase {
   final LeaveRepository _repo;
   const DeleteLeaveUseCase(this._repo);
 
-  Future<ApiResponse<int>> call(String id) => _repo.deleteLeave(id);
+  Future<ApiResponse<int>> call(int id) => _repo.deleteLeave(id);
 }

@@ -17,16 +17,10 @@ class LeaveRepositoryImpl implements LeaveRepository {
 
   @override
   Future<ApiResponse<List<Leave>>> getLeaveList() async {
-    final userId = await _requireUserId();
-    if (userId == null) {
-      return ApiResponse.failure(
-        NetworkException(
-          type: NetworkErrorType.unauthorized,
-          message: 'Session not found. Please login again.',
-        ),
-      );
-    }
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
 
+    final int userId = userIdRes.data!;
     final res = await _remote.getLeaveList(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -35,7 +29,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
-  Future<ApiResponse<Leave>> getLeaveDetail(String id) async {
+  Future<ApiResponse<Leave>> getLeaveDetail(int id) async {
     final res = await _remote.getLeaveDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -73,10 +67,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
-  Future<ApiResponse<Leave>> updateLeave(
-    String id,
-    LeaveRequest request,
-  ) async {
+  Future<ApiResponse<Leave>> updateLeave(int id, LeaveRequest request) async {
     final ensured = await _ensureUserIdInRequest(request);
 
     final res = await _remote.updateLeave(id, ensured);
@@ -96,7 +87,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
-  Future<ApiResponse<int>> deleteLeave(String id) async {
+  Future<ApiResponse<int>> deleteLeave(int id) async {
     final res = await _remote.deleteLeave(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -115,19 +106,28 @@ class LeaveRepositoryImpl implements LeaveRepository {
 
   // ========= helpers =========
 
-  Future<String?> _requireUserId() async {
-    final session = await _session.readSession();
-    final userId = session?['user_id']?.toString();
-    if (userId == null || userId.isEmpty) return null;
-    return userId;
+  Future<ApiResponse<int>> _requireUserId() async {
+    final int? userId = await _session.readUserId();
+    if (userId == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unauthorized,
+          message: 'Session not found. Please login again.',
+        ),
+      );
+    }
+    return ApiResponse.success(userId);
   }
 
   Future<LeaveRequest> _ensureUserIdInRequest(LeaveRequest req) async {
     if (req.userId != null) return req;
 
-    final userIdStr = await _requireUserId();
-    final userId = int.tryParse(userIdStr ?? '');
-    if (userId == null) return req;
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) {
+      return req;
+    }
+
+    final int userId = userIdRes.data!;
 
     return LeaveRequest(
       userId: userId,

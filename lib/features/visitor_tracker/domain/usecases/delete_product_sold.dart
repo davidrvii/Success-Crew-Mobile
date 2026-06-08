@@ -5,7 +5,7 @@ class DeleteProductSoldUseCase {
   final VisitRepository _repo;
   const DeleteProductSoldUseCase(this._repo);
 
-  Future<ApiResponse<int>> call(String visitId, String productSoldId) {
+  Future<ApiResponse<int>> call(int visitId, int productSoldId) {
     return _repo.deleteProductSold(visitId, productSoldId);
   }
 }

@@ -14,6 +14,33 @@ import '../features/auth/presentation/pages/register_page.dart';
 // HOME
 import '../features/home/presentation/controllers/home_controller.dart';
 import '../features/home/presentation/pages/home_page.dart';
+import '../features/visitor_tracker/presentation/pages/visit_detail_page.dart';
+import '../features/visitor_tracker/presentation/pages/visit_page.dart';
+import '../features/visitor_tracker/presentation/pages/visit_form_page.dart';
+import '../features/visitor_tracker/presentation/controllers/visit_controller.dart';
+
+// ATTENDANCE
+import '../features/attendance/presentation/pages/attendance_page.dart';
+import '../features/attendance/presentation/controllers/attendance_controller.dart';
+
+// PROFILE
+import '../features/profile/presentation/pages/profile_page.dart';
+import '../features/profile/presentation/pages/edit_profile_page.dart';
+import '../features/profile/presentation/controllers/profile_controller.dart';
+
+// LEAVE
+import '../features/leave/presentation/pages/leave_list_page.dart';
+import '../features/leave/presentation/pages/leave_form_page.dart';
+import '../features/leave/presentation/controllers/leave_controller.dart';
+
+// OVERTIME
+import '../features/overtime/presentation/pages/overtime_list_page.dart';
+import '../features/overtime/presentation/pages/overtime_form_page.dart';
+import '../features/overtime/presentation/controllers/overtime_controller.dart';
+
+// NOTIFICATION
+import '../features/notification/presentation/pages/notification_page.dart';
+import '../features/notification/presentation/controllers/notification_controller.dart';
 
 import 'main_shell.dart';
 
@@ -28,6 +55,16 @@ class AppGoRouter {
   static const String home = '/home';
   static const String visitor = '/visitor';
   static const String absence = '/absence';
+
+  // Sub routes
+  static const String profile = '/profile';
+  static const String editProfile = '/edit-profile';
+  static const String leave = '/leave';
+  static const String leaveAdd = '/leave-add';
+  static const String overtime = '/overtime';
+  static const String overtimeAdd = '/overtime-add';
+  static const String notification = '/notification';
+  static const String visitorAdd = '/visitor-add';
 
   static final GoRouter router = GoRouter(
     initialLocation: login,
@@ -55,6 +92,77 @@ class AppGoRouter {
           );
         },
       ),
+      GoRoute(
+        path: '/visit-detail',
+        builder: (context, state) {
+          final visitId = state.extra as int;
+          return VisitDetailPage(visitId: visitId);
+        },
+      ),
+      GoRoute(
+        path: visitorAdd,
+        builder: (context, state) {
+          return VisitFormPage(
+            controller: sl<VisitorController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: profile,
+        builder: (context, state) {
+          return ProfilePage(
+            controller: sl<ProfileController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: editProfile,
+        builder: (context, state) {
+          return EditProfilePage(
+            controller: sl<ProfileController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: leave,
+        builder: (context, state) {
+          return LeaveListPage(
+            controller: sl<LeaveController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: leaveAdd,
+        builder: (context, state) {
+          return LeaveFormPage(
+            controller: sl<LeaveController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: overtime,
+        builder: (context, state) {
+          return OvertimeListPage(
+            controller: sl<OvertimeController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: overtimeAdd,
+        builder: (context, state) {
+          return OvertimeFormPage(
+            controller: sl<OvertimeController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: notification,
+        builder: (context, state) {
+          return NotificationPage(
+            controller: sl<NotificationController>(),
+          );
+        },
+      ),
 
       // MAIN SHELL (BottomNav)
       StatefulShellRoute.indexedStack(
@@ -72,6 +180,11 @@ class AppGoRouter {
                     child: HomePage(
                       controller: sl<HomeController>(),
                       disposeController: true,
+                      onTapProfile: () => context.push(profile),
+                      onTapNotifications: () => context.push(notification),
+                      onTapLeave: () => context.push(leave),
+                      onTapOvertime: () => context.push(overtime),
+                      onTapCheckIn: () => context.go(absence),
                     ),
                   );
                 },
@@ -79,25 +192,27 @@ class AppGoRouter {
             ],
           ),
 
-          // -------- VISITOR (placeholder) --------
+          // -------- VISITOR --------
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
                 path: visitor,
                 pageBuilder: (context, state) => const NoTransitionPage(
-                  child: PlaceholderScaffold(title: 'Visitor'),
+                  child: VisitorPage(),
                 ),
               ),
             ],
           ),
 
-          // -------- ABSENCE (placeholder) --------
+          // -------- ABSENCE --------
           StatefulShellBranch(
             routes: <RouteBase>[
               GoRoute(
                 path: absence,
-                pageBuilder: (context, state) => const NoTransitionPage(
-                  child: PlaceholderScaffold(title: 'Absence'),
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: AttendancePage(
+                    controller: sl<AttendanceController>(),
+                  ),
                 ),
               ),
             ],

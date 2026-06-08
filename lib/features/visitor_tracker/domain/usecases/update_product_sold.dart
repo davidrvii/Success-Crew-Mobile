@@ -8,8 +8,8 @@ class UpdateProductSoldUseCase {
   const UpdateProductSoldUseCase(this._repo);
 
   Future<ApiResponse<ProductSold>> call(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
     ProductSoldRequest request,
   ) {
     return _repo.updateProductSold(visitId, productSoldId, request);

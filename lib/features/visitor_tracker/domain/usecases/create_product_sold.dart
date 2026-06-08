@@ -8,7 +8,7 @@ class CreateProductSoldUseCase {
   const CreateProductSoldUseCase(this._repo);
 
   Future<ApiResponse<ProductSold>> call(
-    String visitId,
+    int visitId,
     ProductSoldRequest request,
   ) {
     return _repo.createProductSold(visitId, request);

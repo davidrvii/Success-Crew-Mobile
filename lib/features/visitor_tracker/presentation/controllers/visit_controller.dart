@@ -1,0 +1,163 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
+
+import '../../domain/entities/visit.dart';
+import '../../domain/usecases/get_visits.dart';
+import '../../domain/usecases/create_visit.dart';
+import '../../data/models/visit_request.dart';
+import '../../../../core/network/api_response.dart';
+
+enum VisitorSortMode { newest, az }
+
+class VisitorController extends ChangeNotifier {
+  final GetVisitsUseCase _getVisits;
+  final CreateVisitUseCase _createVisit;
+
+  VisitorController(this._getVisits, this._createVisit);
+
+  bool isLoading = false;
+  String? errorMessage;
+
+  final List<Visit> _all = [];
+  List<Visit> visible = [];
+
+  String query = '';
+  VisitorSortMode sortMode = VisitorSortMode.newest;
+
+  String? statusFilter;
+
+  Timer? _debounce;
+
+  int get totalCount => _all.length;
+
+  Future<void> init() async {
+    await refresh();
+  }
+
+  Future<void> refresh() async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    final ApiResponse<List<Visit>> res = await _getVisits();
+
+    if (!res.isSuccess) {
+      isLoading = false;
+      errorMessage = res.error?.message ?? 'Gagal memuat data';
+      notifyListeners();
+      return;
+    }
+
+    _all
+      ..clear()
+      ..addAll(res.data ?? const []);
+
+    _apply();
+    isLoading = false;
+    notifyListeners();
+  }
+
+  Future<bool> submitVisit({
+    required String customerName,
+    required String customerPhone,
+    required String customerAddress,
+    required String purpose,
+    required String notes,
+  }) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    final req = VisitRequest(
+      customerName: customerName,
+      customerPhone: customerPhone,
+      customerAddress: customerAddress,
+      purpose: purpose,
+      notes: notes,
+      status: 'Pending',
+    );
+
+    final res = await _createVisit(req);
+
+    if (res.isSuccess) {
+      await refresh();
+      return true;
+    } else {
+      isLoading = false;
+      errorMessage = res.error?.message ?? 'Gagal membuat visit';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  void setQuery(String value) {
+    query = value;
+    _debounce?.cancel();
+    _debounce = Timer(const Duration(milliseconds: 250), () {
+      _apply();
+      notifyListeners();
+    });
+  }
+
+  void toggleSort() {
+    sortMode = sortMode == VisitorSortMode.newest
+        ? VisitorSortMode.az
+        : VisitorSortMode.newest;
+    _apply();
+    notifyListeners();
+  }
+
+  void setStatusFilter(String? value) {
+    statusFilter = value;
+    _apply();
+    notifyListeners();
+  }
+
+  void clearFilter() {
+    statusFilter = null;
+    _apply();
+    notifyListeners();
+  }
+
+  void _apply() {
+    Iterable<Visit> data = _all;
+
+    if (statusFilter != null && statusFilter!.trim().isNotEmpty) {
+      final f = statusFilter!.trim().toLowerCase();
+      data = data.where((v) => (v.visitorStatus ?? '').toLowerCase() == f);
+    }
+
+    final q = query.trim().toLowerCase();
+    if (q.isNotEmpty) {
+      data = data.where((v) {
+        final interest = (v.visitorInterest ?? '').toLowerCase();
+        final type = (v.visitType ?? '').toLowerCase();
+        final desc = (v.visitDesc ?? '').toLowerCase();
+        return interest.contains(q) || type.contains(q) || desc.contains(q);
+      });
+    }
+
+    final list = data.toList();
+
+    if (sortMode == VisitorSortMode.az) {
+      list.sort(
+        (a, b) => (a.visitorInterest ?? '').compareTo(b.visitorInterest ?? ''),
+      );
+    } else {
+      list.sort((a, b) {
+        final ad = a.createdAt;
+        final bd = b.createdAt;
+        if (ad != null && bd != null) return bd.compareTo(ad);
+        return (b.visitId).compareTo(a.visitId);
+      });
+    }
+
+    visible = list;
+  }
+
+  @override
+  void dispose() {
+    _debounce?.cancel();
+    super.dispose();
+  }
+}

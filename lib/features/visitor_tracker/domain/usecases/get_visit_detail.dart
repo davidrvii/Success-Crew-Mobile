@@ -6,7 +6,7 @@ class GetVisitDetailUseCase {
   final VisitRepository _repo;
   const GetVisitDetailUseCase(this._repo);
 
-  Future<ApiResponse<Visit>> call(String visitId) {
+  Future<ApiResponse<Visit>> call(int visitId) {
     return _repo.getVisitDetail(visitId);
   }
 }

@@ -7,7 +7,7 @@ class CheckOutUseCase {
   final AttendanceRepository _repo;
   const CheckOutUseCase(this._repo);
 
-  Future<ApiResponse<Attendance>> call(String attendanceId, {String? status}) {
+  Future<ApiResponse<Attendance>> call(int attendanceId, {String? status}) {
     final req = CheckOutRequest(status: status);
     return _repo.checkOut(attendanceId, req);
   }

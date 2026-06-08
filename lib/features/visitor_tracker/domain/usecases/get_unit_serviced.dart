@@ -6,7 +6,7 @@ class GetUnitsServicedUseCase {
   final VisitRepository _repo;
   const GetUnitsServicedUseCase(this._repo);
 
-  Future<ApiResponse<List<UnitServiced>>> call(String visitId) {
+  Future<ApiResponse<List<UnitServiced>>> call(int visitId) {
     return _repo.getUnitsServiced(visitId);
   }
 }

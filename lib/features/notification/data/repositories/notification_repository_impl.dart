@@ -16,15 +16,10 @@ class NotificationRepositoryImpl implements NotificationRepository {
 
   @override
   Future<ApiResponse<List<AppNotification>>> getNotifications() async {
-    final userId = await _requireUserId();
-    if (userId == null) {
-      return ApiResponse.failure(
-        NetworkException(
-          type: NetworkErrorType.unauthorized,
-          message: 'Session not found. Please login again.',
-        ),
-      );
-    }
+    final userIdRes = await _requireUserId();
+    if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
+
+    final int userId = userIdRes.data!;
 
     final res = await _remote.getNotificationHistory(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -34,7 +29,7 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
-  Future<ApiResponse<AppNotification>> getNotificationDetail(String id) async {
+  Future<ApiResponse<AppNotification>> getNotificationDetail(int id) async {
     final res = await _remote.getNotificationDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
@@ -53,11 +48,17 @@ class NotificationRepositoryImpl implements NotificationRepository {
 
   // ========= helpers =========
 
-  Future<String?> _requireUserId() async {
-    final session = await _session.readSession();
-    final userId = session?['user_id']?.toString();
-    if (userId == null || userId.isEmpty) return null;
-    return userId;
+  Future<ApiResponse<int>> _requireUserId() async {
+    final int? userId = await _session.readUserId();
+    if (userId == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unauthorized,
+          message: 'Session not found. Please login again.',
+        ),
+      );
+    }
+    return ApiResponse.success(userId);
   }
 
   AppNotification _mapDtoToEntity(NotificationDto dto) {

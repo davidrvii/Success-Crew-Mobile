@@ -30,10 +30,10 @@ class UserSession {
     return jsonDecode(raw) as Map<String, dynamic>;
   }
 
-  Future<String?> readUserId() async {
+  Future<int?> readUserId() async {
     final s = await readSession();
     final id = s?['user_id'];
-    return id?.toString();
+    return id?.toInt();
   }
 
   Future<String?> readUserName() async {
@@ -46,11 +46,15 @@ class UserSession {
     await _storage.delete(key: _kTodayAttendanceId);
   }
 
-  Future<String?> readTodayAttendanceId() =>
-      _storage.read(key: _kTodayAttendanceId);
+  Future<int?> readTodayAttendanceId() async {
+    final raw = await _storage.read(key: _kTodayAttendanceId);
+    if (raw == null) return null;
+    return int.tryParse(raw);
+  }
 
-  Future<void> saveTodayAttendanceId(String id) =>
-      _storage.write(key: _kTodayAttendanceId, value: id);
+  Future<void> saveTodayAttendanceId(int id) async {
+    await _storage.write(key: _kTodayAttendanceId, value: id.toString());
+  }
 
   Future<void> clearTodayAttendanceId() =>
       _storage.delete(key: _kTodayAttendanceId);

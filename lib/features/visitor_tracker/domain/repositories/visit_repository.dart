@@ -13,53 +13,47 @@ import '../entities/unit_serviced.dart';
 abstract class VisitRepository {
   // VISIT
   Future<ApiResponse<List<Visit>>> getAdminVisits();
-  Future<ApiResponse<Visit>> getVisitDetail(String visitId);
+  Future<ApiResponse<Visit>> getVisitDetail(int visitId);
   Future<ApiResponse<Visit>> createVisit(VisitRequest request);
-  Future<ApiResponse<Visit>> updateVisit(String visitId, VisitRequest request);
-  Future<ApiResponse<int>> deleteVisit(String visitId);
+  Future<ApiResponse<Visit>> updateVisit(int visitId, VisitRequest request);
+  Future<ApiResponse<int>> deleteVisit(int visitId);
 
   // FOLLOW-UP
-  Future<ApiResponse<List<FollowUp>>> getFollowUps(String visitId);
+  Future<ApiResponse<List<FollowUp>>> getFollowUps(int visitId);
   Future<ApiResponse<FollowUp>> createFollowUp(
-    String visitId,
+    int visitId,
     FollowUpRequest request,
   );
   Future<ApiResponse<FollowUp>> updateFollowUp(
-    String visitId,
-    String followUpId,
+    int visitId,
+    int followUpId,
     FollowUpRequest request,
   );
-  Future<ApiResponse<int>> deleteFollowUp(String visitId, String followUpId);
+  Future<ApiResponse<int>> deleteFollowUp(int visitId, int followUpId);
 
   // PRODUCTS SOLD
-  Future<ApiResponse<List<ProductSold>>> getProductsSold(String visitId);
+  Future<ApiResponse<List<ProductSold>>> getProductsSold(int visitId);
   Future<ApiResponse<ProductSold>> createProductSold(
-    String visitId,
+    int visitId,
     ProductSoldRequest request,
   );
   Future<ApiResponse<ProductSold>> updateProductSold(
-    String visitId,
-    String productSoldId,
+    int visitId,
+    int productSoldId,
     ProductSoldRequest request,
   );
-  Future<ApiResponse<int>> deleteProductSold(
-    String visitId,
-    String productSoldId,
-  );
+  Future<ApiResponse<int>> deleteProductSold(int visitId, int productSoldId);
 
   // UNITS SERVICED
-  Future<ApiResponse<List<UnitServiced>>> getUnitsServiced(String visitId);
+  Future<ApiResponse<List<UnitServiced>>> getUnitsServiced(int visitId);
   Future<ApiResponse<UnitServiced>> createUnitServiced(
-    String visitId,
+    int visitId,
     UnitServicedRequest request,
   );
   Future<ApiResponse<UnitServiced>> updateUnitServiced(
-    String visitId,
-    String unitServicedId,
+    int visitId,
+    int unitServicedId,
     UnitServicedRequest request,
   );
-  Future<ApiResponse<int>> deleteUnitServiced(
-    String visitId,
-    String unitServicedId,
-  );
+  Future<ApiResponse<int>> deleteUnitServiced(int visitId, int unitServicedId);
 }

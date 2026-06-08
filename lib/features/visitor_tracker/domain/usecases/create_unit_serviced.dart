@@ -8,7 +8,7 @@ class CreateUnitServicedUseCase {
   const CreateUnitServicedUseCase(this._repo);
 
   Future<ApiResponse<UnitServiced>> call(
-    String visitId,
+    int visitId,
     UnitServicedRequest request,
   ) {
     return _repo.createUnitServiced(visitId, request);
