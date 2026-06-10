@@ -13,8 +13,8 @@ class HomeAbsenceResponse {
 
   factory HomeAbsenceResponse.fromJson(Map<String, dynamic> json) {
     return HomeAbsenceResponse(
-      attendanceId: json['attendance_id'] as int,
-      status: json['attendance_status'] as String,
+      attendanceId: (json['attendance_id'] as num?)?.toInt() ?? 0,
+      status: (json['attendance_status'] as String?) ?? '',
       checkIn: json['attendance_in'] as String?,
       checkOut: json['attendance_out'] as String?,
     );

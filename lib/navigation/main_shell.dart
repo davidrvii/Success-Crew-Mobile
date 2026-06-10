@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'go_router_config.dart';
-
 /// Main shell untuk bottom navigation.
 ///
 /// Step 1:
@@ -22,32 +20,22 @@ class MainShell extends StatelessWidget {
     );
   }
 
-  String _titleForIndex(int index) {
-    switch (index) {
-      case 0:
-        return 'Home';
-      case 1:
-        return 'Visitor';
-      case 2:
-        return 'Absence';
-      default:
-        return 'Success Crew';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_titleForIndex(navigationShell.currentIndex)),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            tooltip: 'Ke Home',
-            onPressed: () => context.go(AppGoRouter.home),
-            icon: const Icon(Icons.home_outlined),
+        backgroundColor: const Color(0xFFF8F9FE),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        title: const Text(
+          'Success Comp',
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF1C5AA6),
           ),
-        ],
+        ),
+        centerTitle: true,
       ),
       body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(

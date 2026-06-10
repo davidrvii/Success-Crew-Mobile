@@ -5,7 +5,7 @@ class HomeOvertimeResponse {
 
   factory HomeOvertimeResponse.fromJson(Map<String, dynamic> json) {
     return HomeOvertimeResponse(
-      pendingCount: json['pending_overtime'] as int? ?? 0,
+      pendingCount: (json['pending_overtime'] as num?)?.toInt() ?? 0,
     );
   }
 

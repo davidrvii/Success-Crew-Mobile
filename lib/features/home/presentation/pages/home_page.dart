@@ -207,9 +207,6 @@ class _HomePageState extends State<HomePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const _TopBrand(),
-                      const SizedBox(height: 16),
-
                       _buildHeaderCard(isOwner),
                       const SizedBox(height: 24),
 
@@ -240,23 +237,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class _TopBrand extends StatelessWidget {
-  const _TopBrand();
 
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Success Comp',
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: Color(0xFF1C5AA6),
-        ),
-      ),
-    );
-  }
-}
 
 class _SectionTitle extends StatelessWidget {
   final String text;

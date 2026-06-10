@@ -4,7 +4,7 @@ class HomeLeaveResponse {
   HomeLeaveResponse({required this.pendingCount});
 
   factory HomeLeaveResponse.fromJson(Map<String, dynamic> json) {
-    return HomeLeaveResponse(pendingCount: json['pending_leave'] as int? ?? 0);
+    return HomeLeaveResponse(pendingCount: (json['pending_leave'] as num?)?.toInt() ?? 0);
   }
 
   Map<String, dynamic> toJson() {

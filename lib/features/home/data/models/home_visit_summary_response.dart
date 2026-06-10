@@ -5,7 +5,7 @@ class HomeVisitSummaryResponse {
 
   factory HomeVisitSummaryResponse.fromJson(Map<String, dynamic> json) {
     return HomeVisitSummaryResponse(
-      visitorsToday: json['visitors_today'] as int? ?? 0,
+      visitorsToday: (json['visitors_today'] as num?)?.toInt() ?? 0,
     );
   }
 

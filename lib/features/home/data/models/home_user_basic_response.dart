@@ -12,11 +12,17 @@ class HomeUserBasicResponse {
   });
 
   factory HomeUserBasicResponse.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic> data = (json['userBasic'] is Map<String, dynamic>)
+        ? json['userBasic'] as Map<String, dynamic>
+        : ((json['data'] is Map<String, dynamic>)
+            ? json['data'] as Map<String, dynamic>
+            : json);
+
     return HomeUserBasicResponse(
-      userId: json['user_id'] as int,
-      userName: json['user_name'] as String,
-      roleName: json['role_name'] as String,
-      userPhoto: json['user_photo'] as String?,
+      userId: (data['user_id'] as num?)?.toInt() ?? 0,
+      userName: (data['user_name'] as String?) ?? '',
+      roleName: (data['role_name'] as String?) ?? '',
+      userPhoto: data['user_photo'] as String?,
     );
   }
 

@@ -13,10 +13,10 @@ class HomeAttendanceResponse {
 
   factory HomeAttendanceResponse.fromJson(Map<String, dynamic> json) {
     return HomeAttendanceResponse(
-      present: json['present'] as int? ?? 0,
-      late: json['late'] as int? ?? 0,
-      leave: json['leave'] as int? ?? 0,
-      overtime: json['overtime'] as int? ?? 0,
+      present: (json['present'] as num?)?.toInt() ?? 0,
+      late: (json['late'] as num?)?.toInt() ?? 0,
+      leave: (json['leave'] as num?)?.toInt() ?? 0,
+      overtime: (json['overtime'] as num?)?.toInt() ?? 0,
     );
   }
 

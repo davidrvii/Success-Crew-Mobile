@@ -5,7 +5,7 @@ class HomeNotificationResponse {
 
   factory HomeNotificationResponse.fromJson(Map<String, dynamic> json) {
     return HomeNotificationResponse(
-      unreadCount: json['unread_count'] as int? ?? 0,
+      unreadCount: (json['unread_count'] as num?)?.toInt() ?? 0,
     );
   }
 
