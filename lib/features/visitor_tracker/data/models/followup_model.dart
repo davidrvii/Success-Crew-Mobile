@@ -28,8 +28,8 @@ class FollowUpModel {
           _int(json['follow_up_id'] ?? json['followUpId'] ?? json['id']) ?? 0,
       visitId: _int(json['visit_id']),
       stage: json['stage'] as String? ?? json['step'] as String?,
-      notes: json['notes'] as String?,
-      status: json['status'] as String?,
+      notes: json['follow_up_action'] as String? ?? json['notes'] as String?,
+      status: json['follow_up_status'] as String? ?? json['status'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
     );

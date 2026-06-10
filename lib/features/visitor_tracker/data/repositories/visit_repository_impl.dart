@@ -49,6 +49,7 @@ class VisitRepositoryImpl implements VisitRepository {
     visitorStatus: m.visitorStatus,
     visitType: m.visitType,
     visitDesc: m.visitDesc,
+    salesName: m.salesName,
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
   );

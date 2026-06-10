@@ -40,7 +40,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
               children: [
                 _TopHeader(
                   titleTop: (c.visit?.visitType ?? 'Walk-In'),
-                  titleMain: (c.visit?.visitorInterest ?? '-'),
+                  titleMain: (c.visit?.visitorName ?? '-'),
                   onBack: () => Navigator.pop(context),
                 ),
                 Expanded(child: _buildBody(context)),
@@ -93,21 +93,16 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
 
           const SizedBox(height: 16),
           _SectionHeader(
-            title: 'Activities',
-            subtitle: 'Follow Up / Product / Unit',
+            title: 'Aktifitas',
+            subtitle: '',
             onRefresh: c.refreshAll,
           ),
           const SizedBox(height: 10),
           _Card(
             title: 'Follow Up',
-            trailing: Row(
-              children: [
-                _countChip(c.followUps.length),
-                IconButton(
-                  icon: const Icon(Icons.add_circle, color: Color(0xFF0B5FA5)),
-                  onPressed: () => _showFollowUpForm(context, c),
-                ),
-              ],
+            trailing: IconButton(
+              icon: const Icon(Icons.add_circle, color: Color(0xFF0B5FA5)),
+              onPressed: () => _showFollowUpForm(context, c),
             ),
             child: _SimpleList(
               isLoading: c.isLoadingFollowUps,
@@ -123,14 +118,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
           const SizedBox(height: 14),
           _Card(
             title: 'Product Sold',
-            trailing: Row(
-              children: [
-                _countChip(c.products.length),
-                IconButton(
-                  icon: const Icon(Icons.add_circle, color: Color(0xFF0B5FA5)),
-                  onPressed: () => _showProductSoldForm(context, c),
-                ),
-              ],
+            trailing: IconButton(
+              icon: const Icon(Icons.add_circle, color: Color(0xFF0B5FA5)),
+              onPressed: () => _showProductSoldForm(context, c),
             ),
             child: _SimpleList(
               isLoading: c.isLoadingProducts,
@@ -153,14 +143,9 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
           const SizedBox(height: 14),
           _Card(
             title: 'Unit Servis',
-            trailing: Row(
-              children: [
-                _countChip(c.units.length),
-                IconButton(
-                  icon: const Icon(Icons.add_circle, color: Color(0xFF0B5FA5)),
-                  onPressed: () => _showUnitServicedForm(context, c),
-                ),
-              ],
+            trailing: IconButton(
+              icon: const Icon(Icons.add_circle, color: Color(0xFF0B5FA5)),
+              onPressed: () => _showUnitServicedForm(context, c),
             ),
             child: _SimpleList(
               isLoading: c.isLoadingUnits,
@@ -185,19 +170,6 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     );
   }
 
-  Widget _countChip(int count) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.black12),
-      ),
-      child: Text(
-        '$count',
-        style: const TextStyle(fontWeight: FontWeight.w700),
-      ),
-    );
-  }
 
   void _showFollowUpForm(BuildContext context, VisitDetailController c) {
     showModalBottomSheet(
@@ -495,61 +467,18 @@ class _VisitSummaryCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          v?.visitorInterest ?? '-',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+        const Text(
+          'Kunjungan',
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
 
-        _RowText(
-          label: 'Tipe kunjungan',
-          value: '',
-          trailing: _pill(type, icon: Icons.call_made),
-        ),
+        _RowText(label: 'Tipe kunjungan', value: type),
         _RowText(label: 'Tanggal', value: date),
         _RowText(label: 'Jam datang', value: time),
-
-        const SizedBox(height: 8),
-        _RowText(
-          label: 'Status kunjungan',
-          value: '',
-          trailing: _pill(
-            status,
-            icon: Icons.arrow_forward,
-            bg: const Color(0xFF16A34A),
-          ),
-        ),
-        _RowText(label: 'User ID', value: '${v?.userId ?? '-'}'),
-        _RowText(label: 'Visitor ID', value: '${v?.visitorId ?? '-'}'),
+        _RowText(label: 'Status kunjungan', value: status),
+        _RowText(label: 'Sales', value: v?.salesName ?? '-'),
       ],
-    );
-  }
-
-  Widget _pill(
-    String text, {
-    required IconData icon,
-    Color bg = const Color(0xFF16A34A),
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: bg,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: Colors.white, size: 16),
-          const SizedBox(width: 8),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -564,9 +493,10 @@ class _VisitorInfoCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _RowText(label: 'Visitor ID', value: '${v?.visitorId ?? '-'}'),
-        _RowText(label: 'User ID', value: '${v?.userId ?? '-'}'),
-        _RowText(label: 'Tipe kunjungan', value: v?.visitType ?? '-'),
+        _RowText(label: 'Nama', value: v?.visitorName ?? '-'),
+        _RowText(label: 'Telepon', value: v?.visitorPhone ?? '-'),
+        _RowText(label: 'Perusahaan/Instansi', value: v?.visitorAddress ?? '-'),
+        _RowText(label: 'Status Pengunjung', value: v?.visitorInformation ?? '-'),
       ],
     );
   }
@@ -582,62 +512,19 @@ class _NeedCard extends StatelessWidget {
     final interest = (v?.visitorInterest ?? '').trim();
     final desc = (v?.visitDesc ?? '').trim();
 
-    final tags = interest.isEmpty
-        ? const <String>[]
-        : interest
-              .split(RegExp(r'[,;]'))
-              .map((e) => e.trim())
-              .where((e) => e.isNotEmpty)
-              .toList();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (tags.isNotEmpty)
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: tags.take(6).map((t) => _tagChip(t)).toList(),
-          )
-        else
-          const Text('-', style: TextStyle(color: Colors.black54)),
-        const SizedBox(height: 12),
         Text(
-          'Catatan : ${desc.isEmpty ? '-' : desc}',
+          'Keperluan : ${interest.isEmpty ? '-' : interest}',
+          style: const TextStyle(color: Colors.black87),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Keterangan : ${desc.isEmpty ? '-' : desc}',
           style: const TextStyle(color: Colors.black87),
         ),
       ],
-    );
-  }
-
-  Widget _tagChip(String text) {
-    final isPembelian =
-        text.toLowerCase().contains('beli') ||
-        text.toLowerCase().contains('pembelian');
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: isPembelian ? const Color(0xFF16A34A) : const Color(0xFFD4A106),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            isPembelian ? Icons.attach_money : Icons.chat_bubble_outline,
-            color: Colors.white,
-            size: 16,
-          ),
-          const SizedBox(width: 8),
-          Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -645,8 +532,7 @@ class _NeedCard extends StatelessWidget {
 class _RowText extends StatelessWidget {
   final String label;
   final String value;
-  final Widget? trailing;
-  const _RowText({required this.label, required this.value, this.trailing});
+  const _RowText({required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -662,7 +548,7 @@ class _RowText extends StatelessWidget {
               style: const TextStyle(color: Colors.black54),
             ),
           ),
-          Expanded(child: trailing ?? Text(value.isEmpty ? '-' : value)),
+          Expanded(child: Text(value.isEmpty ? '-' : value)),
         ],
       ),
     );
@@ -695,8 +581,10 @@ class _SectionHeader extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              const SizedBox(height: 2),
-              Text(subtitle, style: const TextStyle(color: Colors.black54)),
+              if (subtitle.isNotEmpty) ...[
+                const SizedBox(height: 2),
+                Text(subtitle, style: const TextStyle(color: Colors.black54)),
+              ],
             ],
           ),
         ),

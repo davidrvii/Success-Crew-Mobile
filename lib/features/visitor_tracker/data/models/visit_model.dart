@@ -17,6 +17,7 @@ class VisitModel {
   final String? visitorStatus;
   final String? visitType;
   final String? visitDesc;
+  final String? salesName;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -34,6 +35,7 @@ class VisitModel {
     this.visitorStatus,
     this.visitType,
     this.visitDesc,
+    this.salesName,
     this.createdAt,
     this.updatedAt,
   });
@@ -54,6 +56,7 @@ class VisitModel {
       visitorStatus: json['visitor_status'] as String?,
       visitType: json['visit_type'] as String?,
       visitDesc: json['visit_desc'] as String?,
+      salesName: json['sales_name'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
     );
