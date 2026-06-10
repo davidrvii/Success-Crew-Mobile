@@ -11,6 +11,7 @@ class Leave {
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? userName;
 
   const Leave({
     required this.id,
@@ -22,6 +23,7 @@ class Leave {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    this.userName,
   });
 
   bool get isPending {

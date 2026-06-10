@@ -17,11 +17,20 @@ class LeaveRepositoryImpl implements LeaveRepository {
 
   @override
   Future<ApiResponse<List<Leave>>> getLeaveList() async {
-    final userIdRes = await _requireUserId();
-    if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
+    final session = await _session.readSession();
+    final roleName = (session?['role_name'] as String?)?.trim().toLowerCase();
+    final isOwner = roleName == 'owner';
 
-    final int userId = userIdRes.data!;
-    final res = await _remote.getLeaveList(userId);
+    final ApiResponse<LeaveListResponse> res;
+    if (isOwner) {
+      res = await _remote.getAllLeaveAdmin();
+    } else {
+      final userIdRes = await _requireUserId();
+      if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
+      final int userId = userIdRes.data!;
+      res = await _remote.getLeaveList(userId);
+    }
+
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final items = res.data?.items ?? const <LeaveDto>[];
@@ -150,6 +159,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
       status: dto.status,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
+      userName: dto.userName,
     );
   }
 }

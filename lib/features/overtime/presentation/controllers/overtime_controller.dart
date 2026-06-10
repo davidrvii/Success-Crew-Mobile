@@ -3,17 +3,25 @@ import 'package:flutter/material.dart';
 import '../../domain/entities/overtime.dart';
 import '../../domain/usecases/get_overtime_list.dart';
 import '../../domain/usecases/create_overtime.dart';
+import '../../domain/usecases/update_overtime.dart';
 import '../../data/models/overtime_request.dart';
+import '../../../../core/storage/user_session.dart';
 
 class OvertimeController extends ChangeNotifier {
   final GetOvertimeListUseCase _getOvertimeList;
   final CreateOvertimeUseCase _createOvertime;
+  final UpdateOvertimeUseCase _updateOvertime;
+  final UserSession _session;
 
   OvertimeController({
     required GetOvertimeListUseCase getOvertimeList,
     required CreateOvertimeUseCase createOvertime,
+    required UpdateOvertimeUseCase updateOvertime,
+    required UserSession userSession,
   }) : _getOvertimeList = getOvertimeList,
-       _createOvertime = createOvertime;
+       _createOvertime = createOvertime,
+       _updateOvertime = updateOvertime,
+       _session = userSession;
 
   bool _loading = false;
   bool get isLoading => _loading;
@@ -24,7 +32,16 @@ class OvertimeController extends ChangeNotifier {
   List<Overtime> _overtimes = [];
   List<Overtime> get overtimes => _overtimes;
 
-  Future<void> init() => fetchOvertimes();
+  bool _isOwner = false;
+  bool get isOwner => _isOwner;
+
+  Future<void> init() async {
+    final session = await _session.readSession();
+    final role = (session?['role_name'] as String?)?.trim().toLowerCase();
+    _isOwner = role == 'owner';
+    notifyListeners();
+    await fetchOvertimes();
+  }
 
   Future<void> fetchOvertimes() async {
     _setLoading(true);
@@ -67,6 +84,25 @@ class OvertimeController extends ChangeNotifier {
       return true;
     } else {
       _errorMessage = res.error?.message ?? 'Gagal mengajukan lembur';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updateStatus(int id, String status) async {
+    _setLoading(true);
+    _errorMessage = null;
+
+    final req = OvertimeRequest(status: status);
+    final res = await _updateOvertime(id, req);
+
+    _setLoading(false);
+
+    if (res.isSuccess) {
+      fetchOvertimes(); // Refresh data after success
+      return true;
+    } else {
+      _errorMessage = res.error?.message ?? 'Gagal memperbarui status lembur';
       notifyListeners();
       return false;
     }

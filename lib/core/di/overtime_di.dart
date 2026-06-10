@@ -8,6 +8,7 @@ import '../../features/overtime/data/repositories/overtime_repository_impl.dart'
 import '../../features/overtime/domain/repositories/overtime_repository.dart';
 import '../../features/overtime/domain/usecases/get_overtime_list.dart';
 import '../../features/overtime/domain/usecases/create_overtime.dart';
+import '../../features/overtime/domain/usecases/update_overtime.dart';
 import '../../features/overtime/presentation/controllers/overtime_controller.dart';
 
 void registerOvertimeDi(GetIt sl) {
@@ -28,12 +29,17 @@ void registerOvertimeDi(GetIt sl) {
   sl.registerLazySingleton<CreateOvertimeUseCase>(
     () => CreateOvertimeUseCase(sl<OvertimeRepository>()),
   );
+  sl.registerLazySingleton<UpdateOvertimeUseCase>(
+    () => UpdateOvertimeUseCase(sl<OvertimeRepository>()),
+  );
 
   // Controllers
   sl.registerFactory<OvertimeController>(
     () => OvertimeController(
       getOvertimeList: sl<GetOvertimeListUseCase>(),
       createOvertime: sl<CreateOvertimeUseCase>(),
+      updateOvertime: sl<UpdateOvertimeUseCase>(),
+      userSession: sl<UserSession>(),
     ),
   );
 }

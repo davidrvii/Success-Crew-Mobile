@@ -24,7 +24,7 @@ class HomeOwnerHeaderCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: blue,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: const [
           BoxShadow(
             blurRadius: 18,

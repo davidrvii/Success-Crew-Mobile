@@ -11,6 +11,7 @@ class OvertimeDto {
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final String? userName;
 
   const OvertimeDto({
     required this.id,
@@ -22,9 +23,13 @@ class OvertimeDto {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    this.userName,
   });
 
   factory OvertimeDto.fromJson(Map<String, dynamic> json) {
+    final userMap = json['user'] is Map<String, dynamic> ? json['user'] as Map<String, dynamic> : null;
+    final uName = userMap?['user_name'] as String? ?? json['user_name'] as String? ?? json['userName'] as String?;
+
     return OvertimeDto(
       id: _readInt(json, ['overtime_id', 'id', 'overtimeId']) ?? 0,
       userId: _readInt(json, ['user_id', 'userId']) ?? 0,
@@ -35,6 +40,7 @@ class OvertimeDto {
       status: _readString(json, ['status', 'overtime_status']),
       createdAt: _readDate(json, ['created_at', 'createdAt']),
       updatedAt: _readDate(json, ['updated_at', 'updatedAt']),
+      userName: uName,
     );
   }
 }

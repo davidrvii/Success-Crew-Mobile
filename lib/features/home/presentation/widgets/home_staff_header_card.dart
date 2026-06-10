@@ -24,7 +24,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFF135CAE), // Match exact blue from design
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: const [
           BoxShadow(
             blurRadius: 18,

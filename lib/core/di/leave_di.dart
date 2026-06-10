@@ -8,6 +8,7 @@ import '../../features/leave/data/repositories/leave_repository_impl.dart';
 import '../../features/leave/domain/repositories/leave_repository.dart';
 import '../../features/leave/domain/usecases/get_leave_list.dart';
 import '../../features/leave/domain/usecases/create_leave.dart';
+import '../../features/leave/domain/usecases/update_leave.dart';
 import '../../features/leave/presentation/controllers/leave_controller.dart';
 
 void registerLeaveDi(GetIt sl) {
@@ -28,12 +29,17 @@ void registerLeaveDi(GetIt sl) {
   sl.registerLazySingleton<CreateLeaveUseCase>(
     () => CreateLeaveUseCase(sl<LeaveRepository>()),
   );
+  sl.registerLazySingleton<UpdateLeaveUseCase>(
+    () => UpdateLeaveUseCase(sl<LeaveRepository>()),
+  );
 
   // Controllers
   sl.registerFactory<LeaveController>(
     () => LeaveController(
       getLeaveList: sl<GetLeaveListUseCase>(),
       createLeave: sl<CreateLeaveUseCase>(),
+      updateLeave: sl<UpdateLeaveUseCase>(),
+      userSession: sl<UserSession>(),
     ),
   );
 }
