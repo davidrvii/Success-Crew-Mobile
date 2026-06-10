@@ -83,23 +83,13 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildOwnerContent() {
     return [
-      const _SectionTitle('Ringkasan Bisnis'),
+      const _SectionTitle('Ringkasan Pengunjung'),
       const SizedBox(height: 12),
       _OwnerSummaryGrid(
-        income: 24, // Dummy
-        visitors: 16,
-        inService: 12,
-        trip: 8,
-      ),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Kehadiran Karyawan'),
-      const SizedBox(height: 12),
-      _OwnerAttendanceCard(
-        present: c.present,
-        late: c.late,
-        leave: c.leave,
-        overtime: c.overtime,
+        visitorsToday: c.visitorsToday,
+        walkIn: c.walkInToday,
+        callIn: c.callInToday,
+        chatIn: c.chatInToday,
       ),
       const SizedBox(height: 24),
 
@@ -153,6 +143,16 @@ class _HomePageState extends State<HomePage> {
         approachingDeadline: 16, // Dummy for now
         passedDeadline: 12, // Dummy for now
         complaints: 8, // Dummy for now
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Kehadiran Karyawan'),
+      const SizedBox(height: 12),
+      _OwnerAttendanceCard(
+        present: c.present,
+        late: c.late,
+        leave: c.leave,
+        overtime: c.overtime,
       ),
       const SizedBox(height: 24),
 
@@ -261,68 +261,70 @@ class _SectionTitle extends StatelessWidget {
 // ============================================================================
 
 class _OwnerSummaryGrid extends StatelessWidget {
-  final int income;
-  final int visitors;
-  final int inService;
-  final int trip;
+  final int visitorsToday;
+  final int walkIn;
+  final int callIn;
+  final int chatIn;
 
   const _OwnerSummaryGrid({
-    required this.income,
-    required this.visitors,
-    required this.inService,
-    required this.trip,
+    required this.visitorsToday,
+    required this.walkIn,
+    required this.callIn,
+    required this.chatIn,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: _OwnerGridCard(
-                title: 'Jumlah\nPemasukkan',
-                value: income.toString(),
-                subText: 'Total Pendapatan :\nRp. 100.000',
-                color: const Color(0xFF22C55E), // Green
-                icon: Icons.attach_money,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _OwnerGridCard(
+                  title: 'Pengunjung\nHari Ini',
+                  value: visitorsToday.toString(),
+                  color: const Color(0xFF1E88FF), // Blue
+                  icon: Icons.people_alt_rounded,
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _OwnerGridCard(
-                title: 'Pengunjung\nHari Ini',
-                value: visitors.toString(),
-                subText: 'Jam Sibuk :\n13:00 - 14:00',
-                color: const Color(0xFF3B82F6), // Blue
-                icon: Icons.people_outline,
+              const SizedBox(width: 12),
+              Expanded(
+                child: _OwnerGridCard(
+                  title: 'Walk-In\n',
+                  value: walkIn.toString(),
+                  color: const Color(0xFF2ED3A2), // Green
+                  icon: Icons.schedule_rounded,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _OwnerGridCard(
-                title: 'Sedang di\nService',
-                value: inService.toString(),
-                subText: 'Mendekati Batas :\n4 Item',
-                color: const Color(0xFF8B5CF6), // Purple
-                icon: Icons.build_circle_outlined,
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _OwnerGridCard(
+                  title: 'Call-In\n',
+                  value: callIn.toString(),
+                  color: const Color(0xFF5B5FEA), // Indigo
+                  icon: Icons.error_outline_rounded,
+                ),
               ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _OwnerGridCard(
-                title: 'Perjalanan\nHari Ini',
-                value: trip.toString(),
-                subText: 'Total Jarak :\n80 km',
-                color: const Color(0xFF14B8A6), // Teal
-                icon: Icons.inventory_2_outlined,
+              const SizedBox(width: 12),
+              Expanded(
+                child: _OwnerGridCard(
+                  title: 'Chat-In\n',
+                  value: chatIn.toString(),
+                  color: const Color(0xFF9A7BFF), // Purple
+                  icon: Icons.check_circle_outline_rounded,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
@@ -332,14 +334,12 @@ class _OwnerSummaryGrid extends StatelessWidget {
 class _OwnerGridCard extends StatelessWidget {
   final String title;
   final String value;
-  final String subText;
   final Color color;
   final IconData icon;
 
   const _OwnerGridCard({
     required this.title,
     required this.value,
-    required this.subText,
     required this.color,
     required this.icon,
   });
@@ -347,7 +347,7 @@ class _OwnerGridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 12),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(20),
@@ -365,7 +365,7 @@ class _OwnerGridCard extends StatelessWidget {
             alignment: Alignment.topRight,
             child: Container(
               padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
@@ -392,16 +392,6 @@ class _OwnerGridCard extends StatelessWidget {
                   fontSize: 34,
                   fontWeight: FontWeight.w900,
                   height: 1,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                subText,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  height: 1.2,
-                  fontWeight: FontWeight.w500,
                 ),
               ),
             ],

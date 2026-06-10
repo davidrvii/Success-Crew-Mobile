@@ -9,6 +9,7 @@ import '../entities/visit.dart';
 import '../entities/followup.dart';
 import '../entities/product_sold.dart';
 import '../entities/unit_serviced.dart';
+import '../entities/visitor.dart';
 
 abstract class VisitRepository {
   // VISIT
@@ -17,6 +18,7 @@ abstract class VisitRepository {
   Future<ApiResponse<Visit>> createVisit(VisitRequest request);
   Future<ApiResponse<Visit>> updateVisit(int visitId, VisitRequest request);
   Future<ApiResponse<int>> deleteVisit(int visitId);
+  Future<ApiResponse<List<Visitor>>> getVisitors();
 
   // FOLLOW-UP
   Future<ApiResponse<List<FollowUp>>> getFollowUps(int visitId);

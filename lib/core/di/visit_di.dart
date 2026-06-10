@@ -16,6 +16,7 @@ import '../../features/visitor_tracker/domain/usecases/delete_followup.dart';
 import '../../features/visitor_tracker/domain/usecases/delete_product_sold.dart';
 import '../../features/visitor_tracker/domain/usecases/delete_unit_serviced.dart';
 import '../../features/visitor_tracker/domain/usecases/delete_visit.dart';
+import '../../features/visitor_tracker/domain/usecases/get_visitors.dart';
 
 import '../../features/visitor_tracker/presentation/controllers/visit_controller.dart';
 import '../../features/visitor_tracker/presentation/controllers/visit_detail_controller.dart';
@@ -45,9 +46,10 @@ void registerVisitDi(GetIt sl) {
   sl.registerLazySingleton(() => DeleteProductSoldUseCase(sl()));
   sl.registerLazySingleton(() => DeleteUnitServicedUseCase(sl()));
   sl.registerLazySingleton(() => DeleteVisitUseCase(sl()));
+  sl.registerLazySingleton(() => GetVisitorsUseCase(sl()));
 
   // controller
-  sl.registerFactory(() => VisitorController(sl(), sl()));
+  sl.registerFactory(() => VisitorController(sl(), sl(), sl()));
   sl.registerFactory(() => VisitDetailController(
         sl(), sl(), sl(), sl(), 
         sl(), sl(), sl(), 

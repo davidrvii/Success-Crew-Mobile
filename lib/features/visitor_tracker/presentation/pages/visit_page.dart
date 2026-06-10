@@ -37,8 +37,9 @@ class _VisitorPageState extends State<VisitorPage> {
           backgroundColor: const Color(0xFFF4F6F8),
 
           floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              context.push('/visitor-add');
+            onPressed: () async {
+              await context.push('/visitor-add');
+              c.refresh();
             },
             child: const Icon(Icons.add),
           ),
@@ -92,18 +93,20 @@ class _VisitorPageState extends State<VisitorPage> {
         itemBuilder: (context, index) {
           final v = c.visible[index];
 
-          final name = _nonEmpty(v.visitorInterest);
-          final need = _nonEmpty(v.visitDesc);
-          final status = _nonEmpty(v.visitorStatus);
-          final method = _nonEmpty(v.visitType);
+          final visitorName = _nonEmpty(v.visitorName);
+          final visitorInterest = _nonEmpty(v.visitorInterest);
+          final visitType = _nonEmpty(v.visitType);
+          final visitorInfo = _nonEmpty(v.visitorInformation);
 
+          final status = _nonEmpty(v.visitorStatus);
           final date = _formatDate(v.createdAt);
           final time = _formatTime(v.createdAt);
 
           return _VisitorCard(
-            name: name,
-            need: need,
-            method: method,
+            title: visitorName,
+            interest: visitorInterest,
+            type: visitType,
+            info: visitorInfo,
             status: status,
             date: date,
             time: time,
@@ -242,18 +245,20 @@ class _SortRow extends StatelessWidget {
 }
 
 class _VisitorCard extends StatelessWidget {
-  final String name;
-  final String need;
-  final String method;
+  final String title;
+  final String interest;
+  final String type;
+  final String info;
   final String status;
   final String date;
   final String time;
   final VoidCallback onTap;
 
   const _VisitorCard({
-    required this.name,
-    required this.need,
-    required this.method,
+    required this.title,
+    required this.interest,
+    required this.type,
+    required this.info,
     required this.status,
     required this.date,
     required this.time,
@@ -282,7 +287,7 @@ class _VisitorCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      name,
+                      title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
@@ -296,9 +301,11 @@ class _VisitorCard extends StatelessWidget {
               ),
               const SizedBox(height: 10),
 
-              _kv('Catatan', need),
+              _kv('Keperluan', interest),
               const SizedBox(height: 4),
-              _kv('Tipe', method),
+              _kv('Metode', type),
+              const SizedBox(height: 4),
+              _kv('Pengunjung', info),
 
               const SizedBox(height: 10),
               Row(
@@ -322,7 +329,7 @@ class _VisitorCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          width: 86,
+          width: 100,
           child: Text('$k :', style: const TextStyle(color: Colors.black54)),
         ),
         Expanded(child: Text(v)),

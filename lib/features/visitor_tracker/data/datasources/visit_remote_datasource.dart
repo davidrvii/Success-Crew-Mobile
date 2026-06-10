@@ -13,6 +13,7 @@ import '../models/product_sold_response.dart';
 
 import '../models/unit_serviced_request.dart';
 import '../models/unit_serviced_response.dart';
+import '../models/visitor_response.dart';
 
 abstract class VisitRemoteDataSource {
   // VISIT
@@ -23,6 +24,7 @@ abstract class VisitRemoteDataSource {
     int visitId,
     VisitRequest request,
   );
+  Future<ApiResponse<VisitorListResponse>> getVisitors();
   Future<ApiResponse<VisitDeleteResponse>> deleteVisit(int visitId);
 
   // FOLLOW-UP
@@ -85,6 +87,15 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
       request: () => _client.get(ApiPaths.visitAdmin),
       parser: (json) =>
           VisitListResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<ApiResponse<VisitorListResponse>> getVisitors() {
+    return ApiResponse.guard(
+      request: () => _client.get(ApiPaths.visitorAdmin),
+      parser: (json) =>
+          VisitorListResponse.fromJson(json as Map<String, dynamic>),
     );
   }
 

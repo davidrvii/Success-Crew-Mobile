@@ -9,7 +9,7 @@ import '../models/home_leave_response.dart';
 import '../models/home_notification_response.dart';
 import '../models/home_overtime_response.dart';
 import '../models/home_user_basic_response.dart';
-import '../models/home_visit_summary_response.dart';
+import '../../../visitor_tracker/data/models/visit_response.dart';
 
 abstract class HomeRemoteDataSource {
   Future<ApiResponse<HomeUserBasicResponse>> getUserBasic(int userId);
@@ -32,7 +32,7 @@ abstract class HomeRemoteDataSource {
 
   Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAdmin();
 
-  Future<ApiResponse<HomeVisitSummaryResponse>> getVisitSummary();
+  Future<ApiResponse<VisitListResponse>> getVisitSummary();
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -109,10 +109,10 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeVisitSummaryResponse>> getVisitSummary() {
+  Future<ApiResponse<VisitListResponse>> getVisitSummary() {
     return _get(
       path: ApiPaths.visitAdmin,
-      parser: HomeVisitSummaryResponse.fromJson,
+      parser: VisitListResponse.fromJson,
     );
   }
 

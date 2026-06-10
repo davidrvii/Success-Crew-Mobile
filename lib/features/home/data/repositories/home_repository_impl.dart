@@ -16,7 +16,7 @@ import '../models/home_leave_response.dart';
 import '../models/home_notification_response.dart';
 import '../models/home_overtime_response.dart';
 import '../models/home_user_basic_response.dart';
-import '../models/home_visit_summary_response.dart';
+import '../../../visitor_tracker/data/models/visit_response.dart';
 
 class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSource _remote;
@@ -68,7 +68,7 @@ class HomeRepositoryImpl implements HomeRepository {
     final overtimeRes = await _requireSuccess(overtimeF);
     if (!overtimeRes.isSuccess) return ApiResponse.failure(overtimeRes.error!);
 
-    HomeVisitSummaryResponse? visit;
+    VisitListResponse? visit;
     if (visitF != null) {
       final visitRes = await _requireSuccess(visitF);
       if (!visitRes.isSuccess) return ApiResponse.failure(visitRes.error!);
@@ -168,13 +168,19 @@ class HomeRepositoryImpl implements HomeRepository {
   // BUILD SUMMARY (DTO -> ENTITY)
   // =========================
 
+  bool _isToday(DateTime? dt) {
+    if (dt == null) return false;
+    final now = DateTime.now();
+    return dt.year == now.year && dt.month == now.month && dt.day == now.day;
+  }
+
   HomeSummary _buildSummary({
     required HomeUserBasicResponse userBasic,
     required HomeNotificationResponse notif,
     required HomeAttendanceResponse attendance,
     required HomeLeaveResponse leave,
     required HomeOvertimeResponse overtime,
-    required HomeVisitSummaryResponse? visit,
+    required VisitListResponse? visit,
     required HomeTodayAbsence todayAbsence,
   }) {
     final user = HomeUserBasic(
@@ -184,7 +190,26 @@ class HomeRepositoryImpl implements HomeRepository {
       userPhoto: userBasic.userPhoto,
     );
 
-    final visitorsToday = visit?.visitorsToday ?? 0;
+    int visitorsToday = 0;
+    int walkInToday = 0;
+    int callInToday = 0;
+    int chatInToday = 0;
+
+    if (visit != null) {
+      for (final v in visit.visits) {
+        if (_isToday(v.createdAt)) {
+          visitorsToday++;
+          final type = (v.visitType ?? '').trim().toLowerCase();
+          if (type == 'walk-in' || type == 'walk in') {
+            walkInToday++;
+          } else if (type == 'call-in' || type == 'call in') {
+            callInToday++;
+          } else if (type == 'chat-in' || type == 'chat in') {
+            chatInToday++;
+          }
+        }
+      }
+    }
 
     return HomeSummary(
       user: user,
@@ -202,6 +227,9 @@ class HomeRepositoryImpl implements HomeRepository {
       ),
       visitors: HomeVisitSummary(
         visitorsToday: visitorsToday,
+        walkInToday: walkInToday,
+        callInToday: callInToday,
+        chatInToday: chatInToday,
         totalRevenue: 0,
         totalDistance: 0,
       ),

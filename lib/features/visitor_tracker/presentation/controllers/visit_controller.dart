@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import '../../domain/entities/visit.dart';
 import '../../domain/usecases/get_visits.dart';
 import '../../domain/usecases/create_visit.dart';
+import '../../domain/usecases/get_visitors.dart';
+import '../../domain/entities/visitor.dart';
 import '../../data/models/visit_request.dart';
 import '../../../../core/network/api_response.dart';
 
@@ -12,14 +14,16 @@ enum VisitorSortMode { newest, az }
 class VisitorController extends ChangeNotifier {
   final GetVisitsUseCase _getVisits;
   final CreateVisitUseCase _createVisit;
+  final GetVisitorsUseCase _getVisitors;
 
-  VisitorController(this._getVisits, this._createVisit);
+  VisitorController(this._getVisits, this._createVisit, this._getVisitors);
 
   bool isLoading = false;
   String? errorMessage;
 
   final List<Visit> _all = [];
   List<Visit> visible = [];
+  final List<Visitor> visitors = [];
 
   String query = '';
   VisitorSortMode sortMode = VisitorSortMode.newest;
@@ -40,6 +44,7 @@ class VisitorController extends ChangeNotifier {
     notifyListeners();
 
     final ApiResponse<List<Visit>> res = await _getVisits();
+    final ApiResponse<List<Visitor>> visitorRes = await _getVisitors();
 
     if (!res.isSuccess) {
       isLoading = false;
@@ -52,6 +57,12 @@ class VisitorController extends ChangeNotifier {
       ..clear()
       ..addAll(res.data ?? const []);
 
+    if (visitorRes.isSuccess) {
+      visitors
+        ..clear()
+        ..addAll(visitorRes.data ?? const []);
+    }
+
     _apply();
     isLoading = false;
     notifyListeners();
@@ -63,18 +74,29 @@ class VisitorController extends ChangeNotifier {
     required String customerAddress,
     required String purpose,
     required String notes,
+    required String visitDesc,
+    required String visitType,
+    required String status,
+    required DateTime createdAt,
+    required int? userId,
+    int? visitorId,
   }) async {
     isLoading = true;
     errorMessage = null;
     notifyListeners();
 
     final req = VisitRequest(
+      userId: userId,
+      visitorId: visitorId,
       customerName: customerName,
       customerPhone: customerPhone,
       customerAddress: customerAddress,
       purpose: purpose,
+      status: status,
       notes: notes,
-      status: 'Pending',
+      visitType: visitType,
+      visitDesc: visitDesc,
+      createdAt: createdAt,
     );
 
     final res = await _createVisit(req);

@@ -127,6 +127,9 @@ class HomeController extends ChangeNotifier {
   int get unreadNotif => _summary?.unreadNotificationCount ?? 0;
 
   int get visitorsToday => _summary?.visitors.visitorsToday ?? 0;
+  int get walkInToday => _summary?.visitors.walkInToday ?? 0;
+  int get callInToday => _summary?.visitors.callInToday ?? 0;
+  int get chatInToday => _summary?.visitors.chatInToday ?? 0;
 
   int get present => _summary?.attendance.presentCount ?? 0;
   int get late => _summary?.attendance.lateCount ?? 0;

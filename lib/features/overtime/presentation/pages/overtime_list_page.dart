@@ -55,7 +55,7 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
           if (displayOvertimes.isEmpty) {
             body = Center(
               child: Text(c.isOwner
-                  ? 'Tidak ada pengajuan lembur pending.'
+                  ? 'Tidak ada pengajuan lembur.'
                   : 'Belum ada data lembur.'),
             );
           } else {

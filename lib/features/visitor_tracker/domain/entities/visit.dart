@@ -1,7 +1,15 @@
+import 'visitor.dart';
+
 class Visit {
   final int visitId;
   final int? visitorId;
   final int? userId;
+  final Visitor? visitor;
+
+  final String? visitorName;
+  final String? visitorPhone;
+  final String? visitorAddress;
+  final String? visitorInformation;
 
   final String? visitorInterest;
   final String? visitorStatus;
@@ -15,6 +23,11 @@ class Visit {
     required this.visitId,
     this.visitorId,
     this.userId,
+    this.visitor,
+    this.visitorName,
+    this.visitorPhone,
+    this.visitorAddress,
+    this.visitorInformation,
     this.visitorInterest,
     this.visitorStatus,
     this.visitType,

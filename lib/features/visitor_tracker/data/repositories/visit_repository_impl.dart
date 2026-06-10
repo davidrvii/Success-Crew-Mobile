@@ -13,6 +13,8 @@ import '../models/visit_model.dart';
 import '../models/followup_model.dart';
 import '../models/product_sold_model.dart';
 import '../models/unit_serviced_model.dart';
+import '../../domain/entities/visitor.dart';
+import '../models/visitor_model.dart';
 
 import '../models/visit_request.dart';
 import '../models/followup_request.dart';
@@ -38,10 +40,25 @@ class VisitRepositoryImpl implements VisitRepository {
     visitId: m.visitId,
     visitorId: m.visitorId,
     userId: m.userId,
+    visitor: m.visitor,
+    visitorName: m.visitorName ?? m.visitor?.visitorName,
+    visitorPhone: m.visitorPhone ?? m.visitor?.visitorPhone,
+    visitorAddress: m.visitorAddress ?? m.visitor?.visitorAddress,
+    visitorInformation: m.visitorInformation ?? m.visitor?.visitorInformation,
     visitorInterest: m.visitorInterest,
     visitorStatus: m.visitorStatus,
     visitType: m.visitType,
     visitDesc: m.visitDesc,
+    createdAt: m.createdAt,
+    updatedAt: m.updatedAt,
+  );
+
+  Visitor _mapVisitor(VisitorModel m) => Visitor(
+    visitorId: m.visitorId,
+    visitorName: m.visitorName,
+    visitorPhone: m.visitorPhone,
+    visitorInformation: m.visitorInformation,
+    visitorAddress: m.visitorAddress,
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
   );
@@ -97,6 +114,21 @@ class VisitRepositoryImpl implements VisitRepository {
     }
 
     return ApiResponse.success(list.map(_mapVisit).toList());
+  }
+
+  @override
+  Future<ApiResponse<List<Visitor>>> getVisitors() async {
+    final res = await _remote.getVisitors();
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final list = res.data?.visitors;
+    if (list == null) {
+      return ApiResponse.failure(
+        _unexpected('Unexpected response: visitors is null'),
+      );
+    }
+
+    return ApiResponse.success(list.map(_mapVisitor).toList());
   }
 
   @override

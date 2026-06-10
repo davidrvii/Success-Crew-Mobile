@@ -54,6 +54,9 @@ class ApiPaths {
   static const String visitAdmin = '/visit/admin';
   static const String visitAdd = '/visit/add';
 
+  // VISITOR (/visitor)
+  static const String visitorAdmin = '/visitor/admin';
+
   static String visitDetail(int id) => '/visit/detail/$id';
   static String visitUpdate(int id) => '/visit/update/$id';
   static String visitDelete(int id) => '/visit/delete/$id';

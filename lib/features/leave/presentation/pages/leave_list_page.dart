@@ -55,7 +55,7 @@ class _LeaveListPageState extends State<LeaveListPage> {
           if (displayLeaves.isEmpty) {
             body = Center(
               child: Text(c.isOwner
-                  ? 'Tidak ada pengajuan cuti pending.'
+                  ? 'Tidak ada pengajuan cuti.'
                   : 'Belum ada data cuti.'),
             );
           } else {

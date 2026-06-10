@@ -1,3 +1,5 @@
+import 'visitor_model.dart';
+
 DateTime? _dt(dynamic v) => v is String ? DateTime.tryParse(v) : null;
 int? _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v');
 
@@ -5,6 +7,11 @@ class VisitModel {
   final int visitId;
   final int? visitorId;
   final int? userId;
+  final VisitorModel? visitor;
+  final String? visitorName;
+  final String? visitorPhone;
+  final String? visitorAddress;
+  final String? visitorInformation;
 
   final String? visitorInterest;
   final String? visitorStatus;
@@ -18,6 +25,11 @@ class VisitModel {
     required this.visitId,
     this.visitorId,
     this.userId,
+    this.visitor,
+    this.visitorName,
+    this.visitorPhone,
+    this.visitorAddress,
+    this.visitorInformation,
     this.visitorInterest,
     this.visitorStatus,
     this.visitType,
@@ -31,6 +43,13 @@ class VisitModel {
       visitId: _int(json['visit_id']) ?? 0,
       visitorId: _int(json['visitor_id']),
       userId: _int(json['user_id']),
+      visitor: json['visitor'] != null
+          ? VisitorModel.fromJson(json['visitor'] as Map<String, dynamic>)
+          : null,
+      visitorName: json['visitor_name'] as String?,
+      visitorPhone: json['visitor_phone'] as String?,
+      visitorAddress: json['visitor_address'] as String?,
+      visitorInformation: json['visitor_information'] as String?,
       visitorInterest: json['visitor_interest'] as String?,
       visitorStatus: json['visitor_status'] as String?,
       visitType: json['visit_type'] as String?,
