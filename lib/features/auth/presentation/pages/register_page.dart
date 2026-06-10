@@ -135,6 +135,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   TextField(
                     controller: _nameC,
                     textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black87),
                     decoration: _fieldDecoration(hint: 'Name'),
                   ),
 
@@ -145,6 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _emailC,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black87),
                     decoration: _fieldDecoration(hint: 'Email'),
                   ),
 
@@ -155,6 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passC,
                     obscureText: c.obscurePassword,
                     textInputAction: TextInputAction.next,
+                    style: const TextStyle(color: Colors.black87),
                     decoration: _fieldDecoration(
                       hint: 'Password',
                       suffix: IconButton(
@@ -173,11 +176,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 6),
                   DropdownButtonFormField<int>(
                     initialValue: _officeId,
+                    style: const TextStyle(color: Colors.black87, fontSize: 16),
                     items: _offices
                         .map(
                           (o) => DropdownMenuItem<int>(
                             value: o.id,
-                            child: Text(o.label),
+                            child: Text(o.label, style: const TextStyle(color: Colors.black87)),
                           ),
                         )
                         .toList(),
@@ -194,11 +198,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 6),
                   DropdownButtonFormField<int>(
                     initialValue: _roleId,
+                    style: const TextStyle(color: Colors.black87, fontSize: 16),
                     items: _roles
                         .map(
                           (r) => DropdownMenuItem<int>(
                             value: r.id,
-                            child: Text(r.label),
+                            child: Text(r.label, style: const TextStyle(color: Colors.black87)),
                           ),
                         )
                         .toList(),
@@ -261,6 +266,7 @@ class _RegisterPageState extends State<RegisterPage> {
   InputDecoration _fieldDecoration({required String hint, Widget? suffix}) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: const TextStyle(color: Colors.black45),
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
@@ -275,6 +281,7 @@ class _RegisterPageState extends State<RegisterPage> {
   InputDecoration _dropdownDecoration({required String hint}) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: const TextStyle(color: Colors.black45),
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),

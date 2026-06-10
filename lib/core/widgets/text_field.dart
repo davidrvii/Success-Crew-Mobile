@@ -53,6 +53,7 @@ class AppTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     final decoration = InputDecoration(
       hintText: hint,
+      hintStyle: const TextStyle(color: Colors.black45),
       helperText: helperText,
       errorText: errorText,
       prefixIcon: prefixIcon,

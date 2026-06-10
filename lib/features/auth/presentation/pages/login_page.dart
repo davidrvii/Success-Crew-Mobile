@@ -107,6 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _emailC,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
+                  style: const TextStyle(color: Colors.black87),
                   decoration: _fieldDecoration(hint: 'Email'),
                 ),
 
@@ -118,6 +119,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: c.obscurePassword,
                   textInputAction: TextInputAction.done,
                   onSubmitted: (_) => _submit(),
+                  style: const TextStyle(color: Colors.black87),
                   decoration: _fieldDecoration(
                     hint: 'Password',
                     suffix: IconButton(
@@ -181,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
   InputDecoration _fieldDecoration({required String hint, Widget? suffix}) {
     return InputDecoration(
       hintText: hint,
+      hintStyle: const TextStyle(color: Colors.black45),
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
