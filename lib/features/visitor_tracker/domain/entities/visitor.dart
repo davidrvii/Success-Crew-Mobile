@@ -3,7 +3,7 @@ class Visitor {
   final String? visitorName;
   final String? visitorPhone;
   final String? visitorInformation;
-  final String? visitorAddress;
+  final String? visitorCompany;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -12,7 +12,7 @@ class Visitor {
     this.visitorName,
     this.visitorPhone,
     this.visitorInformation,
-    this.visitorAddress,
+    this.visitorCompany,
     this.createdAt,
     this.updatedAt,
   });

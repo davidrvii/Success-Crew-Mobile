@@ -9,7 +9,7 @@ class VisitorModel extends Visitor {
     super.visitorName,
     super.visitorPhone,
     super.visitorInformation,
-    super.visitorAddress,
+    super.visitorCompany,
     super.createdAt,
     super.updatedAt,
   });
@@ -20,7 +20,7 @@ class VisitorModel extends Visitor {
       visitorName: json['visitor_name'] as String?,
       visitorPhone: json['visitor_phone'] as String?,
       visitorInformation: json['visitor_information'] as String?,
-      visitorAddress: json['visitor_address'] as String?,
+      visitorCompany: json['visitor_company'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
     );

@@ -35,11 +35,11 @@ class ProductSoldModel {
           ) ??
           0,
       visitId: _int(json['visit_id']),
-      productName: json['product_name'] as String? ?? json['name'] as String?,
-      quantity: _int(json['quantity'] ?? json['qty']),
-      price: _dbl(json['price']),
-      total: _dbl(json['total']),
-      notes: json['notes'] as String?,
+      productName: json['product_sold_name'] as String? ?? json['product_sold_type'] as String? ?? json['product_name'] as String? ?? json['name'] as String?,
+      quantity: _int(json['product_sold_quantity'] ?? json['quantity'] ?? json['qty']),
+      price: _dbl(json['product_sold_price'] ?? json['price']),
+      total: null,
+      notes: json['product_sold_desc'] as String? ?? json['product_sold_category'] as String? ?? json['notes'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
     );

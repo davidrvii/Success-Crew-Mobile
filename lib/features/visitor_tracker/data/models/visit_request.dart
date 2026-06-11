@@ -35,7 +35,7 @@ class VisitRequest {
     if (visitorId != null) data['visitor_id'] = visitorId;
     if (customerName != null) data['customer_name'] = customerName;
     if (customerPhone != null) data['customer_phone'] = customerPhone;
-    if (customerAddress != null) data['customer_address'] = customerAddress;
+    if (customerAddress != null) data['visitor_company'] = customerAddress;
     if (purpose != null) data['purpose'] = purpose;
     if (status != null) data['status'] = status;
     if (notes != null) data['notes'] = notes;
@@ -48,7 +48,7 @@ class VisitRequest {
 
     if (customerName != null) data['visitor_name'] = customerName;
     if (customerPhone != null) data['visitor_phone'] = customerPhone;
-    if (customerAddress != null) data['visitor_address'] = customerAddress;
+    if (customerAddress != null) data['visitor_company'] = customerAddress;
     if (notes != null) data['visitor_information'] = notes;
 
     return data;

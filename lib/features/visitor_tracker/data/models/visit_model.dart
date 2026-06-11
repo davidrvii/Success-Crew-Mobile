@@ -10,7 +10,7 @@ class VisitModel {
   final VisitorModel? visitor;
   final String? visitorName;
   final String? visitorPhone;
-  final String? visitorAddress;
+  final String? visitorCompany;
   final String? visitorInformation;
 
   final String? visitorInterest;
@@ -29,7 +29,7 @@ class VisitModel {
     this.visitor,
     this.visitorName,
     this.visitorPhone,
-    this.visitorAddress,
+    this.visitorCompany,
     this.visitorInformation,
     this.visitorInterest,
     this.visitorStatus,
@@ -50,7 +50,7 @@ class VisitModel {
           : null,
       visitorName: json['visitor_name'] as String?,
       visitorPhone: json['visitor_phone'] as String?,
-      visitorAddress: json['visitor_address'] as String?,
+      visitorCompany: json['visitor_company'] as String?,
       visitorInformation: json['visitor_information'] as String?,
       visitorInterest: json['visitor_interest'] as String?,
       visitorStatus: json['visitor_status'] as String?,

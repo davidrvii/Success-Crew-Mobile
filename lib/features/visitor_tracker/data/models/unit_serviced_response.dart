@@ -8,6 +8,7 @@ List<Map<String, dynamic>> _asListMap(dynamic raw) {
   if (raw is List) return raw.whereType<Map<String, dynamic>>().toList();
   if (raw is Map<String, dynamic>) {
     final inner =
+        raw['units'] ??
         raw['unitsServiced'] ??
         raw['unitServiced'] ??
         raw['data'] ??
@@ -33,6 +34,7 @@ class UnitServicedListResponse {
 
   factory UnitServicedListResponse.fromJson(Map<String, dynamic> json) {
     final raw =
+        json['units'] ??
         json['unitsServiced'] ??
         json['data'] ??
         json['items'] ??

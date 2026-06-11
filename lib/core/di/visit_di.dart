@@ -49,7 +49,7 @@ void registerVisitDi(GetIt sl) {
   sl.registerLazySingleton(() => GetVisitorsUseCase(sl()));
 
   // controller
-  sl.registerFactory(() => VisitorController(sl(), sl(), sl()));
+  sl.registerFactory(() => VisitorController(sl(), sl(), sl(), sl()));
   sl.registerFactory(() => VisitDetailController(
         sl(), sl(), sl(), sl(), 
         sl(), sl(), sl(), 

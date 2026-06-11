@@ -23,14 +23,13 @@ class _VisitFormPageState extends State<VisitFormPage> {
   final _nameFocusNode = FocusNode();
   final _phoneController = TextEditingController();
   final _companyController = TextEditingController(); // perusahaan/instansi
-  final _addressController = TextEditingController(); // alamat
   final _notesController = TextEditingController(); // catatan kunjungan 
   final _interestController = TextEditingController(); // interest pengunjung 
   final _salesController = TextEditingController(); // nama sales 
 
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
-  String _selectedStatus = 'Pending';
+  String _selectedStatus = 'Proses';
   String _selectedType = 'Baru';
   String _selectedMethod = 'Walk In';
   int? _userId;
@@ -59,7 +58,6 @@ class _VisitFormPageState extends State<VisitFormPage> {
     _nameFocusNode.dispose();
     _phoneController.dispose();
     _companyController.dispose();
-    _addressController.dispose();
     _notesController.dispose();
     _interestController.dispose();
     _salesController.dispose();
@@ -109,14 +107,10 @@ class _VisitFormPageState extends State<VisitFormPage> {
       _selectedTime.minute,
     );
 
-    final combinedAddress = _addressController.text.trim().isEmpty
-        ? _companyController.text.trim()
-        : '${_companyController.text.trim()} - ${_addressController.text.trim()}';
-
     final success = await widget.controller.submitVisit(
       customerName: _nameController.text.trim(),
       customerPhone: _phoneController.text.trim(),
-      customerAddress: combinedAddress, 
+      customerAddress: _companyController.text.trim(), 
       purpose: _interestController.text.trim(), // keperluan
       notes: _selectedType, // status pengunjung
       visitDesc: _notesController.text.trim(), // catatan kunjungan
@@ -203,15 +197,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
                                   _phoneController.text = selection.visitorPhone ?? '';
                                   _selectedType = selection.visitorInformation ?? 'Baru';
                                   
-                                  final addr = selection.visitorAddress ?? '';
-                                  final parts = addr.split(' - ');
-                                  if (parts.length >= 2) {
-                                    _companyController.text = parts[0];
-                                    _addressController.text = parts.sublist(1).join(' - ');
-                                  } else {
-                                    _companyController.text = addr;
-                                    _addressController.text = '';
-                                  }
+                                  _companyController.text = selection.visitorCompany ?? '';
                                 });
                               },
                               fieldViewBuilder: (
@@ -322,7 +308,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
                               ),
                               items: const [
                                 DropdownMenuItem(value: 'Follow Up', child: Text('Follow Up')),
-                                DropdownMenuItem(value: 'Pending', child: Text('Pending')),
+                                DropdownMenuItem(value: 'Proses', child: Text('Proses')),
                                 DropdownMenuItem(value: 'Selesai', child: Text('Selesai')),
                                 DropdownMenuItem(value: 'Batal', child: Text('Batal')),
                               ],
@@ -379,18 +365,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
                               ),
                               validator: (v) => v == null || v.isEmpty ? 'Wajib diisi' : null,
                             ),
-                            const SizedBox(height: 16),
-
-                            // Alamat
-                            TextFormField(
-                              controller: _addressController,
-                              decoration: const InputDecoration(
-                                labelText: 'Alamat',
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (v) => v == null || v.isEmpty ? 'Wajib diisi' : null,
-                            ),
-                            const SizedBox(height: 16),
+                             const SizedBox(height: 16),
 
                             // Keperluan
                             TextFormField(

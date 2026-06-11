@@ -191,7 +191,7 @@ class VisitDetailController extends ChangeNotifier {
       return false;
     }
     
-    await loadFollowUps();
+    await refreshAll();
     return true;
   }
 
@@ -204,7 +204,6 @@ class VisitDetailController extends ChangeNotifier {
       productName: name,
       quantity: qty,
       price: price,
-      total: qty * price,
       notes: notes,
     );
     final res = await _createProductSold(visitId!, req);
@@ -263,7 +262,7 @@ class VisitDetailController extends ChangeNotifier {
     final res = await _deleteFollowUp(visitId!, followUpId);
     if (!res.isSuccess) return false;
 
-    await loadFollowUps();
+    await refreshAll();
     return true;
   }
 

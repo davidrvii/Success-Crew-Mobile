@@ -8,7 +8,7 @@ class Visit {
 
   final String? visitorName;
   final String? visitorPhone;
-  final String? visitorAddress;
+  final String? visitorCompany;
   final String? visitorInformation;
 
   final String? visitorInterest;
@@ -27,7 +27,7 @@ class Visit {
     this.visitor,
     this.visitorName,
     this.visitorPhone,
-    this.visitorAddress,
+    this.visitorCompany,
     this.visitorInformation,
     this.visitorInterest,
     this.visitorStatus,

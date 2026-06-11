@@ -43,7 +43,7 @@ class VisitRepositoryImpl implements VisitRepository {
     visitor: m.visitor,
     visitorName: m.visitorName ?? m.visitor?.visitorName,
     visitorPhone: m.visitorPhone ?? m.visitor?.visitorPhone,
-    visitorAddress: m.visitorAddress ?? m.visitor?.visitorAddress,
+    visitorCompany: m.visitorCompany ?? m.visitor?.visitorCompany,
     visitorInformation: m.visitorInformation ?? m.visitor?.visitorInformation,
     visitorInterest: m.visitorInterest,
     visitorStatus: m.visitorStatus,
@@ -59,7 +59,7 @@ class VisitRepositoryImpl implements VisitRepository {
     visitorName: m.visitorName,
     visitorPhone: m.visitorPhone,
     visitorInformation: m.visitorInformation,
-    visitorAddress: m.visitorAddress,
+    visitorCompany: m.visitorCompany,
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
   );

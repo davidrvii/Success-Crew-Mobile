@@ -16,14 +16,22 @@ class ProductSoldRequest {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
-    if (productName != null) data['product_name'] = productName;
-    if (quantity != null) data['quantity'] = quantity;
-    if (price != null) data['price'] = price;
-    if (total != null) data['total'] = total;
-    if (notes != null) data['notes'] = notes;
-
-    if (productName != null) data['product_sold_type'] = productName;
-    if (notes != null) data['product_sold_category'] = notes;
+    if (productName != null) {
+      data['product_sold_name'] = productName;
+      data['product_name'] = productName;
+    }
+    if (quantity != null) {
+      data['product_sold_quantity'] = quantity;
+      data['quantity'] = quantity;
+    }
+    if (price != null) {
+      data['product_sold_price'] = price;
+      data['price'] = price;
+    }
+    if (notes != null) {
+      data['product_sold_desc'] = notes;
+      data['notes'] = notes;
+    }
 
     return data;
   }

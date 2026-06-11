@@ -3,6 +3,9 @@ import 'package:get_it/get_it.dart';
 
 import '../controllers/visit_detail_controller.dart';
 import '../../domain/entities/visit.dart';
+import '../../domain/entities/followup.dart';
+import '../../domain/entities/product_sold.dart';
+import '../../domain/entities/unit_serviced.dart';
 
 class VisitDetailPage extends StatefulWidget {
   final int visitId;
@@ -109,9 +112,35 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
               error: c.followUpsError,
               emptyText: 'No Follow Ups',
               items: c.followUps.map((f) {
-                final title = f.status ?? 'Follow Up';
-                final sub = f.notes ?? '-';
-                return _ListItem(title: title, subtitle: sub);
+                return Dismissible(
+                  key: Key('followup_${f.followUpId}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  confirmDismiss: (direction) async {
+                    return await _showConfirmDialog(
+                      context,
+                      'Hapus Follow Up',
+                      'Apakah Anda yakin ingin menghapus data follow up ini?',
+                    );
+                  },
+                  onDismissed: (direction) async {
+                    final success = await c.deleteFollowUpItem(f.followUpId);
+                    if (success && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Follow up berhasil dihapus')),
+                      );
+                    }
+                  },
+                  child: _FollowUpItem(followUp: f),
+                );
               }).toList(),
             ),
           ),
@@ -127,15 +156,34 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
               error: c.productsError,
               emptyText: 'No Products Sold',
               items: c.products.map((p) {
-                final title = p.productName ?? 'Product';
-                final sub = [
-                  if (p.quantity != null) 'Qty ${p.quantity}',
-                  if (p.total != null) 'Total ${p.total}',
-                  if ((p.notes ?? '').isNotEmpty) p.notes!,
-                ].join(' • ');
-                return _ListItem(
-                  title: title,
-                  subtitle: sub.isEmpty ? '-' : sub,
+                return Dismissible(
+                  key: Key('product_${p.productSoldId}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  confirmDismiss: (direction) async {
+                    return await _showConfirmDialog(
+                      context,
+                      'Hapus Produk Terjual',
+                      'Apakah Anda yakin ingin menghapus data produk terjual ${p.productName ?? ''} ini?',
+                    );
+                  },
+                  onDismissed: (direction) async {
+                    final success = await c.deleteProductItem(p.productSoldId);
+                    if (success && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Produk terjual berhasil dihapus')),
+                      );
+                    }
+                  },
+                  child: _ProductSoldItem(productSold: p),
                 );
               }).toList(),
             ),
@@ -152,15 +200,34 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
               error: c.unitsError,
               emptyText: 'No Unit Serviced',
               items: c.units.map((u) {
-                final title = u.unitName ?? 'Unit';
-                final sub = [
-                  if ((u.issue ?? '').isNotEmpty) 'Issue: ${u.issue}',
-                  if ((u.action ?? '').isNotEmpty) 'Action: ${u.action}',
-                  if ((u.status ?? '').isNotEmpty) 'Status: ${u.status}',
-                ].join(' • ');
-                return _ListItem(
-                  title: title,
-                  subtitle: sub.isEmpty ? '-' : sub,
+                return Dismissible(
+                  key: Key('unit_${u.unitServicedId}'),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.only(right: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  confirmDismiss: (direction) async {
+                    return await _showConfirmDialog(
+                      context,
+                      'Hapus Unit Servis',
+                      'Apakah Anda yakin ingin menghapus data unit servis ${u.unitName ?? ''} ini?',
+                    );
+                  },
+                  onDismissed: (direction) async {
+                    final success = await c.deleteUnitItem(u.unitServicedId);
+                    if (success && context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Unit servis berhasil dihapus')),
+                      );
+                    }
+                  },
+                  child: _UnitServicedItem(unitServiced: u),
                 );
               }).toList(),
             ),
@@ -214,7 +281,13 @@ class _FollowUpForm extends StatefulWidget {
 
 class _FollowUpFormState extends State<_FollowUpForm> {
   final _notes = TextEditingController();
-  final _status = TextEditingController();
+  String _selectedStatus = 'Follow Up';
+
+  @override
+  void dispose() {
+    _notes.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -227,12 +300,28 @@ class _FollowUpFormState extends State<_FollowUpForm> {
           const SizedBox(height: 16),
           TextField(controller: _notes, decoration: const InputDecoration(labelText: 'Catatan / Action', border: OutlineInputBorder())),
           const SizedBox(height: 12),
-          TextField(controller: _status, decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder())),
+          DropdownButtonFormField<String>(
+            initialValue: _selectedStatus,
+            decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
+            items: const [
+              DropdownMenuItem(value: 'Follow Up', child: Text('Follow Up')),
+              DropdownMenuItem(value: 'Selesai', child: Text('Selesai')),
+              DropdownMenuItem(value: 'Proses', child: Text('Proses')),
+              DropdownMenuItem(value: 'Batal', child: Text('Batal')),
+            ],
+            onChanged: (val) {
+              if (val != null) {
+                setState(() {
+                  _selectedStatus = val;
+                });
+              }
+            },
+          ),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () async {
               if (_notes.text.isEmpty) return;
-              final res = await widget.controller.submitFollowUp(_notes.text, _status.text);
+              final res = await widget.controller.submitFollowUp(_notes.text, _selectedStatus);
               if (res && context.mounted) Navigator.pop(context);
             },
             child: const Text('Simpan'),
@@ -495,7 +584,7 @@ class _VisitorInfoCard extends StatelessWidget {
       children: [
         _RowText(label: 'Nama', value: v?.visitorName ?? '-'),
         _RowText(label: 'Telepon', value: v?.visitorPhone ?? '-'),
-        _RowText(label: 'Perusahaan/Instansi', value: v?.visitorAddress ?? '-'),
+        _RowText(label: 'Perusahaan/Instansi', value: v?.visitorCompany ?? '-'),
         _RowText(label: 'Status Pengunjung', value: v?.visitorInformation ?? '-'),
       ],
     );
@@ -598,7 +687,7 @@ class _SimpleList extends StatelessWidget {
   final bool isLoading;
   final String? error;
   final String emptyText;
-  final List<_ListItem> items;
+  final List<Widget> items;
 
   const _SimpleList({
     required this.isLoading,
@@ -637,31 +726,6 @@ class _SimpleList extends StatelessWidget {
   }
 }
 
-class _ListItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-
-  const _ListItem({required this.title, required this.subtitle});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: const Color(0xFFF7F7F7),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
-            const SizedBox(height: 4),
-            Text(subtitle, style: const TextStyle(color: Colors.black87)),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 String _formatDate(DateTime? dt) {
   if (dt == null) return '-';
@@ -673,4 +737,283 @@ String _formatTime(DateTime? dt) {
   if (dt == null) return '-';
   String two(int v) => v.toString().padLeft(2, '0');
   return '${two(dt.hour)}:${two(dt.minute)}';
+}
+
+class _FollowUpItem extends StatelessWidget {
+  final FollowUp followUp;
+
+  const _FollowUpItem({required this.followUp});
+
+  @override
+  Widget build(BuildContext context) {
+    final title = followUp.status ?? 'Follow Up';
+    final notes = followUp.notes ?? '-';
+    final dateStr = _formatDate(followUp.createdAt);
+    final timeStr = _formatTime(followUp.createdAt);
+
+    return Material(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: Color(0xFFE2E8F0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    notes,
+                    style: const TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 13,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  dateStr,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF475569),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  timeStr,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF94A3B8),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProductSoldItem extends StatelessWidget {
+  final ProductSold productSold;
+
+  const _ProductSoldItem({required this.productSold});
+
+  @override
+  Widget build(BuildContext context) {
+    final title = productSold.productName ?? 'Product';
+    final details = [
+      if (productSold.quantity != null) 'Qty ${productSold.quantity}',
+      if (productSold.price != null) 'Harga Rp ${_formatCurrency(productSold.price)}',
+      if ((productSold.notes ?? '').isNotEmpty) productSold.notes!,
+    ].join(' • ');
+    final sub = details.isEmpty ? '-' : details;
+    final dateStr = _formatDate(productSold.createdAt);
+    final timeStr = _formatTime(productSold.createdAt);
+
+    return Material(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: Color(0xFFE2E8F0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    sub,
+                    style: const TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 13,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  dateStr,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF475569),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  timeStr,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF94A3B8),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _UnitServicedItem extends StatelessWidget {
+  final UnitServiced unitServiced;
+
+  const _UnitServicedItem({required this.unitServiced});
+
+  @override
+  Widget build(BuildContext context) {
+    final title = unitServiced.unitName ?? 'Unit';
+    final details = [
+      if ((unitServiced.issue ?? '').isNotEmpty) 'Issue: ${unitServiced.issue}',
+      if ((unitServiced.action ?? '').isNotEmpty) 'Action: ${unitServiced.action}',
+      if ((unitServiced.status ?? '').isNotEmpty) 'Status: ${unitServiced.status}',
+      if ((unitServiced.notes ?? '').isNotEmpty) 'Notes: ${unitServiced.notes}',
+    ].join(' • ');
+    final sub = details.isEmpty ? '-' : details;
+    final dateStr = _formatDate(unitServiced.createdAt);
+    final timeStr = _formatTime(unitServiced.createdAt);
+
+    return Material(
+      color: Colors.white,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: const BorderSide(color: Color(0xFFE2E8F0)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                      color: Color(0xFF1E293B),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    sub,
+                    style: const TextStyle(
+                      color: Color(0xFF64748B),
+                      fontSize: 13,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  dateStr,
+                  style: const TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFF475569),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  timeStr,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: Color(0xFF94A3B8),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+String _formatCurrency(double? val) {
+  if (val == null) return '-';
+  final clean = val.toInt();
+  final str = clean.toString();
+  final buffer = StringBuffer();
+  for (int i = 0; i < str.length; i++) {
+    if (i > 0 && (str.length - i) % 3 == 0) {
+      buffer.write('.');
+    }
+    buffer.write(str[i]);
+  }
+  return buffer.toString();
+}
+
+Future<bool?> _showConfirmDialog(BuildContext context, String title, String message) {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Batal', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Hapus', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      );
+    },
+  );
 }

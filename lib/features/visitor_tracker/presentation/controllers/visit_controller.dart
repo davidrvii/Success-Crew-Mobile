@@ -8,6 +8,7 @@ import '../../domain/usecases/get_visitors.dart';
 import '../../domain/entities/visitor.dart';
 import '../../data/models/visit_request.dart';
 import '../../../../core/network/api_response.dart';
+import '../../domain/usecases/delete_visit.dart';
 
 enum VisitorSortMode { newest, az }
 
@@ -15,8 +16,9 @@ class VisitorController extends ChangeNotifier {
   final GetVisitsUseCase _getVisits;
   final CreateVisitUseCase _createVisit;
   final GetVisitorsUseCase _getVisitors;
+  final DeleteVisitUseCase _deleteVisit;
 
-  VisitorController(this._getVisits, this._createVisit, this._getVisitors);
+  VisitorController(this._getVisits, this._createVisit, this._getVisitors, this._deleteVisit);
 
   bool isLoading = false;
   String? errorMessage;
@@ -107,6 +109,24 @@ class VisitorController extends ChangeNotifier {
     } else {
       isLoading = false;
       errorMessage = res.error?.message ?? 'Gagal membuat visit';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteVisit(int visitId) async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+
+    final ApiResponse<int> res = await _deleteVisit(visitId);
+
+    if (res.isSuccess) {
+      await refresh();
+      return true;
+    } else {
+      isLoading = false;
+      errorMessage = res.error?.message ?? 'Gagal menghapus kunjungan';
       notifyListeners();
       return false;
     }

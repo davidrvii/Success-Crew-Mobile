@@ -102,17 +102,46 @@ class _VisitorPageState extends State<VisitorPage> {
           final date = _formatDate(v.createdAt);
           final time = _formatTime(v.createdAt);
 
-          return _VisitorCard(
-            title: visitorName,
-            interest: visitorInterest,
-            type: visitType,
-            info: visitorInfo,
-            status: status,
-            date: date,
-            time: time,
-            onTap: () {
-              context.push('/visit-detail', extra: v.visitId);
+          return Dismissible(
+            key: Key('visit_${v.visitId}'),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                color: Colors.red,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            confirmDismiss: (direction) async {
+              return await _showConfirmDialog(
+                context,
+                'Hapus Kunjungan',
+                'Apakah Anda yakin ingin menghapus data kunjungan untuk $visitorName?',
+              );
             },
+            onDismissed: (direction) async {
+              final success = await c.deleteVisit(v.visitId);
+              if (success && context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Kunjungan berhasil dihapus')),
+                );
+              }
+            },
+            child: _VisitorCard(
+              title: visitorName,
+              interest: visitorInterest,
+              type: visitType,
+              info: visitorInfo,
+              status: status,
+              date: date,
+              time: time,
+              onTap: () async {
+                await context.push('/visit-detail', extra: v.visitId);
+                c.refresh();
+              },
+            ),
           );
         },
       ),
@@ -358,13 +387,15 @@ class _VisitorCard extends StatelessWidget {
   Widget _miniChip(String text) {
     final t = text.trim().toLowerCase();
 
-    final Color bg = (t.contains('follow') || t.contains('proses'))
-        ? const Color(0xFF16A34A)
-        : (t.contains('batal') || t.contains('cancel')
-              ? const Color(0xFFDC2626)
-              : (t.contains('selesai') || t.contains('done')
-                    ? const Color(0xFF0B5FA5)
-                    : const Color(0xFF64748B)));
+    final Color bg = t.contains('follow')
+        ? const Color(0xFF0B5FA5) // Blue
+        : (t.contains('proses') || t.contains('pending')
+            ? const Color(0xFFEAB308) // Yellow
+            : (t.contains('selesai') || t.contains('done')
+                ? const Color(0xFF16A34A) // Green
+                : (t.contains('batal') || t.contains('cancel')
+                    ? const Color(0xFFDC2626) // Red
+                    : const Color(0xFF64748B))));
 
     final shown = text.trim().isEmpty ? '-' : text.trim();
 
@@ -515,4 +546,27 @@ String _formatTime(DateTime? dt) {
   if (dt == null) return '-';
   String two(int v) => v.toString().padLeft(2, '0');
   return '${two(dt.hour)}:${two(dt.minute)}';
+}
+
+Future<bool?> _showConfirmDialog(BuildContext context, String title, String message) {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Batal', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Hapus', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      );
+    },
+  );
 }
