@@ -501,19 +501,9 @@ class _TopProfileCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _BackButton(onPressed: onBack),
-              IconButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Fitur edit crew hanya tersedia di web panel.')),
-                  );
-                },
-                icon: const Icon(Icons.edit, color: Color(0xFF0C5AA6)),
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: _BackButton(onPressed: onBack),
           ),
           const SizedBox(height: 8),
           CircleAvatar(
