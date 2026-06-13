@@ -42,6 +42,10 @@ import '../features/overtime/presentation/controllers/overtime_controller.dart';
 import '../features/notification/presentation/pages/notification_page.dart';
 import '../features/notification/presentation/controllers/notification_controller.dart';
 
+// CREW
+import '../features/crew/presentation/pages/crew_page.dart';
+import '../features/crew/presentation/controllers/crew_controller.dart';
+
 import 'main_shell.dart';
 
 class AppGoRouter {
@@ -55,6 +59,7 @@ class AppGoRouter {
   static const String home = '/home';
   static const String visitor = '/visitor';
   static const String absence = '/absence';
+  static const String crew = '/crew';
 
   // Sub routes
   static const String profile = '/profile';
@@ -212,6 +217,20 @@ class AppGoRouter {
                 pageBuilder: (context, state) => NoTransitionPage(
                   child: AttendancePage(
                     controller: sl<AttendanceController>(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          // -------- CREW --------
+          StatefulShellBranch(
+            routes: <RouteBase>[
+              GoRoute(
+                path: crew,
+                pageBuilder: (context, state) => NoTransitionPage(
+                  child: CrewPage(
+                    controller: sl<CrewController>(),
                   ),
                 ),
               ),
