@@ -6,7 +6,7 @@ class GetAttendanceHistoryUseCase {
   final AttendanceRepository _repo;
   const GetAttendanceHistoryUseCase(this._repo);
 
-  Future<ApiResponse<List<Attendance>>> call() {
+  Future<ApiResponse<AttendanceHistoryData>> call() {
     return _repo.getAttendanceHistory();
   }
 }

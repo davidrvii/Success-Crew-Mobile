@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../controllers/attendance_controller.dart';
+import '../../domain/entities/attendance.dart';
+import '../../../../core/widgets/hold_to_action_button.dart';
 
 class AttendancePage extends StatefulWidget {
   final AttendanceController controller;
@@ -34,123 +36,224 @@ class _AttendancePageState extends State<AttendancePage> {
             !c.isLoading && (a != null && a.hasCheckedIn && !a.hasCheckedOut);
 
         return Scaffold(
-          backgroundColor: const Color(0xFFF5F6FA),
+          backgroundColor: const Color(0xFFFAFBFF),
           body: SafeArea(
             child: RefreshIndicator(
               onRefresh: c.refresh,
+              color: const Color(0xFF22C55E),
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 16, 16, 18),
+                padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: [
-                  _TopBar(
-                    title: 'Attendance',
-                    onBack: () => Navigator.of(context).maybePop(),
+                  // 1. Top Bar / User Card
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30.0),
+                      border: Border.all(
+                        color: Colors.black.withValues(alpha: 0.06),
+                        width: 1.2,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.02),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          c.userName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF0F172A),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          c.roleName,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Color(0xFF64748B),
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 18),
 
+                  // Error message banner
                   if (c.errorMessage != null) ...[
                     _ErrorBanner(message: c.errorMessage!),
                     const SizedBox(height: 14),
                   ],
 
-                  _Card(
+                  // 2. Large Green Card (Action card with fingerprint button)
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(24.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(28.0),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF22C55E), Color(0xFF10B981)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF22C55E).withValues(alpha: 0.25),
+                          blurRadius: 18,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Hari ini',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w800,
-                            color: Color(0xFF0B1B3A),
+                        // Fingerprint button area
+                        HoldToActionButton(
+                          onTap: () {
+                            if (canCheckIn) {
+                              c.checkIn();
+                            } else if (canCheckOut) {
+                              c.checkOut();
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withValues(alpha: 0.08),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white.withValues(alpha: 0.12),
+                              ),
+                              child: Container(
+                                width: 90,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white.withValues(alpha: 0.18),
+                                ),
+                                alignment: Alignment.center,
+                                child: c.isLoading
+                                    ? const SizedBox(
+                                        width: 30,
+                                        height: 30,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                          strokeWidth: 3,
+                                        ),
+                                      )
+                                    : const Icon(
+                                        Icons.fingerprint,
+                                        color: Colors.white,
+                                        size: 54,
+                                      ),
+                              ),
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        _kv(
-                          'Attendance ID',
-                          c.todayAttendanceId?.toString() ?? '-',
-                        ),
-                        _kv('Tanggal', _formatDate(a?.attendanceDate)),
-                        _kv(
-                          'Status',
-                          a?.displayStatus ??
-                              (c.todayAttendanceId == null
-                                  ? 'Belum Check In'
-                                  : '-'),
-                        ),
-                        const SizedBox(height: 8),
-                        _TimeRow(
-                          inText: _formatTime(a?.checkInAt),
-                          outText: _formatTime(a?.checkOutAt),
+                        const SizedBox(height: 36),
+
+                        // Check in / Check out times row
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  _buildTimeText(a?.checkInAt),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Check In',
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.85),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              width: 1.5,
+                              height: 42,
+                              color: Colors.white.withValues(alpha: 0.40),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: [
+                                  _buildTimeText(a?.checkOutAt),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    'Check Out',
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(alpha: 0.85),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
+                  const SizedBox(height: 18),
 
-                  const SizedBox(height: 14),
-
+                  // 3. Row of 4 statistics cards
                   Row(
                     children: [
-                      Expanded(
-                        child: SizedBox(
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: canCheckIn ? c.checkIn : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF0C5AA6),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: c.isLoading
-                                ? const SizedBox(
-                                    height: 18,
-                                    width: 18,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Check In',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: SizedBox(
-                          height: 54,
-                          child: ElevatedButton(
-                            onPressed: canCheckOut ? c.checkOut : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFF04444),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 0,
-                            ),
-                            child: c.isLoading
-                                ? const SizedBox(
-                                    height: 18,
-                                    width: 18,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                    ),
-                                  )
-                                : const Text(
-                                    'Check Out',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                      ),
+                      _buildStatCard('Hadir', c.presentCount),
+                      const SizedBox(width: 8),
+                      _buildStatCard('Telat', c.lateCount),
+                      const SizedBox(width: 8),
+                      _buildStatCard('Cuti', c.leaveCount),
+                      const SizedBox(width: 8),
+                      _buildStatCard('Lembur', c.overtimeCount),
                     ],
                   ),
+                  const SizedBox(height: 24),
+
+                  // 4. Riwayat Kehadiran Header
+                  const Text(
+                    'Riwayat Kehadiran',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF0F172A),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // 5. History items
+                  if (c.history.isEmpty && !c.isLoading)
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'Tidak ada riwayat kehadiran.',
+                        style: TextStyle(
+                          color: Color(0xFF64748B),
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    )
+                  else
+                    ...c.history.map((h) => _buildHistoryCard(h)),
                 ],
               ),
             ),
@@ -160,25 +263,46 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  Widget _kv(String k, String v) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(fontSize: 14, height: 1.35),
+  Widget _buildStatCard(String title, int count) {
+    final isAlertLeave = title == 'Cuti' && count >= 16;
+    final valueColor = isAlertLeave ? const Color(0xFFEF4444) : const Color(0xFF0F172A);
+
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.black.withValues(alpha: 0.06),
+            width: 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.015),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            TextSpan(
-              text: '$k : ',
+            Text(
+              title,
               style: const TextStyle(
-                color: Color(0xFF6E7AA8),
-                fontWeight: FontWeight.w700,
+                color: Color(0xFF94A3B8),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            TextSpan(
-              text: v,
-              style: const TextStyle(
-                color: Color(0xFF6E7AA8),
-                fontWeight: FontWeight.w400,
+            const SizedBox(height: 6),
+            Text(
+              count.toString(),
+              style: TextStyle(
+                color: valueColor,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -186,145 +310,122 @@ class _AttendancePageState extends State<AttendancePage> {
       ),
     );
   }
-}
 
-class _TopBar extends StatelessWidget {
-  final String title;
-  final VoidCallback onBack;
+  Widget _buildHistoryCard(Attendance h) {
+    // Determine status color based on presence details
+    final statusLower = (h.status ?? '').toLowerCase().trim();
+    Color statusColor;
+    if (statusLower == 'tepat waktu' || statusLower == 'hadir') {
+      statusColor = const Color(0xFF22C55E); // Green
+    } else if (statusLower == 'telat') {
+      statusColor = const Color(0xFFFACC15); // Yellow
+    } else if (statusLower == 'cuti') {
+      statusColor = const Color(0xFF3B82F6); // Blue
+    } else if (statusLower == 'tidak hadir') {
+      statusColor = const Color(0xFFEF4444); // Red
+    } else if (statusLower == 'lembur') {
+      statusColor = const Color(0xFFF97316); // Orange
+    } else {
+      statusColor = const Color(0xFF64748B); // Fallback gray
+    }
+    final overtimeHours = _getOvertimeHours(h);
 
-  const _TopBar({required this.title, required this.onBack});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Material(
-          color: const Color(0xFF0C5AA6),
-          borderRadius: BorderRadius.circular(10),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: onBack,
-            child: const SizedBox(
-              height: 38,
-              width: 38,
-              child: Icon(
-                Icons.arrow_back_ios_new,
-                color: Colors.white,
-                size: 18,
-              ),
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Text(
-          title,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
-        ),
-      ],
-    );
-  }
-}
-
-class _TimeRow extends StatelessWidget {
-  final String? inText;
-  final String? outText;
-
-  const _TimeRow({required this.inText, required this.outText});
-
-  @override
-  Widget build(BuildContext context) {
-    final inVal = (inText == null || inText!.trim().isEmpty)
-        ? '-'
-        : inText!.trim();
-    final outVal = (outText == null || outText!.trim().isEmpty)
-        ? '-'
-        : outText!.trim();
-
-    return Row(
-      children: [
-        Expanded(
-          child: _TimeChip(label: 'IN', value: inVal),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: _TimeChip(label: 'OUT', value: outVal),
-        ),
-      ],
-    );
-  }
-}
-
-class _TimeChip extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const _TimeChip({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF1F3FA),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0C5AA6),
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w800,
-                fontSize: 12,
-              ),
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              value,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                color: Color(0xFF0B1B3A),
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Card extends StatelessWidget {
-  final Widget child;
-  const _Card({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 1.2,
+        ),
         boxShadow: [
           BoxShadow(
-            blurRadius: 18,
-            offset: const Offset(0, 8),
-            // ignore: deprecated_member_use
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.01),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: child,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                _formatDateIndonesian(h.attendanceDate),
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF0F172A),
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    h.displayStatus,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: statusColor,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: statusColor,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Check In : ${h.checkInAt != null ? _formatTimeOnly(h.checkInAt) : '-'}',
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF64748B),
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            'Check Out : ${h.checkOutAt != null ? _formatTimeOnly(h.checkOutAt) : '-'}',
+            style: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: Color(0xFF64748B),
+            ),
+          ),
+          if (overtimeHours > 0) ...[
+            const SizedBox(height: 6),
+            Text(
+              'Lembur : $overtimeHours jam',
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF1C85E8),
+              ),
+            ),
+          ],
+        ],
+      ),
     );
+  }
+
+  int _getOvertimeHours(Attendance a) {
+    if (a.overtime != null) return a.overtime!;
+    if (a.checkInAt == null || a.checkOutAt == null) return 0;
+    final diff = a.checkOutAt!.difference(a.checkInAt!);
+    final hours = diff.inHours;
+    return hours > 8 ? hours - 8 : 0;
   }
 }
 
@@ -351,12 +452,66 @@ class _ErrorBanner extends StatelessWidget {
   }
 }
 
-String _formatDate(DateTime? dt) {
+String _formatDateIndonesian(DateTime? dt) {
   if (dt == null) return '-';
-  return DateFormat('dd MMM yyyy').format(dt);
+  final wibDt = dt.toUtc().add(const Duration(hours: 7));
+  const days = [
+    'Senin',
+    'Selasa',
+    'Rabu',
+    'Kamis',
+    'Jumat',
+    'Sabtu',
+    'Minggu'
+  ];
+  const months = [
+    'Januari',
+    'Februari',
+    'Maret',
+    'April',
+    'Mei',
+    'Juni',
+    'Juli',
+    'Agustus',
+    'September',
+    'Oktober',
+    'November',
+    'Desember'
+  ];
+  final dayIndex = wibDt.weekday - 1;
+  final monthIndex = wibDt.month - 1;
+  
+  // Guard checks for index safety
+  final dayName = (dayIndex >= 0 && dayIndex < days.length) ? days[dayIndex] : '';
+  final monthName = (monthIndex >= 0 && monthIndex < months.length) ? months[monthIndex] : '';
+
+  return '$dayName, ${wibDt.day} $monthName ${wibDt.year}';
 }
 
-String _formatTime(DateTime? dt) {
-  if (dt == null) return '-';
-  return DateFormat('HH:mm').format(dt);
+String _formatTimeOnly(DateTime? dt) {
+  if (dt == null) return '--:--';
+  final wibDt = dt.toUtc().add(const Duration(hours: 7));
+  return DateFormat('HH:mm').format(wibDt);
+}
+
+Widget _buildTimeText(DateTime? dt) {
+  if (dt == null) {
+    return Text(
+      '-',
+      style: TextStyle(
+        color: Colors.white.withValues(alpha: 0.5),
+        fontSize: 26,
+        fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+  final wibDt = dt.toUtc().add(const Duration(hours: 7));
+  return Text(
+    DateFormat('HH:mm:ss').format(wibDt),
+    style: const TextStyle(
+      color: Colors.white,
+      fontSize: 26,
+      fontWeight: FontWeight.bold,
+    ),
+  );
 }

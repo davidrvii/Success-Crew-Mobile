@@ -9,6 +9,7 @@ import '../../features/attendance/domain/repositories/attendance_repository.dart
 import '../../features/attendance/domain/usecases/checkin.dart';
 import '../../features/attendance/domain/usecases/checkout.dart';
 import '../../features/attendance/domain/usecases/get_attendance_detail.dart';
+import '../../features/attendance/domain/usecases/get_attendance_history.dart';
 import '../../features/attendance/presentation/controllers/attendance_controller.dart';
 
 void registerAttendanceDi(GetIt sl) {
@@ -35,6 +36,9 @@ void registerAttendanceDi(GetIt sl) {
   sl.registerLazySingleton<GetAttendanceDetailUseCase>(
     () => GetAttendanceDetailUseCase(sl<AttendanceRepository>()),
   );
+  sl.registerLazySingleton<GetAttendanceHistoryUseCase>(
+    () => GetAttendanceHistoryUseCase(sl<AttendanceRepository>()),
+  );
 
   // Controllers
   sl.registerFactory<AttendanceController>(
@@ -43,6 +47,7 @@ void registerAttendanceDi(GetIt sl) {
       checkInUseCase: sl<CheckInUseCase>(),
       checkOutUseCase: sl<CheckOutUseCase>(),
       getAttendanceDetailUseCase: sl<GetAttendanceDetailUseCase>(),
+      getAttendanceHistoryUseCase: sl<GetAttendanceHistoryUseCase>(),
     ),
   );
 }

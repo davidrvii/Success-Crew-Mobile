@@ -17,7 +17,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   AttendanceRepositoryImpl(this._remote, this._session);
 
   @override
-  Future<ApiResponse<List<Attendance>>> getAttendanceHistory() async {
+  Future<ApiResponse<AttendanceHistoryData>> getAttendanceHistory() async {
     final userId = await _requireUserId();
     if (userId == null) {
       return ApiResponse.failure(
@@ -34,7 +34,48 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final items = res.data?.items ?? const <AttendanceDto>[];
     final mapped = items.map(_mapDtoToEntity).toList();
 
-    return ApiResponse.success(mapped);
+    // Calculate stats filtered by the current calendar year
+    final now = DateTime.now();
+    final currentYear = now.year;
+
+    final currentYearEntries = mapped.where((a) {
+      if (a.attendanceDate == null) return false;
+      return a.attendanceDate!.toLocal().year == currentYear;
+    }).toList();
+
+    final presentCount = currentYearEntries.where((a) {
+      final statusLower = (a.status ?? '').toLowerCase().trim();
+      return a.checkInAt != null && statusLower != 'tidak hadir';
+    }).length;
+
+    final lateCount = currentYearEntries.where((a) {
+      final statusLower = (a.status ?? '').toLowerCase().trim();
+      return statusLower == 'telat';
+    }).length;
+
+    final overtimeCount = currentYearEntries.fold<int>(0, (sum, a) {
+      final ot = a.overtime ?? 0;
+      if (ot > 0) return sum + ot;
+
+      // Fallback
+      if (a.checkInAt == null || a.checkOutAt == null) return sum;
+      final diff = a.checkOutAt!.difference(a.checkInAt!);
+      final hours = diff.inHours;
+      final calcOt = hours > 8 ? hours - 8 : 0;
+      return sum + calcOt;
+    });
+
+    final leaveCount = res.data?.leave ?? 0;
+
+    return ApiResponse.success(
+      AttendanceHistoryData(
+        history: mapped,
+        presentCount: presentCount,
+        lateCount: lateCount,
+        leaveCount: leaveCount,
+        overtimeCount: overtimeCount,
+      ),
+    );
   }
 
   @override
@@ -100,8 +141,13 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<int?> _requireUserId() async {
     final session = await _session.readSession();
     final userId = session?['user_id'];
-    if (userId == null || userId.isEmpty) return null;
-    return userId;
+    if (userId == null) return null;
+    if (userId is num) return userId.toInt();
+    if (userId is String) {
+      if (userId.trim().isEmpty) return null;
+      return int.tryParse(userId);
+    }
+    return null;
   }
 
   Attendance _mapDtoToEntity(AttendanceDto dto) {
@@ -114,6 +160,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       status: dto.status,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
+      overtime: dto.overtime,
     );
   }
 }

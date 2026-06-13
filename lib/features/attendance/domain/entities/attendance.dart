@@ -11,6 +11,7 @@ class Attendance {
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final int? overtime;
 
   const Attendance({
     required this.id,
@@ -21,6 +22,7 @@ class Attendance {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    this.overtime,
   });
 
   bool get hasCheckedIn => checkInAt != null;
@@ -30,4 +32,20 @@ class Attendance {
     final s = (status ?? '').trim();
     return s.isEmpty ? '-' : s;
   }
+}
+
+class AttendanceHistoryData {
+  final List<Attendance> history;
+  final int presentCount;
+  final int lateCount;
+  final int leaveCount;
+  final int overtimeCount;
+
+  const AttendanceHistoryData({
+    required this.history,
+    required this.presentCount,
+    required this.lateCount,
+    required this.leaveCount,
+    required this.overtimeCount,
+  });
 }

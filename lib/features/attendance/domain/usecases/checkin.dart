@@ -7,8 +7,16 @@ class CheckInUseCase {
   final AttendanceRepository _repo;
   const CheckInUseCase(this._repo);
 
-  Future<ApiResponse<Attendance>> call({String? status}) {
-    final req = CheckInRequest(status: status);
+  Future<ApiResponse<Attendance>> call({
+    String? status,
+    DateTime? attendanceDate,
+    DateTime? checkInAt,
+  }) {
+    final req = CheckInRequest(
+      status: status,
+      attendanceDate: attendanceDate,
+      checkInAt: checkInAt,
+    );
     return _repo.checkIn(req);
   }
 }

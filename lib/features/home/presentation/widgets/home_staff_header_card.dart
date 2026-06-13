@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../core/widgets/hold_to_action_button.dart';
 
 class HomeStaffHeaderCard extends StatelessWidget {
   final String name;
@@ -79,12 +80,10 @@ class HomeStaffHeaderCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          // Check In Button
-          Material(
-            color: const Color(0xFF22C55E), // Green
-            borderRadius: BorderRadius.circular(999),
-            child: InkWell(
-              onTap: onTapCheckIn,
+          HoldToActionButton(
+            onTap: onTapCheckIn ?? () {},
+            child: Material(
+              color: const Color(0xFF22C55E), // Green
               borderRadius: BorderRadius.circular(999),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
