@@ -61,9 +61,19 @@ class AttendanceController extends ChangeNotifier {
   int _overtimeCount = 0;
   int get overtimeCount => _overtimeCount;
 
-  // History list
-  List<Attendance> _history = [];
-  List<Attendance> get history => _history;
+  // Pagination fields
+  List<Attendance> _allHistory = [];
+  List<Attendance> _displayedHistory = [];
+  List<Attendance> get history => _displayedHistory;
+
+  int _currentPage = 1;
+  final int _pageSize = 5;
+
+  bool _hasMore = false;
+  bool get hasMore => _hasMore;
+
+  bool _isLoadingMore = false;
+  bool get isLoadingMore => _isLoadingMore;
 
   Future<void> init() => refresh();
 
@@ -99,7 +109,7 @@ class AttendanceController extends ChangeNotifier {
     final historyRes = await _getAttendanceHistoryUseCase();
     if (historyRes.isSuccess && historyRes.data != null) {
       final data = historyRes.data!;
-      _history = data.history;
+      _allHistory = data.history;
       _presentCount = data.presentCount;
       _lateCount = data.lateCount;
       _leaveCount = data.leaveCount;
@@ -110,7 +120,7 @@ class AttendanceController extends ChangeNotifier {
         final now = DateTime.now();
         Attendance? todayEntry;
         // 1st pass: Look for today's entry that already has a check-in time
-        for (final a in _history) {
+        for (final a in _allHistory) {
           if (a.attendanceDate != null) {
             final date = a.attendanceDate!.toLocal();
             if (date.year == now.year &&
@@ -124,7 +134,7 @@ class AttendanceController extends ChangeNotifier {
         }
         // 2nd pass: Look for any today's entry (e.g. pre-created / absent)
         if (todayEntry == null) {
-          for (final a in _history) {
+          for (final a in _allHistory) {
             if (a.attendanceDate != null) {
               final date = a.attendanceDate!.toLocal();
               if (date.year == now.year &&
@@ -153,17 +163,43 @@ class AttendanceController extends ChangeNotifier {
             _attendance = newRecord;
             _todayAttendanceId = newRecord.id;
             await _session.saveTodayAttendanceId(newRecord.id);
-            _history = [newRecord, ..._history];
+            _allHistory = [newRecord, ..._allHistory];
           } else if (createRes.error != null) {
             _errorMessage = createRes.error?.message;
           }
         }
       }
+
+      // Initial page setup for pagination
+      _currentPage = 1;
+      _displayedHistory = _allHistory.take(_pageSize).toList();
+      _hasMore = _allHistory.length > _pageSize;
+      _isLoadingMore = false;
     } else if (historyRes.error != null) {
       _errorMessage ??= historyRes.error?.message;
     }
 
     _setLoading(false);
+  }
+
+  Future<void> loadMore() async {
+    if (_isLoadingMore || !_hasMore) return;
+
+    _isLoadingMore = true;
+    notifyListeners();
+
+    // Small delay for smooth and premium loading experience
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    final int nextOffset = _currentPage * _pageSize;
+    final nextItems = _allHistory.skip(nextOffset).take(_pageSize).toList();
+
+    _displayedHistory.addAll(nextItems);
+    _currentPage++;
+    _hasMore = _displayedHistory.length < _allHistory.length;
+
+    _isLoadingMore = false;
+    notifyListeners();
   }
 
   Future<void> checkIn() async {

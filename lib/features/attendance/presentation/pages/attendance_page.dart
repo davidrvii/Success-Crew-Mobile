@@ -15,13 +15,28 @@ class AttendancePage extends StatefulWidget {
 
 class _AttendancePageState extends State<AttendancePage> {
   AttendanceController get c => widget.controller;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController()..addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       c.init();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent - 200) {
+      c.loadMore();
+    }
   }
 
   @override
@@ -42,6 +57,7 @@ class _AttendancePageState extends State<AttendancePage> {
               onRefresh: c.refresh,
               color: const Color(0xFF22C55E),
               child: ListView(
+                controller: _scrollController,
                 padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                 physics: const AlwaysScrollableScrollPhysics(),
                 children: [
@@ -252,8 +268,23 @@ class _AttendancePageState extends State<AttendancePage> {
                         ),
                       ),
                     )
-                  else
+                  else ...[
                     ...c.history.map((h) => _buildHistoryCard(h)),
+                    if (c.isLoadingMore)
+                      const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.5,
+                              color: Color(0xFF22C55E),
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
                 ],
               ),
             ),
