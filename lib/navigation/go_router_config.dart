@@ -43,8 +43,11 @@ import '../features/notification/presentation/pages/notification_page.dart';
 import '../features/notification/presentation/controllers/notification_controller.dart';
 
 // CREW
+import '../features/crew/domain/entities/crew_member.dart';
 import '../features/crew/presentation/pages/crew_page.dart';
+import '../features/crew/presentation/pages/crew_detail_page.dart';
 import '../features/crew/presentation/controllers/crew_controller.dart';
+import '../features/crew/presentation/controllers/crew_detail_controller.dart';
 
 import 'main_shell.dart';
 
@@ -165,6 +168,16 @@ class AppGoRouter {
         builder: (context, state) {
           return NotificationPage(
             controller: sl<NotificationController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/crew-detail',
+        builder: (context, state) {
+          final member = state.extra as CrewMember;
+          return CrewDetailPage(
+            member: member,
+            controller: sl<CrewDetailController>(),
           );
         },
       ),

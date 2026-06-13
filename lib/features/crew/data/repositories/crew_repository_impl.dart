@@ -1,4 +1,9 @@
 import '../../../../core/network/api_response.dart';
+import '../../../../core/network/network_exceptions.dart';
+import '../../../profile/data/models/user_detail_model.dart';
+import '../../../profile/domain/entities/user_detail.dart';
+import '../../../attendance/data/models/attendance_model.dart';
+import '../../../attendance/domain/entities/attendance.dart';
 import '../../domain/entities/crew_member.dart';
 import '../../domain/repositories/crew_repository.dart';
 import '../datasources/crew_remote_datasource.dart';
@@ -24,5 +29,104 @@ class CrewRepositoryImpl implements CrewRepository {
     )).toList();
 
     return ApiResponse.success(mapped);
+  }
+
+  @override
+  Future<ApiResponse<UserDetail>> getCrewDetail(int userId) async {
+    final res = await _remote.getCrewDetail(userId);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.userDetail;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (userDetail is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDetail(dto));
+  }
+
+  @override
+  Future<ApiResponse<AttendanceHistoryData>> getCrewAttendanceHistory(int userId) async {
+    final res = await _remote.getCrewAttendanceHistory(userId);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final items = res.data?.items ?? const <AttendanceDto>[];
+    final mapped = items.map(_mapDtoToEntity).toList();
+
+    // Calculate stats filtered by the current calendar year
+    final now = DateTime.now();
+    final currentYear = now.year;
+
+    final currentYearEntries = mapped.where((a) {
+      if (a.attendanceDate == null) return false;
+      return a.attendanceDate!.toLocal().year == currentYear;
+    }).toList();
+
+    final presentCount = currentYearEntries.where((a) {
+      final statusLower = (a.status ?? '').toLowerCase().trim();
+      return a.checkInAt != null && statusLower != 'tidak hadir';
+    }).length;
+
+    final lateCount = currentYearEntries.where((a) {
+      final statusLower = (a.status ?? '').toLowerCase().trim();
+      return statusLower == 'telat';
+    }).length;
+
+    final overtimeCount = currentYearEntries.fold<int>(0, (sum, a) {
+      final ot = a.overtime ?? 0;
+      if (ot > 0) return sum + ot;
+
+      // Fallback
+      if (a.checkInAt == null || a.checkOutAt == null) return sum;
+      final diff = a.checkOutAt!.difference(a.checkInAt!);
+      final hours = diff.inHours;
+      final calcOt = hours > 8 ? hours - 8 : 0;
+      return sum + calcOt;
+    });
+
+    final leaveCount = res.data?.leave ?? 0;
+
+    return ApiResponse.success(
+      AttendanceHistoryData(
+        history: mapped,
+        presentCount: presentCount,
+        lateCount: lateCount,
+        leaveCount: leaveCount,
+        overtimeCount: overtimeCount,
+      ),
+    );
+  }
+
+  UserDetail _mapDetail(UserDetailDto dto) {
+    return UserDetail(
+      userId: dto.userId,
+      officeId: dto.officeId,
+      roleId: dto.roleId,
+      userName: dto.userName,
+      userEmail: dto.userEmail,
+      userPhoto: dto.userPhoto,
+      roleName: dto.roleName,
+      officeName: dto.officeName,
+      createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
+    );
+  }
+
+  Attendance _mapDtoToEntity(AttendanceDto dto) {
+    return Attendance(
+      id: dto.id,
+      userId: dto.userId,
+      attendanceDate: dto.attendanceDate,
+      checkInAt: dto.checkInAt,
+      checkOutAt: dto.checkOutAt,
+      status: dto.status,
+      createdAt: dto.createdAt,
+      updatedAt: dto.updatedAt,
+      overtime: dto.overtime,
+    );
   }
 }

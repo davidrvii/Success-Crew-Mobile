@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../controllers/crew_controller.dart';
 import '../../domain/entities/crew_member.dart';
 
@@ -161,8 +162,10 @@ class _CrewPageState extends State<CrewPage> {
       [const Color(0xFFEC4899), const Color(0xFFD946EF)],
     ];
 
-    return Container(
-      decoration: BoxDecoration(
+    return GestureDetector(
+      onTap: () => context.push('/crew-detail', extra: m),
+      child: Container(
+        decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(24.0),
         border: Border.all(
@@ -260,8 +263,9 @@ class _CrewPageState extends State<CrewPage> {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Color _getRoleBgColor(String role) {
     final r = role.toLowerCase().trim();
