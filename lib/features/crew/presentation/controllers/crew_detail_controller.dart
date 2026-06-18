@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../profile/domain/entities/user_detail.dart';
 import '../../../attendance/domain/entities/attendance.dart';
 import '../../domain/usecases/get_crew_detail.dart';
@@ -47,13 +48,19 @@ class CrewDetailController extends ChangeNotifier {
   String get displayRole => _detail?.roleName ?? '-';
   String get displayEmail => _detail?.userEmail ?? '-';
   String get displayEmployeeId => _detail?.userId.toString() ?? '-';
-  String get displayPhone => '-';
-  String get displayBirthDate => '-';
-  String get displayStartWorkDate => '-';
-  String get displayDivision => _detail?.roleName ?? '-';
+  String get displayPhone => _detail?.userPhone ?? '-';
+  String get displayBirthDate => _detail?.userBirth != null
+      ? DateFormat('dd MMM yyyy').format(_detail!.userBirth!)
+      : '-';
+  String get displayStartWorkDate => _detail?.startWork != null
+      ? DateFormat('dd MMM yyyy').format(_detail!.startWork!)
+      : '-';
+  String get displayDivision => _detail?.roleDivision ?? _detail?.roleName ?? '-';
   String get displayPosition => _detail?.roleName ?? '-';
   String get displayLocation => _detail?.officeName ?? '-';
-  String get displayEmploymentStatus => 'Karyawan Tetap - Aktif';
+  String get displayEmploymentStatus => _detail?.contractStatus != null
+      ? '${_detail!.contractStatus} - ${_detail!.crewStatus ?? "Aktif"}'
+      : 'Karyawan Tetap - Aktif';
 
   // Stats
   int get presentCount => _stats?.presentCount ?? 0;

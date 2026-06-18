@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/storage/user_session.dart';
 
@@ -73,7 +74,7 @@ class ProfileController extends ChangeNotifier {
   String get displayStartWorkDate => _dashIfEmpty(startWorkDateText);
 
   // Job Info
-  String get displayDivision => _dashIfEmpty(detail?.roleName);
+  String get displayDivision => _dashIfEmpty(detail?.roleDivision ?? detail?.roleName);
   String get displayPosition => _dashIfEmpty(position);
   String get displayLocation => _dashIfEmpty(detail?.officeName);
 
@@ -208,9 +209,12 @@ class ProfileController extends ChangeNotifier {
     final d = _detail;
     if (d == null) return;
 
-    position ??= d.roleName;
-
-    employeeId ??= d.userId.toString();
+    position = d.roleName ?? position;
+    employeeId = d.userId.toString();
+    phone = d.userPhone ?? phone;
+    birthDateText = d.userBirth != null ? DateFormat('dd MMM yyyy').format(d.userBirth!) : birthDateText;
+    startWorkDateText = d.startWork != null ? DateFormat('dd MMM yyyy').format(d.startWork!) : startWorkDateText;
+    employmentStatusText = d.contractStatus != null ? '${d.contractStatus} - ${d.crewStatus ?? "Aktif"}' : employmentStatusText;
   }
 
   void _fillFormFromDetail() {
