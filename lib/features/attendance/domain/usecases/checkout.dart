@@ -7,17 +7,9 @@ class CheckOutUseCase {
   final AttendanceRepository _repo;
   const CheckOutUseCase(this._repo);
 
-  Future<ApiResponse<Attendance>> call(
-    int attendanceId, {
-    String? status,
-    DateTime? checkInAt,
-    DateTime? checkOutAt,
-  }) {
-    final req = CheckOutRequest(
-      status: status,
-      checkInAt: checkInAt,
-      checkOutAt: checkOutAt,
-    );
-    return _repo.checkOut(attendanceId, req);
+  /// [date] — "YYYY-MM-DD" (defaults to today on server if omitted)
+  Future<ApiResponse<Attendance>> call({String? date}) {
+    final req = CheckOutRequest(date: date);
+    return _repo.checkOut(req);
   }
 }

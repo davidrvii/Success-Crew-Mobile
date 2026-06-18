@@ -18,7 +18,7 @@ abstract class HomeRemoteDataSource {
     int userId,
   );
 
-  Future<ApiResponse<HomeNotificationResponse>> getNotificationAdmin();
+  Future<ApiResponse<HomeNotificationResponse>> getNotificationAll();
 
   Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(int userId);
 
@@ -26,11 +26,11 @@ abstract class HomeRemoteDataSource {
 
   Future<ApiResponse<HomeLeaveResponse>> getLeaveCrew(int userId);
 
-  Future<ApiResponse<HomeLeaveResponse>> getLeaveAdmin();
+  Future<ApiResponse<HomeLeaveResponse>> getLeaveAll();
 
   Future<ApiResponse<HomeOvertimeResponse>> getOvertimeCrew(int userId);
 
-  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAdmin();
+  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAll();
 
   Future<ApiResponse<VisitListResponse>> getVisitSummary();
 }
@@ -59,9 +59,9 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeNotificationResponse>> getNotificationAdmin() {
+  Future<ApiResponse<HomeNotificationResponse>> getNotificationAll() {
     return _get(
-      path: '/notification/admin',
+      path: ApiPaths.notificationAll,
       parser: HomeNotificationResponse.fromJson,
     );
   }
@@ -91,8 +91,8 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeLeaveResponse>> getLeaveAdmin() {
-    return _get(path: '/leave/admin', parser: HomeLeaveResponse.fromJson);
+  Future<ApiResponse<HomeLeaveResponse>> getLeaveAll() {
+    return _get(path: ApiPaths.leaveAll, parser: HomeLeaveResponse.fromJson);
   }
 
   @override
@@ -104,14 +104,14 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAdmin() {
-    return _get(path: '/overtime/admin', parser: HomeOvertimeResponse.fromJson);
+  Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAll() {
+    return _get(path: ApiPaths.overtimeAll, parser: HomeOvertimeResponse.fromJson);
   }
 
   @override
   Future<ApiResponse<VisitListResponse>> getVisitSummary() {
     return _get(
-      path: ApiPaths.visitAdmin,
+      path: ApiPaths.visitAll,
       parser: VisitListResponse.fromJson,
     );
   }

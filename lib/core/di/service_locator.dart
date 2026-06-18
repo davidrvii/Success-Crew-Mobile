@@ -10,6 +10,7 @@ import 'leave_di.dart';
 import 'overtime_di.dart';
 import 'notification_di.dart';
 import 'crew_di.dart';
+import 'out_of_office_di.dart';
 
 final GetIt sl = GetIt.instance;
 
@@ -24,6 +25,7 @@ Future<void> setupLocator() async {
   registerOvertimeDi(sl);
   registerNotificationDi(sl);
   registerCrewDi(sl);
+  registerOutOfOfficeDi(sl);
 }
 
 Future<void> resetLocator() async {

@@ -3,6 +3,7 @@ import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
 
 import '../../domain/entities/notification.dart';
+import '../../domain/entities/notification_basic.dart';
 import '../../domain/repositories/notification_repository.dart';
 
 import '../datasources/notification_remote_datasource.dart';
@@ -44,6 +45,129 @@ class NotificationRepositoryImpl implements NotificationRepository {
     }
 
     return ApiResponse.success(_mapDtoToEntity(dto));
+  }
+
+  @override
+  Future<ApiResponse<NotificationBasic>> getNotificationBasic(int id) async {
+    final res = await _remote.getNotificationBasic(id);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final detail = res.data?.detail;
+    if (detail == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (notification basic detail is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(NotificationBasic(
+      id: detail.id,
+      isRead: detail.isRead,
+      totalUnread: detail.totalUnread,
+    ));
+  }
+
+  @override
+  Future<ApiResponse<AppNotification>> createNotification(
+    CreateNotificationRequest request,
+  ) async {
+    final res = await _remote.createNotification(request);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.notification;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (created notification is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDtoToEntity(dto));
+  }
+
+  @override
+  Future<ApiResponse<AppNotification>> updateNotification(
+    int id,
+    UpdateNotificationRequest request,
+  ) async {
+    final res = await _remote.updateNotification(id, request);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.notification;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (updated notification is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDtoToEntity(dto));
+  }
+
+  @override
+  Future<ApiResponse<AppNotification>> updateNotificationPut(
+    int id,
+    CreateNotificationRequest request,
+  ) async {
+    final res = await _remote.updateNotificationPut(id, request);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.notification;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (updated notification is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDtoToEntity(dto));
+  }
+
+  @override
+  Future<ApiResponse<AppNotification>> readNotification(
+    int id,
+    bool isRead,
+  ) async {
+    final res = await _remote.readNotification(id, isRead);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.notification;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (notification status is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDtoToEntity(dto));
+  }
+
+  @override
+  Future<ApiResponse<int>> deleteNotification(int id) async {
+    final res = await _remote.deleteNotification(id);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final deletedId = res.data?.notificationId;
+    if (deletedId == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (deleted notificationId is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(deletedId);
   }
 
   // ========= helpers =========

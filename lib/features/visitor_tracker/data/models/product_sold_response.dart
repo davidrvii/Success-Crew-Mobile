@@ -59,6 +59,8 @@ class ProductSoldMutationResponse {
   factory ProductSoldMutationResponse.fromJson(Map<String, dynamic> json) {
     final raw =
         json['productSold'] ??
+        json['productSoldCreated'] ??
+        json['productSoldUpdated'] ??
         json['newProductSold'] ??
         json['updatedProductSold'] ??
         json['data'] ??

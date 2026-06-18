@@ -23,7 +23,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
 
     final ApiResponse<LeaveListResponse> res;
     if (isOwner) {
-      res = await _remote.getAllLeaveAdmin();
+      res = await _remote.getAllLeave();
     } else {
       final userIdRes = await _requireUserId();
       if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);

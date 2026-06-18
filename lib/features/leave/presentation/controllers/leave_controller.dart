@@ -3,25 +3,33 @@ import 'package:flutter/foundation.dart';
 
 import '../../domain/entities/leave.dart';
 import '../../domain/usecases/get_leave_list.dart';
+import '../../domain/usecases/get_leave_detail.dart';
 import '../../domain/usecases/create_leave.dart';
 import '../../domain/usecases/update_leave.dart';
+import '../../domain/usecases/delete_leave.dart';
 import '../../data/models/leave_request.dart';
 import '../../../../core/storage/user_session.dart';
 
 class LeaveController extends ChangeNotifier {
   final GetLeaveListUseCase _getLeaveList;
+  final GetLeaveDetailUseCase _getLeaveDetail;
   final CreateLeaveUseCase _createLeave;
   final UpdateLeaveUseCase _updateLeave;
+  final DeleteLeaveUseCase _deleteLeave;
   final UserSession _session;
 
   LeaveController({
     required GetLeaveListUseCase getLeaveList,
+    required GetLeaveDetailUseCase getLeaveDetail,
     required CreateLeaveUseCase createLeave,
     required UpdateLeaveUseCase updateLeave,
+    required DeleteLeaveUseCase deleteLeave,
     required UserSession userSession,
   }) : _getLeaveList = getLeaveList,
+       _getLeaveDetail = getLeaveDetail,
        _createLeave = createLeave,
        _updateLeave = updateLeave,
+       _deleteLeave = deleteLeave,
        _session = userSession;
 
   bool _loading = false;
@@ -32,6 +40,9 @@ class LeaveController extends ChangeNotifier {
 
   List<Leave> _leaves = [];
   List<Leave> get leaves => _leaves;
+
+  Leave? _selectedLeave;
+  Leave? get selectedLeave => _selectedLeave;
 
   bool _isOwner = false;
   bool get isOwner => _isOwner;
@@ -49,12 +60,27 @@ class LeaveController extends ChangeNotifier {
     _errorMessage = null;
 
     // The repository handles the user ID internally
-    final res = await _getLeaveList(); 
+    final res = await _getLeaveList();
 
     if (res.isSuccess) {
       _leaves = res.data ?? [];
     } else {
       _errorMessage = res.error?.message ?? 'Gagal memuat data cuti';
+    }
+
+    _setLoading(false);
+  }
+
+  Future<void> fetchLeaveDetail(int id) async {
+    _setLoading(true);
+    _errorMessage = null;
+
+    final res = await _getLeaveDetail(id);
+
+    if (res.isSuccess) {
+      _selectedLeave = res.data;
+    } else {
+      _errorMessage = res.error?.message ?? 'Gagal memuat detail cuti';
     }
 
     _setLoading(false);
@@ -105,6 +131,24 @@ class LeaveController extends ChangeNotifier {
       return true;
     } else {
       _errorMessage = res.error?.message ?? 'Gagal memperbarui status cuti';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteLeave(int id) async {
+    _setLoading(true);
+    _errorMessage = null;
+
+    final res = await _deleteLeave(id);
+
+    _setLoading(false);
+
+    if (res.isSuccess) {
+      fetchLeaves(); // Refresh data after success
+      return true;
+    } else {
+      _errorMessage = res.error?.message ?? 'Gagal menghapus cuti';
       notifyListeners();
       return false;
     }

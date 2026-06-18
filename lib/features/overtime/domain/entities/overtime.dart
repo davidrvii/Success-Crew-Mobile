@@ -1,6 +1,7 @@
 class Overtime {
   final int id;
   final int userId;
+  final int? attendanceId;
 
   final DateTime? overtimeDate;
   final DateTime? startTime;
@@ -16,6 +17,7 @@ class Overtime {
   const Overtime({
     required this.id,
     required this.userId,
+    this.attendanceId,
     required this.overtimeDate,
     required this.startTime,
     required this.endTime,

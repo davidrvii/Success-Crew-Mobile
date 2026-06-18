@@ -1,32 +1,20 @@
+/// Request for PATCH /attendance/checkin
+/// Body: { date: "YYYY-MM-DD", attendance_status: "Hadir" }
 class CheckInRequest {
-  final String? status;
-  final DateTime? attendanceDate;
-  final DateTime? checkInAt;
+  /// Date string formatted as YYYY-MM-DD
+  final String? date;
 
-  const CheckInRequest({
-    this.status,
-    this.attendanceDate,
-    this.checkInAt,
-  });
+  /// e.g. "Hadir", "Telat"
+  final String? attendanceStatus;
+
+  const CheckInRequest({this.date, this.attendanceStatus});
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-
-    if (status != null && status!.isNotEmpty) {
-      map['attendance_status'] = status;
+    if (date != null && date!.isNotEmpty) map['date'] = date;
+    if (attendanceStatus != null && attendanceStatus!.isNotEmpty) {
+      map['attendance_status'] = attendanceStatus;
     }
-
-    if (attendanceDate != null) {
-      final y = attendanceDate!.year.toString().padLeft(4, '0');
-      final m = attendanceDate!.month.toString().padLeft(2, '0');
-      final d = attendanceDate!.day.toString().padLeft(2, '0');
-      map['attendance_date'] = '$y-$m-${d}T00:00:00.000Z';
-    }
-
-    if (checkInAt != null) {
-      map['attendance_in'] = checkInAt!.toUtc().toIso8601String();
-    }
-
     return map;
   }
 }

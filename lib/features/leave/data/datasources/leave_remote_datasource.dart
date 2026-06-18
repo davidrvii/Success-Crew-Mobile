@@ -17,7 +17,7 @@ abstract class LeaveRemoteDataSource {
 
   Future<ApiResponse<DeleteLeaveResponse>> deleteLeave(int id);
 
-  Future<ApiResponse<LeaveListResponse>> getAllLeaveAdmin();
+  Future<ApiResponse<LeaveListResponse>> getAllLeave();
 }
 
 class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
@@ -74,9 +74,9 @@ class LeaveRemoteDataSourceImpl implements LeaveRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<LeaveListResponse>> getAllLeaveAdmin() {
+  Future<ApiResponse<LeaveListResponse>> getAllLeave() {
     return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.leaveAdmin),
+      request: () => _client.get(ApiPaths.leaveAll),
       parser: (json) =>
           LeaveListResponse.fromJson(json as Map<String, dynamic>),
     );

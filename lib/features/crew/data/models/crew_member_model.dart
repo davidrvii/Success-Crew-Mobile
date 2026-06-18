@@ -39,7 +39,7 @@ class CrewListResponse {
   });
 
   factory CrewListResponse.fromJson(Map<String, dynamic> json) {
-    final list = json['users'] as List?;
+    final list = (json['users'] ?? json['crew']) as List?;
     final parsed = list
             ?.whereType<Map<String, dynamic>>()
             .map(CrewMemberDto.fromJson)

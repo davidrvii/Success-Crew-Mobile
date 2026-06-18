@@ -1,4 +1,5 @@
 class ProductSoldRequest {
+  final int? visitId;
   final String? productName;
   final int? quantity;
   final double? price;
@@ -6,6 +7,7 @@ class ProductSoldRequest {
   final String? notes;
 
   const ProductSoldRequest({
+    this.visitId,
     this.productName,
     this.quantity,
     this.price,
@@ -16,6 +18,9 @@ class ProductSoldRequest {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
+    if (visitId != null) {
+      data['visit_id'] = visitId;
+    }
     if (productName != null) {
       data['product_sold_name'] = productName;
       data['product_name'] = productName;
@@ -27,6 +32,10 @@ class ProductSoldRequest {
     if (price != null) {
       data['product_sold_price'] = price;
       data['price'] = price;
+    }
+    if (total != null) {
+      data['product_sold_total'] = total;
+      data['total'] = total;
     }
     if (notes != null) {
       data['product_sold_desc'] = notes;

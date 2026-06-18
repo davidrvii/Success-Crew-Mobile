@@ -103,6 +103,11 @@ class VisitDetailController extends ChangeNotifier {
     }
 
     visit = res.data;
+    if (visit != null) {
+      followUps = visit!.followUps ?? const [];
+      products = visit!.productsSold ?? const [];
+      units = visit!.unitsServiced ?? const [];
+    }
     isLoading = false;
     notifyListeners();
   }
@@ -181,7 +186,7 @@ class VisitDetailController extends ChangeNotifier {
     isLoadingFollowUps = true;
     notifyListeners();
 
-    final req = FollowUpRequest(notes: notes, status: status);
+    final req = FollowUpRequest(followUpAction: notes, followUpStatus: status);
     final res = await _createFollowUp(visitId!, req);
 
     if (!res.isSuccess) {

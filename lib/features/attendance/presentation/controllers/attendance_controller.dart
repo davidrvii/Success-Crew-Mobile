@@ -90,7 +90,7 @@ class AttendanceController extends ChangeNotifier {
       }
     } catch (_) {}
 
-    // Load today's attendance details
+    // Load today's attendance from session cache
     _todayAttendanceId = await _session.readTodayAttendanceId();
 
     if (_todayAttendanceId != null) {
@@ -115,11 +115,11 @@ class AttendanceController extends ChangeNotifier {
       _leaveCount = data.leaveCount;
       _overtimeCount = data.overtimeCount;
 
-      // Fallback/Auto-creation: If not found in session, look in history for today's check-in
+      // Find today's entry from history if not yet loaded from session
       if (_attendance == null) {
         final now = DateTime.now();
         Attendance? todayEntry;
-        // 1st pass: Look for today's entry that already has a check-in time
+
         for (final a in _allHistory) {
           if (a.attendanceDate != null) {
             final date = a.attendanceDate!.toLocal();
@@ -132,7 +132,7 @@ class AttendanceController extends ChangeNotifier {
             }
           }
         }
-        // 2nd pass: Look for any today's entry (e.g. pre-created / absent)
+        // 2nd pass: any today entry (pre-created)
         if (todayEntry == null) {
           for (final a in _allHistory) {
             if (a.attendanceDate != null) {
@@ -151,26 +151,10 @@ class AttendanceController extends ChangeNotifier {
           _attendance = todayEntry;
           _todayAttendanceId = todayEntry.id;
           await _session.saveTodayAttendanceId(todayEntry.id);
-        } else {
-          // 1. Create today's attendance record without check-in and check-out times
-          final createRes = await _checkInUseCase(
-            status: 'Tidak Hadir',
-            attendanceDate: now,
-            checkInAt: null,
-          );
-          if (createRes.isSuccess && createRes.data != null) {
-            final newRecord = createRes.data!;
-            _attendance = newRecord;
-            _todayAttendanceId = newRecord.id;
-            await _session.saveTodayAttendanceId(newRecord.id);
-            _allHistory = [newRecord, ..._allHistory];
-          } else if (createRes.error != null) {
-            _errorMessage = createRes.error?.message;
-          }
         }
       }
 
-      // Initial page setup for pagination
+      // Pagination setup
       _currentPage = 1;
       _displayedHistory = _allHistory.take(_pageSize).toList();
       _hasMore = _allHistory.length > _pageSize;
@@ -188,7 +172,6 @@ class AttendanceController extends ChangeNotifier {
     _isLoadingMore = true;
     notifyListeners();
 
-    // Small delay for smooth and premium loading experience
     await Future.delayed(const Duration(milliseconds: 500));
 
     final int nextOffset = _currentPage * _pageSize;
@@ -203,29 +186,29 @@ class AttendanceController extends ChangeNotifier {
   }
 
   Future<void> checkIn() async {
-    if (_todayAttendanceId == null) {
-      _errorMessage = 'Gagal melakukan check-in: data absensi belum diinisialisasi.';
-      notifyListeners();
-      return;
-    }
-
     _setLoading(true);
     _errorMessage = null;
 
-    // Determine status based on 09:00 WIB limit
     final now = DateTime.now();
-    final status = now.hour < 9 ? 'Tepat Waktu' : 'Telat';
+    final dateStr =
+        '${now.year.toString().padLeft(4, '0')}-'
+        '${now.month.toString().padLeft(2, '0')}-'
+        '${now.day.toString().padLeft(2, '0')}';
 
-    // 2. Update existing record with check-in time and status
-    final res = await _checkOutUseCase(
-      _todayAttendanceId!,
-      status: status,
-      checkInAt: now,
-      checkOutAt: null,
+    // Determine status based on 09:00 limit
+    final attendanceStatus = now.hour < 9 ? 'Hadir' : 'Telat';
+
+    final res = await _checkInUseCase(
+      date: dateStr,
+      attendanceStatus: attendanceStatus,
     );
 
-    if (res.isSuccess) {
+    if (res.isSuccess && res.data != null) {
       _attendance = res.data;
+      if (res.data!.id != 0) {
+        _todayAttendanceId = res.data!.id;
+        await _session.saveTodayAttendanceId(res.data!.id);
+      }
       await refresh();
       return;
     } else {
@@ -235,24 +218,18 @@ class AttendanceController extends ChangeNotifier {
   }
 
   Future<void> checkOut() async {
-    if (_todayAttendanceId == null) {
-      _errorMessage = 'Belum melakukan check-in hari ini.';
-      notifyListeners();
-      return;
-    }
-
     _setLoading(true);
     _errorMessage = null;
 
     final now = DateTime.now();
+    final dateStr =
+        '${now.year.toString().padLeft(4, '0')}-'
+        '${now.month.toString().padLeft(2, '0')}-'
+        '${now.day.toString().padLeft(2, '0')}';
 
-    // 3. Update existing record with check-out time
-    final res = await _checkOutUseCase(
-      _todayAttendanceId!,
-      checkOutAt: now,
-    );
+    final res = await _checkOutUseCase(date: dateStr);
 
-    if (res.isSuccess) {
+    if (res.isSuccess && res.data != null) {
       _attendance = res.data;
       await refresh();
       return;

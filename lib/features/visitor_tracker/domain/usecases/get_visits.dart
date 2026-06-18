@@ -7,6 +7,6 @@ class GetVisitsUseCase {
   const GetVisitsUseCase(this._repo);
 
   Future<ApiResponse<List<Visit>>> call() {
-    return _repo.getAdminVisits();
+    return _repo.getVisitList();
   }
 }

@@ -1,21 +1,27 @@
 class FollowUp {
   final int followUpId;
-  final int visitId;
+  final int? visitId;
 
-  final String? stage;
-  final String? status;
-  final String? notes;
+  /// Status follow-up (e.g. "CONTACTED", "DONE")
+  final String? followUpStatus;
+  /// Action / note for this follow-up
+  final String? followUpAction;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
   const FollowUp({
     required this.followUpId,
-    required this.visitId,
-    this.stage,
-    this.status,
-    this.notes,
+    this.visitId,
+    this.followUpStatus,
+    this.followUpAction,
     this.createdAt,
     this.updatedAt,
   });
+
+  /// Backward-compatible alias for followUpStatus
+  String? get status => followUpStatus;
+
+  /// Backward-compatible alias for followUpAction
+  String? get notes => followUpAction;
 }

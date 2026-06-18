@@ -12,8 +12,9 @@ abstract class ProfileRemoteDataSource {
 
   Future<ApiResponse<UserDetailResponse>> updateProfile(
     int userId,
-    UpdateProfileRequest request,
-  );
+    UpdateProfileRequest request, {
+    bool usePut = false,
+  });
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -41,24 +42,40 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   @override
   Future<ApiResponse<UserDetailResponse>> updateProfile(
     int userId,
-    UpdateProfileRequest request,
-  ) {
+    UpdateProfileRequest request, {
+    bool usePut = false,
+  }) {
     final hasFile = request.photoFile != null;
 
     return ApiResponse.guard(
       request: () async {
-        if (!hasFile) {
-          return _client.patch(
+        if (usePut) {
+          if (!hasFile) {
+            return _client.put(
+              ApiPaths.userUpdate(userId),
+              data: request.toJson(),
+            );
+          }
+
+          final form = await request.toFormData();
+          return _client.putMultipart(
             ApiPaths.userUpdate(userId),
-            data: request.toJson(),
+            formData: form,
+          );
+        } else {
+          if (!hasFile) {
+            return _client.patch(
+              ApiPaths.userUpdate(userId),
+              data: request.toJson(),
+            );
+          }
+
+          final form = await request.toFormData();
+          return _client.patchMultipart(
+            ApiPaths.userUpdate(userId),
+            formData: form,
           );
         }
-
-        final form = await request.toFormData();
-        return _client.patchMultipart(
-          ApiPaths.userUpdate(userId),
-          formData: form,
-        );
       },
       parser: (json) =>
           UserDetailResponse.fromJson(json as Map<String, dynamic>),

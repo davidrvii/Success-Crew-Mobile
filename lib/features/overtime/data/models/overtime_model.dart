@@ -1,6 +1,7 @@
 class OvertimeDto {
   final int id;
   final int userId;
+  final int? attendanceId;
 
   final DateTime? overtimeDate;
   final DateTime? startTime;
@@ -16,6 +17,7 @@ class OvertimeDto {
   const OvertimeDto({
     required this.id,
     required this.userId,
+    this.attendanceId,
     required this.overtimeDate,
     required this.startTime,
     required this.endTime,
@@ -33,11 +35,12 @@ class OvertimeDto {
     return OvertimeDto(
       id: _readInt(json, ['overtime_id', 'id', 'overtimeId']) ?? 0,
       userId: _readInt(json, ['user_id', 'userId']) ?? 0,
+      attendanceId: _readInt(json, ['attendance_id', 'attendanceId']),
       overtimeDate: _readDate(json, ['overtime_date', 'overtimeDate', 'date']),
-      startTime: _readDate(json, ['start_time', 'startTime', 'start']),
-      endTime: _readDate(json, ['end_time', 'endTime', 'end']),
-      reason: _readString(json, ['reason', 'overtime_reason']),
-      status: _readString(json, ['status', 'overtime_status']),
+      startTime: _readDate(json, ['overtime_start', 'start_time', 'startTime', 'start']),
+      endTime: _readDate(json, ['overtime_end', 'end_time', 'endTime', 'end']),
+      reason: _readString(json, ['overtime_desc', 'reason', 'overtime_reason']),
+      status: _readString(json, ['overtime_status', 'status']),
       createdAt: _readDate(json, ['created_at', 'createdAt']),
       updatedAt: _readDate(json, ['updated_at', 'updatedAt']),
       userName: uName,
@@ -62,6 +65,7 @@ class OvertimeListResponse {
     final raw = _readAny(json, [
       'overtime',
       'overtimes',
+      'crewOvertimes',
       'overtimeList',
       'overtimeHistory',
       'crewOvertime',
@@ -132,6 +136,7 @@ class CreateOvertimeResponse {
 
   factory CreateOvertimeResponse.fromJson(Map<String, dynamic> json) {
     final obj = _readMap(json, [
+      'overtimeCreated',
       'newOvertime',
       'createdOvertime',
       'overtime',
@@ -160,7 +165,12 @@ class UpdateOvertimeResponse {
   });
 
   factory UpdateOvertimeResponse.fromJson(Map<String, dynamic> json) {
-    final obj = _readMap(json, ['updatedOvertime', 'overtime', 'data']);
+    final obj = _readMap(json, [
+      'overtimeUpdated',
+      'updatedOvertime',
+      'overtime',
+      'data',
+    ]);
 
     return UpdateOvertimeResponse(
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
@@ -195,6 +205,100 @@ class DeleteOvertimeResponse {
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
       message: (json['message'] as String?) ?? '',
       overtimeId: id,
+    );
+  }
+}
+
+/// BASIC DTO AND RESPONSES
+
+class OvertimeBasicDto {
+  final int id;
+  final String status;
+  final int totalUnapproved;
+
+  const OvertimeBasicDto({
+    required this.id,
+    required this.status,
+    required this.totalUnapproved,
+  });
+
+  factory OvertimeBasicDto.fromJson(Map<String, dynamic> json) {
+    return OvertimeBasicDto(
+      id: _readInt(json, ['overtime_id', 'id', 'overtimeId']) ?? 0,
+      status: _readString(json, ['overtime_status', 'status']) ?? '',
+      totalUnapproved: _readInt(json, ['total_unapproved', 'totalUnapproved']) ?? 0,
+    );
+  }
+}
+
+class OvertimeBasicListResponse {
+  final int statusCode;
+  final String message;
+  final List<OvertimeDto> items;
+  final int totalUnapproved;
+
+  const OvertimeBasicListResponse({
+    required this.statusCode,
+    required this.message,
+    required this.items,
+    required this.totalUnapproved,
+  });
+
+  factory OvertimeBasicListResponse.fromJson(Map<String, dynamic> json) {
+    final raw = _readAny(json, [
+      'overtime',
+      'overtimes',
+      'crewOvertimes',
+      'overtimeList',
+      'overtimeHistory',
+      'crewOvertime',
+      'items',
+      'data',
+    ]);
+
+    final extracted = <dynamic>[];
+    if (raw is List) {
+      extracted.addAll(raw);
+    } else if (raw is Map<String, dynamic>) {
+      final nested = _readAny(raw, ['overtime', 'items', 'data']);
+      if (nested is List) extracted.addAll(nested);
+    }
+
+    return OvertimeBasicListResponse(
+      statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
+      message: (json['message'] as String?) ?? '',
+      items: extracted
+          .whereType<Map<String, dynamic>>()
+          .map(OvertimeDto.fromJson)
+          .toList(),
+      totalUnapproved: _readInt(json, ['total_unapproved', 'totalUnapproved']) ?? 0,
+    );
+  }
+}
+
+class OvertimeBasicDetailResponse {
+  final int statusCode;
+  final String message;
+  final OvertimeBasicDto? detail;
+
+  const OvertimeBasicDetailResponse({
+    required this.statusCode,
+    required this.message,
+    required this.detail,
+  });
+
+  factory OvertimeBasicDetailResponse.fromJson(Map<String, dynamic> json) {
+    final obj = _readMap(json, [
+      'overtimeBasic',
+      'basic',
+      'detail',
+      'data',
+    ]);
+
+    return OvertimeBasicDetailResponse(
+      statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
+      message: (json['message'] as String?) ?? '',
+      detail: obj == null ? null : OvertimeBasicDto.fromJson(obj),
     );
   }
 }

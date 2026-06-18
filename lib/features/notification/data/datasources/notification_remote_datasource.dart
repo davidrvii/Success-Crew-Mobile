@@ -10,7 +10,7 @@ abstract class NotificationRemoteDataSource {
   );
   Future<ApiResponse<NotificationDetailResponse>> getNotificationDetail(int id);
 
-  Future<ApiResponse<NotificationListResponse>> getAllNotificationsAdmin();
+  Future<ApiResponse<NotificationListResponse>> getAllNotifications();
 
   Future<ApiResponse<CreateNotificationResponse>> createNotification(
     CreateNotificationRequest request,
@@ -21,7 +21,19 @@ abstract class NotificationRemoteDataSource {
     UpdateNotificationRequest request,
   );
 
+  Future<ApiResponse<UpdateNotificationResponse>> updateNotificationPut(
+    int id,
+    CreateNotificationRequest request,
+  );
+
+  Future<ApiResponse<UpdateNotificationResponse>> readNotification(
+    int id,
+    bool isRead,
+  );
+
   Future<ApiResponse<DeleteNotificationResponse>> deleteNotification(int id);
+
+  Future<ApiResponse<NotificationBasicDetailResponse>> getNotificationBasic(int id);
 }
 
 class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
@@ -51,9 +63,9 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<NotificationListResponse>> getAllNotificationsAdmin() {
+  Future<ApiResponse<NotificationListResponse>> getAllNotifications() {
     return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.notificationAdmin),
+      request: () => _client.get(ApiPaths.notificationAll),
       parser: (json) =>
           NotificationListResponse.fromJson(json as Map<String, dynamic>),
     );
@@ -87,11 +99,50 @@ class NotificationRemoteDataSourceImpl implements NotificationRemoteDataSource {
   }
 
   @override
+  Future<ApiResponse<UpdateNotificationResponse>> updateNotificationPut(
+    int id,
+    CreateNotificationRequest request,
+  ) {
+    return ApiResponse.guard(
+      request: () => _client.put(
+        ApiPaths.notificationUpdate(id),
+        data: request.toJson(),
+      ),
+      parser: (json) =>
+          UpdateNotificationResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<ApiResponse<UpdateNotificationResponse>> readNotification(
+    int id,
+    bool isRead,
+  ) {
+    return ApiResponse.guard(
+      request: () => _client.patch(
+        ApiPaths.notificationRead(id),
+        data: {'is_read': isRead},
+      ),
+      parser: (json) =>
+          UpdateNotificationResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
   Future<ApiResponse<DeleteNotificationResponse>> deleteNotification(int id) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.notificationDelete(id)),
       parser: (json) =>
           DeleteNotificationResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<ApiResponse<NotificationBasicDetailResponse>> getNotificationBasic(int id) {
+    return ApiResponse.guard(
+      request: () => _client.get(ApiPaths.notificationBasic(id)),
+      parser: (json) =>
+          NotificationBasicDetailResponse.fromJson(json as Map<String, dynamic>),
     );
   }
 }

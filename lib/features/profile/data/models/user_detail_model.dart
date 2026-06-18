@@ -13,6 +13,23 @@ class UserDetailDto {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  // New fields
+  final String? crewStatus;
+  final String? contractStatus;
+  final String? userPhone;
+  final DateTime? userBirth;
+  final DateTime? startWork;
+  final DateTime? endWork;
+  final String? roleDivision;
+
+  final int? totalAttendance;
+  final int? totalLate;
+  final int? totalLeave;
+  final int? totalOvertime;
+  final int? totalOutOfOffice;
+
+  final List<CrewHistoryDto>? history;
+
   const UserDetailDto({
     required this.userId,
     required this.officeId,
@@ -24,6 +41,19 @@ class UserDetailDto {
     required this.officeName,
     required this.createdAt,
     required this.updatedAt,
+    this.crewStatus,
+    this.contractStatus,
+    this.userPhone,
+    this.userBirth,
+    this.startWork,
+    this.endWork,
+    this.roleDivision,
+    this.totalAttendance,
+    this.totalLate,
+    this.totalLeave,
+    this.totalOvertime,
+    this.totalOutOfOffice,
+    this.history,
   });
 
   factory UserDetailDto.fromJson(Map<String, dynamic> json) {
@@ -38,6 +68,56 @@ class UserDetailDto {
       officeName: json['office_name'] as String?,
       createdAt: _tryParseDate(json['created_at']),
       updatedAt: _tryParseDate(json['updated_at']),
+      crewStatus: json['crew_status'] as String?,
+      contractStatus: json['contract_status'] as String?,
+      userPhone: json['user_phone'] as String?,
+      userBirth: _tryParseDate(json['user_birth']),
+      startWork: _tryParseDate(json['start_work']),
+      endWork: _tryParseDate(json['end_work']),
+      roleDivision: json['role_division'] as String?,
+      totalAttendance: (json['total_attendance'] as num?)?.toInt(),
+      totalLate: (json['total_late'] as num?)?.toInt(),
+      totalLeave: (json['total_leave'] as num?)?.toInt(),
+      totalOvertime: (json['total_overtime'] as num?)?.toInt(),
+      totalOutOfOffice: (json['total_out_of_office'] as num?)?.toInt(),
+      history: (json['history'] as List?)
+          ?.whereType<Map<String, dynamic>>()
+          .map(CrewHistoryDto.fromJson)
+          .toList(),
+    );
+  }
+
+  static DateTime? _tryParseDate(dynamic v) {
+    if (v is String) return DateTime.tryParse(v);
+    return null;
+  }
+}
+
+class CrewHistoryDto {
+  final int id;
+  final String type;
+  final DateTime? date;
+  final String? status;
+  final String? description;
+  final Map<String, dynamic>? details;
+
+  const CrewHistoryDto({
+    required this.id,
+    required this.type,
+    this.date,
+    this.status,
+    this.description,
+    this.details,
+  });
+
+  factory CrewHistoryDto.fromJson(Map<String, dynamic> json) {
+    return CrewHistoryDto(
+      id: (json['id'] as num?)?.toInt() ?? 0,
+      type: (json['type'] as String?) ?? '',
+      date: _tryParseDate(json['date']),
+      status: json['status'] as String?,
+      description: json['description'] as String?,
+      details: json['details'] as Map<String, dynamic>?,
     );
   }
 
@@ -59,7 +139,7 @@ class UserDetailResponse {
   });
 
   factory UserDetailResponse.fromJson(Map<String, dynamic> json) {
-    final payload = json['userDetail'] ?? json['user'];
+    final payload = json['userDetail'] ?? json['user'] ?? json['userCrew'];
     return UserDetailResponse(
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
       message: (json['message'] as String?) ?? '',

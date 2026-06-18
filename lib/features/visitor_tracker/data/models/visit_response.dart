@@ -1,4 +1,5 @@
 import 'visit_model.dart';
+import 'visit_stats_model.dart';
 
 int _status(Map<String, dynamic> json) =>
     (json['statusCode'] as num?)?.toInt() ?? 0;
@@ -127,6 +128,28 @@ class VisitDeleteResponse {
       statusCode: _status(json),
       message: _msg(json),
       deletedId: id,
+    );
+  }
+}
+
+class VisitStatsResponse {
+  final int statusCode;
+  final String message;
+  final VisitStatsModel? stats;
+
+  const VisitStatsResponse({
+    required this.statusCode,
+    required this.message,
+    this.stats,
+  });
+
+  factory VisitStatsResponse.fromJson(Map<String, dynamic> json) {
+    return VisitStatsResponse(
+      statusCode: _status(json),
+      message: _msg(json),
+      stats: json['dailyCount'] != null || json['weeklyCount'] != null || json['rushHour'] != null
+          ? VisitStatsModel.fromJson(json)
+          : null,
     );
   }
 }

@@ -1,4 +1,5 @@
 class UnitServicedRequest {
+  final int? visitId;
   final String? unitName;
   final String? issue;
   final String? action;
@@ -6,6 +7,7 @@ class UnitServicedRequest {
   final String? notes;
 
   const UnitServicedRequest({
+    this.visitId,
     this.unitName,
     this.issue,
     this.action,
@@ -16,6 +18,9 @@ class UnitServicedRequest {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
+    if (visitId != null) {
+      data['visit_id'] = visitId;
+    }
     if (unitName != null) {
       data['unit_serviced_name'] = unitName;
       data['unit_name'] = unitName;

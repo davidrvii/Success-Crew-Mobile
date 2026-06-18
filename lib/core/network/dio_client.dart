@@ -135,4 +135,19 @@ class DioClient {
       ),
     );
   }
+
+  Future<Response<T>> putMultipart<T>(
+    String path, {
+    required FormData formData,
+    Map<String, dynamic>? queryParameters,
+  }) {
+    return _safeCall<T>(
+      () => _dio.put<T>(
+        path,
+        data: formData,
+        queryParameters: queryParameters,
+        options: Options(contentType: 'multipart/form-data'),
+      ),
+    );
+  }
 }

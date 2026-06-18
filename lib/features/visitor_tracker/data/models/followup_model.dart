@@ -5,9 +5,11 @@ class FollowUpModel {
   final int followUpId;
   final int? visitId;
 
-  final String? stage;
-  final String? notes;
-  final String? status;
+  /// `follow_up_status` 
+  final String? followUpStatus;
+
+  /// `follow_up_action` 
+  final String? followUpAction;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -15,9 +17,8 @@ class FollowUpModel {
   const FollowUpModel({
     required this.followUpId,
     this.visitId,
-    this.stage,
-    this.notes,
-    this.status,
+    this.followUpStatus,
+    this.followUpAction,
     this.createdAt,
     this.updatedAt,
   });
@@ -26,12 +27,13 @@ class FollowUpModel {
     return FollowUpModel(
       followUpId:
           _int(json['follow_up_id'] ?? json['followUpId'] ?? json['id']) ?? 0,
-      visitId: _int(json['visit_id']),
-      stage: json['stage'] as String? ?? json['step'] as String?,
-      notes: json['follow_up_action'] as String? ?? json['notes'] as String?,
-      status: json['follow_up_status'] as String? ?? json['status'] as String?,
-      createdAt: _dt(json['created_at']),
-      updatedAt: _dt(json['updated_at']),
+      visitId: _int(json['visit_id'] ?? json['visitId']),
+      followUpStatus:
+          json['follow_up_status'] as String? ?? json['status'] as String?,
+      followUpAction:
+          json['follow_up_action'] as String? ?? json['action'] as String?,
+      createdAt: _dt(json['created_at'] ?? json['createdAt']),
+      updatedAt: _dt(json['updated_at'] ?? json['updatedAt']),
     );
   }
 }

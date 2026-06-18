@@ -8,6 +8,7 @@ import '../../domain/entities/crew_member.dart';
 import '../../domain/repositories/crew_repository.dart';
 import '../datasources/crew_remote_datasource.dart';
 import '../models/crew_member_model.dart';
+import '../models/crew_request.dart';
 
 class CrewRepositoryImpl implements CrewRepository {
   final CrewRemoteDataSource _remote;
@@ -54,7 +55,7 @@ class CrewRepositoryImpl implements CrewRepository {
     final res = await _remote.getCrewAttendanceHistory(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
-    final items = res.data?.items ?? const <AttendanceDto>[];
+    final items = res.data?.data?.attendance ?? const <AttendanceDto>[];
     final mapped = items.map(_mapDtoToEntity).toList();
 
     // Calculate stats filtered by the current calendar year
@@ -88,7 +89,7 @@ class CrewRepositoryImpl implements CrewRepository {
       return sum + calcOt;
     });
 
-    final leaveCount = res.data?.leave ?? 0;
+    final leaveCount = res.data?.data?.totalLeave ?? 0;
 
     return ApiResponse.success(
       AttendanceHistoryData(
@@ -99,6 +100,69 @@ class CrewRepositoryImpl implements CrewRepository {
         overtimeCount: overtimeCount,
       ),
     );
+  }
+
+  @override
+  Future<ApiResponse<List<CrewMember>>> getAllUsers() async {
+    final res = await _remote.getAllUsers();
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final items = res.data?.users ?? const <CrewMemberDto>[];
+    final mapped = items.map((dto) => CrewMember(
+      userId: dto.userId,
+      userName: dto.userName,
+      userEmail: dto.userEmail,
+      userPhoto: dto.userPhoto,
+      roleName: dto.roleName,
+      officeName: dto.officeName,
+    )).toList();
+
+    return ApiResponse.success(mapped);
+  }
+
+  @override
+  Future<ApiResponse<UserDetail>> addCrew(CrewRequest request) async {
+    final res = await _remote.addCrew(request);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.user;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (user is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDetail(dto));
+  }
+
+  @override
+  Future<ApiResponse<UserDetail>> updateCrew(int userId, CrewRequest request) async {
+    final res = await _remote.updateCrew(userId, request);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.user;
+    if (dto == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (user is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDetail(dto));
+  }
+
+  @override
+  Future<ApiResponse<int>> deleteUser(int userId) async {
+    final res = await _remote.deleteUser(userId);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final deletedId = res.data?.userId ?? userId;
+    return ApiResponse.success(deletedId);
   }
 
   UserDetail _mapDetail(UserDetailDto dto) {
@@ -113,6 +177,26 @@ class CrewRepositoryImpl implements CrewRepository {
       officeName: dto.officeName,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
+      crewStatus: dto.crewStatus,
+      contractStatus: dto.contractStatus,
+      userPhone: dto.userPhone,
+      userBirth: dto.userBirth,
+      startWork: dto.startWork,
+      endWork: dto.endWork,
+      roleDivision: dto.roleDivision,
+      totalAttendance: dto.totalAttendance,
+      totalLate: dto.totalLate,
+      totalLeave: dto.totalLeave,
+      totalOvertime: dto.totalOvertime,
+      totalOutOfOffice: dto.totalOutOfOffice,
+      history: dto.history?.map((h) => CrewHistory(
+        id: h.id,
+        type: h.type,
+        date: h.date,
+        status: h.status,
+        description: h.description,
+        details: h.details,
+      )).toList(),
     );
   }
 

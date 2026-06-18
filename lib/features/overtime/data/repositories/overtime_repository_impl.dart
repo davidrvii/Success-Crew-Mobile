@@ -3,6 +3,8 @@ import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
 
 import '../../domain/entities/overtime.dart';
+import '../../domain/entities/overtime_basic.dart';
+import '../../domain/entities/overtime_basic_list.dart';
 import '../../domain/repositories/overtime_repository.dart';
 
 import '../datasources/overtime_remote_datasource.dart';
@@ -23,7 +25,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
 
     final ApiResponse<OvertimeListResponse> res;
     if (isOwner) {
-      res = await _remote.getAllOvertimeAdmin();
+      res = await _remote.getAllOvertime();
     } else {
       final userIdRes = await _requireUserId();
       if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
@@ -99,6 +101,27 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  Future<ApiResponse<Overtime>> updateOvertimeStatus(
+    int id,
+    String status,
+  ) async {
+    final res = await _remote.updateOvertimeStatus(id, status);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final dto = res.data?.overtime;
+    if (dto == null || dto.id == 0) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected status update response (overtime is null).',
+        ),
+      );
+    }
+
+    return ApiResponse.success(_mapDtoToEntity(dto));
+  }
+
+  @override
   Future<ApiResponse<int>> deleteOvertime(int id) async {
     final res = await _remote.deleteOvertime(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -114,6 +137,43 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
     }
 
     return ApiResponse.success(deletedId);
+  }
+
+  @override
+  Future<ApiResponse<OvertimeBasicList>> getOvertimeBasicAll() async {
+    final res = await _remote.getOvertimeBasicAll();
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final basicList = OvertimeBasicList(
+      overtimes: (res.data?.items ?? const <OvertimeDto>[])
+          .map(_mapDtoToEntity)
+          .toList(),
+      totalUnapproved: res.data?.totalUnapproved ?? 0,
+    );
+    return ApiResponse.success(basicList);
+  }
+
+  @override
+  Future<ApiResponse<OvertimeBasic>> getOvertimeBasicDetail(int id) async {
+    final res = await _remote.getOvertimeBasicDetail(id);
+    if (!res.isSuccess) return ApiResponse.failure(res.error!);
+
+    final detail = res.data?.detail;
+    if (detail == null) {
+      return ApiResponse.failure(
+        NetworkException(
+          type: NetworkErrorType.unknown,
+          message: 'Unexpected response (overtime basic detail is null).',
+        ),
+      );
+    }
+
+    final entity = OvertimeBasic(
+      id: detail.id,
+      status: detail.status,
+      totalUnapproved: detail.totalUnapproved,
+    );
+    return ApiResponse.success(entity);
   }
 
   // ========= helpers =========
@@ -143,6 +203,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
 
     return OvertimeRequest(
       userId: userId,
+      attendanceId: req.attendanceId,
       overtimeDate: req.overtimeDate,
       startTime: req.startTime,
       endTime: req.endTime,
@@ -155,6 +216,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
     return Overtime(
       id: dto.id,
       userId: dto.userId,
+      attendanceId: dto.attendanceId,
       overtimeDate: dto.overtimeDate,
       startTime: dto.startTime,
       endTime: dto.endTime,

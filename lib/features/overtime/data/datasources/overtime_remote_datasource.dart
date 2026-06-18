@@ -16,9 +16,15 @@ abstract class OvertimeRemoteDataSource {
     int id,
     OvertimeRequest request,
   );
+  Future<ApiResponse<UpdateOvertimeResponse>> updateOvertimeStatus(
+    int id,
+    String status,
+  );
   Future<ApiResponse<DeleteOvertimeResponse>> deleteOvertime(int id);
 
-  Future<ApiResponse<OvertimeListResponse>> getAllOvertimeAdmin();
+  Future<ApiResponse<OvertimeListResponse>> getAllOvertime();
+  Future<ApiResponse<OvertimeBasicListResponse>> getOvertimeBasicAll();
+  Future<ApiResponse<OvertimeBasicDetailResponse>> getOvertimeBasicDetail(int id);
 }
 
 class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
@@ -61,7 +67,22 @@ class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
   ) {
     return ApiResponse.guard(
       request: () =>
-          _client.patch(ApiPaths.overtimeUpdate(id), data: request.toJson()),
+          _client.put(ApiPaths.overtimeUpdate(id), data: request.toJson()),
+      parser: (json) =>
+          UpdateOvertimeResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<ApiResponse<UpdateOvertimeResponse>> updateOvertimeStatus(
+    int id,
+    String status,
+  ) {
+    return ApiResponse.guard(
+      request: () => _client.patch(
+        ApiPaths.overtimeUpdate(id),
+        data: {'overtime_status': status},
+      ),
       parser: (json) =>
           UpdateOvertimeResponse.fromJson(json as Map<String, dynamic>),
     );
@@ -77,11 +98,29 @@ class OvertimeRemoteDataSourceImpl implements OvertimeRemoteDataSource {
   }
 
   @override
-  Future<ApiResponse<OvertimeListResponse>> getAllOvertimeAdmin() {
+  Future<ApiResponse<OvertimeListResponse>> getAllOvertime() {
     return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.overtimeAdmin),
+      request: () => _client.get(ApiPaths.overtimeAll),
       parser: (json) =>
           OvertimeListResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<ApiResponse<OvertimeBasicListResponse>> getOvertimeBasicAll() {
+    return ApiResponse.guard(
+      request: () => _client.get(ApiPaths.overtimeBasicAll),
+      parser: (json) =>
+          OvertimeBasicListResponse.fromJson(json as Map<String, dynamic>),
+    );
+  }
+
+  @override
+  Future<ApiResponse<OvertimeBasicDetailResponse>> getOvertimeBasicDetail(int id) {
+    return ApiResponse.guard(
+      request: () => _client.get(ApiPaths.overtimeBasicDetail(id)),
+      parser: (json) =>
+          OvertimeBasicDetailResponse.fromJson(json as Map<String, dynamic>),
     );
   }
 }

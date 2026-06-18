@@ -63,6 +63,8 @@ class UnitServicedMutationResponse {
   factory UnitServicedMutationResponse.fromJson(Map<String, dynamic> json) {
     final raw =
         json['unitServiced'] ??
+        json['unitServicedCreated'] ??
+        json['unitServicedUpdated'] ??
         json['newUnitServiced'] ??
         json['updatedUnitServiced'] ??
         json['data'] ??

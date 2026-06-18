@@ -17,6 +17,7 @@ List<Map<String, dynamic>> _asListMap(dynamic raw) {
 Map<String, dynamic>? _asMap(dynamic raw) =>
     raw is Map<String, dynamic> ? raw : null;
 
+/// Response for GET /follow-up/all AND GET /follow-up/visit/:visitId
 class FollowUpListResponse {
   final int statusCode;
   final String message;
@@ -45,6 +46,8 @@ class FollowUpListResponse {
   }
 }
 
+/// Response for POST /follow-up/add, POST /follow-up/visit/:visitId,
+/// PUT /follow-up/update/:followUpId, PATCH /follow-up/visit/:visitId/:followUpId
 class FollowUpMutationResponse {
   final int statusCode;
   final String message;
@@ -57,7 +60,11 @@ class FollowUpMutationResponse {
   });
 
   factory FollowUpMutationResponse.fromJson(Map<String, dynamic> json) {
+    // Covers: followUpCreated (add), followUpUpdated (update),
+    //         followUp (visit nested), newFollowUp, updatedFollowUp
     final raw =
+        json['followUpCreated'] ??
+        json['followUpUpdated'] ??
         json['followUp'] ??
         json['newFollowUp'] ??
         json['updatedFollowUp'] ??
@@ -74,6 +81,8 @@ class FollowUpMutationResponse {
   }
 }
 
+/// Response for DELETE /follow-up/delete/:followUpId
+/// and DELETE /follow-up/visit/:visitId/:followUpId
 class FollowUpDeleteResponse {
   final int statusCode;
   final String message;
@@ -86,6 +95,8 @@ class FollowUpDeleteResponse {
   });
 
   factory FollowUpDeleteResponse.fromJson(Map<String, dynamic> json) {
+    // API returns `followUpId` for non-nested delete
+    // Visit nested delete only returns statusCode + message
     final rawId = json['followUpId'] ?? json['deletedId'] ?? json['id'];
     final id = (rawId is num) ? rawId.toInt() : int.tryParse('$rawId');
 

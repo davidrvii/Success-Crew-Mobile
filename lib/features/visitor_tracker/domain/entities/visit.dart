@@ -1,4 +1,7 @@
 import 'visitor.dart';
+import 'followup.dart';
+import 'product_sold.dart';
+import 'unit_serviced.dart';
 
 class Visit {
   final int visitId;
@@ -10,6 +13,7 @@ class Visit {
   final String? visitorPhone;
   final String? visitorCompany;
   final String? visitorInformation;
+  final String? visitorCategory;
 
   final String? visitorInterest;
   final String? visitorStatus;
@@ -20,6 +24,10 @@ class Visit {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  final List<FollowUp>? followUps;
+  final List<ProductSold>? productsSold;
+  final List<UnitServiced>? unitsServiced;
+
   const Visit({
     required this.visitId,
     this.visitorId,
@@ -29,6 +37,7 @@ class Visit {
     this.visitorPhone,
     this.visitorCompany,
     this.visitorInformation,
+    this.visitorCategory,
     this.visitorInterest,
     this.visitorStatus,
     this.visitType,
@@ -36,5 +45,8 @@ class Visit {
     this.salesName,
     this.createdAt,
     this.updatedAt,
+    this.followUps,
+    this.productsSold,
+    this.unitsServiced,
   });
 }

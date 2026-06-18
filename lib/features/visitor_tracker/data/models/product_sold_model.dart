@@ -38,7 +38,7 @@ class ProductSoldModel {
       productName: json['product_sold_name'] as String? ?? json['product_sold_type'] as String? ?? json['product_name'] as String? ?? json['name'] as String?,
       quantity: _int(json['product_sold_quantity'] ?? json['quantity'] ?? json['qty']),
       price: _dbl(json['product_sold_price'] ?? json['price']),
-      total: null,
+      total: _dbl(json['product_sold_total'] ?? json['total']),
       notes: json['product_sold_desc'] as String? ?? json['product_sold_category'] as String? ?? json['notes'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),

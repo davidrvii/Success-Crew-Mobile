@@ -1,27 +1,14 @@
+/// Request for PATCH /attendance/checkout
+/// Body: { date: "YYYY-MM-DD" }
 class CheckOutRequest {
-  final DateTime? checkOutAt;
-  final DateTime? checkInAt;
-  final String? status;
+  /// Date string formatted as YYYY-MM-DD
+  final String? date;
 
-  const CheckOutRequest({
-    this.checkOutAt,
-    this.checkInAt,
-    this.status,
-  });
+  const CheckOutRequest({this.date});
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-
-    if (checkOutAt != null) {
-      map['attendance_out'] = checkOutAt!.toUtc().toIso8601String();
-    }
-    if (checkInAt != null) {
-      map['attendance_in'] = checkInAt!.toUtc().toIso8601String();
-    }
-    if (status != null && status!.isNotEmpty) {
-      map['attendance_status'] = status;
-    }
-
+    if (date != null && date!.isNotEmpty) map['date'] = date;
     return map;
   }
 }

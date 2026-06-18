@@ -44,3 +44,72 @@ class VisitorListResponse {
     );
   }
 }
+
+class VisitorDetailResponse {
+  final int statusCode;
+  final String message;
+  final VisitorModel? visitor;
+
+  const VisitorDetailResponse({
+    required this.statusCode,
+    required this.message,
+    this.visitor,
+  });
+
+  factory VisitorDetailResponse.fromJson(Map<String, dynamic> json) {
+    final raw = json['visitor'] ?? json['data'] ?? json['detail'] ?? json['result'];
+    final map = raw is Map<String, dynamic> ? raw : null;
+
+    return VisitorDetailResponse(
+      statusCode: _status(json),
+      message: _msg(json),
+      visitor: map != null ? VisitorModel.fromJson(map) : null,
+    );
+  }
+}
+
+class VisitorMutationResponse {
+  final int statusCode;
+  final String message;
+  final VisitorModel? visitor;
+
+  const VisitorMutationResponse({
+    required this.statusCode,
+    required this.message,
+    this.visitor,
+  });
+
+  factory VisitorMutationResponse.fromJson(Map<String, dynamic> json) {
+    final raw = json['visitor'] ?? json['visitorUpdated'] ?? json['data'] ?? json['result'];
+    final map = raw is Map<String, dynamic> ? raw : null;
+
+    return VisitorMutationResponse(
+      statusCode: _status(json),
+      message: _msg(json),
+      visitor: map != null ? VisitorModel.fromJson(map) : null,
+    );
+  }
+}
+
+class VisitorDeleteResponse {
+  final int statusCode;
+  final String message;
+  final int? deletedId;
+
+  const VisitorDeleteResponse({
+    required this.statusCode,
+    required this.message,
+    this.deletedId,
+  });
+
+  factory VisitorDeleteResponse.fromJson(Map<String, dynamic> json) {
+    final rawId = json['visitorId'] ?? json['deletedId'] ?? json['id'];
+    final id = rawId is num ? rawId.toInt() : int.tryParse('$rawId');
+
+    return VisitorDeleteResponse(
+      statusCode: _status(json),
+      message: _msg(json),
+      deletedId: id,
+    );
+  }
+}

@@ -39,15 +39,15 @@ class HomeRepositoryImpl implements HomeRepository {
     final isOwner = _isOwnerRole(userBasic.roleName);
 
     final notifF = isOwner
-        ? _remote.getNotificationAdmin()
+        ? _remote.getNotificationAll()
         : _remote.getNotificationHistory(userId);
 
     final leaveF = isOwner
-        ? _remote.getLeaveAdmin()
+        ? _remote.getLeaveAll()
         : _remote.getLeaveCrew(userId);
 
     final overtimeF = isOwner
-        ? _remote.getOvertimeAdmin()
+        ? _remote.getOvertimeAll()
         : _remote.getOvertimeCrew(userId);
 
     final attendanceF = _remote.getAttendanceCrew(userId);

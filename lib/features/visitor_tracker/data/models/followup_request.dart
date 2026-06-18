@@ -1,19 +1,25 @@
 class FollowUpRequest {
-  final String? stage;
-  final String? notes;
-  final String? status;
+  /// `visit_id` — used for non-nested add endpoint `/follow-up/add`
+  final int? visitId;
 
-  const FollowUpRequest({this.stage, this.notes, this.status});
+  /// `follow_up_status` — e.g. "CONTACTED", "DONE"
+  final String? followUpStatus;
+
+  /// `follow_up_action` — e.g. "WA customer untuk penawaran"
+  final String? followUpAction;
+
+  const FollowUpRequest({
+    this.visitId,
+    this.followUpStatus,
+    this.followUpAction,
+  });
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
 
-    if (stage != null) data['stage'] = stage;
-    if (notes != null) data['notes'] = notes;
-    if (status != null) data['status'] = status;
-
-    if (notes != null) data['follow_up_action'] = notes;
-    if (status != null) data['follow_up_status'] = status;
+    if (visitId != null) data['visit_id'] = visitId;
+    if (followUpStatus != null) data['follow_up_status'] = followUpStatus;
+    if (followUpAction != null) data['follow_up_action'] = followUpAction;
 
     return data;
   }

@@ -10,6 +10,12 @@ import '../../features/attendance/domain/usecases/checkin.dart';
 import '../../features/attendance/domain/usecases/checkout.dart';
 import '../../features/attendance/domain/usecases/get_attendance_detail.dart';
 import '../../features/attendance/domain/usecases/get_attendance_history.dart';
+import '../../features/attendance/domain/usecases/get_attendance_basic.dart';
+import '../../features/attendance/domain/usecases/get_all_attendance.dart';
+import '../../features/attendance/domain/usecases/get_crew_attendance_history.dart';
+import '../../features/attendance/domain/usecases/add_attendance.dart';
+import '../../features/attendance/domain/usecases/update_attendance.dart';
+import '../../features/attendance/domain/usecases/delete_attendance.dart';
 import '../../features/attendance/presentation/controllers/attendance_controller.dart';
 
 void registerAttendanceDi(GetIt sl) {
@@ -38,6 +44,24 @@ void registerAttendanceDi(GetIt sl) {
   );
   sl.registerLazySingleton<GetAttendanceHistoryUseCase>(
     () => GetAttendanceHistoryUseCase(sl<AttendanceRepository>()),
+  );
+  sl.registerLazySingleton<GetAttendanceBasicUseCase>(
+    () => GetAttendanceBasicUseCase(sl<AttendanceRepository>()),
+  );
+  sl.registerLazySingleton<GetAllAttendanceUseCase>(
+    () => GetAllAttendanceUseCase(sl<AttendanceRepository>()),
+  );
+  sl.registerLazySingleton<GetCrewAttendanceHistoryUseCase>(
+    () => GetCrewAttendanceHistoryUseCase(sl<AttendanceRepository>()),
+  );
+  sl.registerLazySingleton<AddAttendanceUseCase>(
+    () => AddAttendanceUseCase(sl<AttendanceRepository>()),
+  );
+  sl.registerLazySingleton<UpdateAttendanceUseCase>(
+    () => UpdateAttendanceUseCase(sl<AttendanceRepository>()),
+  );
+  sl.registerLazySingleton<DeleteAttendanceUseCase>(
+    () => DeleteAttendanceUseCase(sl<AttendanceRepository>()),
   );
 
   // Controllers

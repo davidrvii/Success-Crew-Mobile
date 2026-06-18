@@ -29,6 +29,12 @@ class UserRegistered {
   final String userName;
   final String userEmail;
   final DateTime? createdAt;
+  final String? userPhone;
+  final DateTime? userBirth;
+  final DateTime? startWork;
+  final DateTime? endWork;
+  final String? crewStatus;
+  final String? contractStatus;
 
   const UserRegistered({
     required this.userId,
@@ -37,6 +43,12 @@ class UserRegistered {
     required this.userName,
     required this.userEmail,
     required this.createdAt,
+    this.userPhone,
+    this.userBirth,
+    this.startWork,
+    this.endWork,
+    this.crewStatus,
+    this.contractStatus,
   });
 
   factory UserRegistered.fromJson(Map<String, dynamic> json) {
@@ -47,6 +59,12 @@ class UserRegistered {
       userName: (json['user_name'] as String?) ?? '',
       userEmail: (json['user_email'] as String?) ?? '',
       createdAt: _tryParseDate(json['created_at']),
+      userPhone: json['user_phone'] as String?,
+      userBirth: _tryParseDate(json['user_birth']),
+      startWork: _tryParseDate(json['start_work']),
+      endWork: _tryParseDate(json['end_work']),
+      crewStatus: json['crew_status'] as String?,
+      contractStatus: json['contract_status'] as String?,
     );
   }
 

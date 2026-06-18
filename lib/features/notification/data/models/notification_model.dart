@@ -49,6 +49,7 @@ class NotificationListResponse {
 
   factory NotificationListResponse.fromJson(Map<String, dynamic> json) {
     final raw = _readAny(json, [
+      'notificationsHistory',
       'notifications',
       'notificationHistory',
       'notification',
@@ -60,7 +61,7 @@ class NotificationListResponse {
     if (raw is List) {
       extracted.addAll(raw);
     } else if (raw is Map<String, dynamic>) {
-      final nested = _readAny(raw, ['notifications', 'items', 'data']);
+      final nested = _readAny(raw, ['notificationsHistory', 'notifications', 'items', 'data']);
       if (nested is List) extracted.addAll(nested);
     }
 
@@ -143,6 +144,7 @@ class CreateNotificationResponse {
 
   factory CreateNotificationResponse.fromJson(Map<String, dynamic> json) {
     final obj = _readMap(json, [
+      'notificationCreated',
       'newNotification',
       'createdNotification',
       'notification',
@@ -160,12 +162,20 @@ class CreateNotificationResponse {
 /// UPDATE REQUEST/RESPONSE
 
 class UpdateNotificationRequest {
+  final String? title;
+  final String? description;
   final bool? isRead;
 
-  const UpdateNotificationRequest({this.isRead});
+  const UpdateNotificationRequest({
+    this.title,
+    this.description,
+    this.isRead,
+  });
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
+    if (title != null) map['notification_title'] = title;
+    if (description != null) map['notification_desc'] = description;
     if (isRead != null) map['is_read'] = isRead;
     return map;
   }
@@ -183,7 +193,13 @@ class UpdateNotificationResponse {
   });
 
   factory UpdateNotificationResponse.fromJson(Map<String, dynamic> json) {
-    final obj = _readMap(json, ['updatedNotification', 'notification', 'data']);
+    final obj = _readMap(json, [
+      'notificationRead',
+      'notificationUpdated',
+      'updatedNotification',
+      'notification',
+      'data',
+    ]);
 
     return UpdateNotificationResponse(
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
@@ -218,6 +234,55 @@ class DeleteNotificationResponse {
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
       message: (json['message'] as String?) ?? '',
       notificationId: id,
+    );
+  }
+}
+
+/// BASIC DTO AND RESPONSES
+
+class NotificationBasicDto {
+  final int id;
+  final bool isRead;
+  final int totalUnread;
+
+  const NotificationBasicDto({
+    required this.id,
+    required this.isRead,
+    required this.totalUnread,
+  });
+
+  factory NotificationBasicDto.fromJson(Map<String, dynamic> json) {
+    return NotificationBasicDto(
+      id: _readInt(json, ['notification_id', 'id', 'notificationId']) ?? 0,
+      isRead: _readBool(json, ['is_read', 'isRead', 'read_status']),
+      totalUnread: _readInt(json, ['total_unread', 'totalUnread']) ?? 0,
+    );
+  }
+}
+
+class NotificationBasicDetailResponse {
+  final int statusCode;
+  final String message;
+  final NotificationBasicDto? detail;
+
+  const NotificationBasicDetailResponse({
+    required this.statusCode,
+    required this.message,
+    required this.detail,
+  });
+
+  factory NotificationBasicDetailResponse.fromJson(Map<String, dynamic> json) {
+    final obj = _readMap(json, [
+      'notificationBasic',
+      'basic',
+      'detail',
+      'data',
+    ]);
+
+    return NotificationBasicDetailResponse(
+      statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,
+      message: (json['message'] as String?) ?? '',
+      detail: obj == null ? null : NotificationBasicDto.fromJson(obj),
     );
   }
 }
