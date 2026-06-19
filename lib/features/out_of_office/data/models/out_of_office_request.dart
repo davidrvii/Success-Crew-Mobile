@@ -1,13 +1,15 @@
 class OutOfOfficeRequest {
   final int? userId;
   final String? description;
-  final String? date;
+  final String? startDate;
+  final String? endDate;
   final String? status;
 
   const OutOfOfficeRequest({
     this.userId,
     this.description,
-    this.date,
+    this.startDate,
+    this.endDate,
     this.status,
   });
 
@@ -25,10 +27,14 @@ class OutOfOfficeRequest {
       map['description'] = description;
     }
 
-    if (date != null && date!.isNotEmpty) {
-      map['outofoffice_date'] = date;
-      map['out_of_office_date'] = date;
-      map['date'] = date;
+    if (startDate != null && startDate!.isNotEmpty) {
+      map['outofoffice_start'] = startDate;
+      map['out_of_office_start'] = startDate;
+    }
+
+    if (endDate != null && endDate!.isNotEmpty) {
+      map['outofoffice_end'] = endDate;
+      map['out_of_office_end'] = endDate;
     }
 
     if (status != null && status!.isNotEmpty) {

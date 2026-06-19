@@ -77,13 +77,133 @@ class _HomePageState extends State<HomePage> {
       name: c.userName,
       role: c.roleName,
       unreadCount: c.unreadNotif,
+      todayAbsence: c.todayAbsence,
       onTapNotifications: widget.onTapNotifications,
       onTapCheckIn: widget.onTapCheckIn ?? () => context.go('/absence'),
       onTapProfile: widget.onTapProfile,
     );
   }
 
+  List<Widget> _buildVisitorCharts() {
+    final weeklyCount = c.visitStats?.weeklyCount ?? [];
+    final xLabelsWeekly = weeklyCount.map((e) => _formatDateAbbr(e.date)).toList();
+    final yValuesWeekly = weeklyCount.map((e) => e.totalVisit.toDouble()).toList();
+
+    final rushHour = c.visitStats?.rushHour ?? [];
+    final xLabelsRush = rushHour.map((e) => e.hour.replaceAll(':', '.')).toList();
+    final yValuesRush = rushHour.map((e) => e.totalVisit.toDouble()).toList();
+
+    final productSold = c.visitStats?.productSoldWeekly ?? [];
+    final xLabelsProduct = productSold.map((e) => _formatDateAbbr(e.date)).toList();
+    final yValuesProduct = productSold.map((e) => e.totalProductSold.toDouble()).toList();
+
+    final unitService = c.visitStats?.unitServiceWeekly ?? [];
+    final xLabelsService = unitService.map((e) => _formatDateAbbr(e.date)).toList();
+    final yValuesService = unitService.map((e) => e.totalUnitService.toDouble()).toList();
+
+    return [
+      _ChartCard(
+        title: 'Pengunjung Harian',
+        xLabels: xLabelsWeekly,
+        yValues: yValuesWeekly,
+        lineColor: const Color(0xFF1E88FF),
+        gradientColors: [
+          const Color(0xFF1E88FF).withValues(alpha: 0.15),
+          const Color(0xFF1E88FF).withValues(alpha: 0.0),
+        ],
+      ),
+      const SizedBox(height: 24),
+
+      _ChartCard(
+        title: 'Jam Sibuk',
+        xLabels: xLabelsRush,
+        yValues: yValuesRush,
+        lineColor: const Color(0xFF9A7BFF),
+        gradientColors: [
+          const Color(0xFF9A7BFF).withValues(alpha: 0.15),
+          const Color(0xFF9A7BFF).withValues(alpha: 0.0),
+        ],
+      ),
+      const SizedBox(height: 24),
+
+      _ChartCard(
+        title: 'Produk Terjual',
+        xLabels: xLabelsProduct,
+        yValues: yValuesProduct,
+        lineColor: const Color(0xFFEF4444),
+        gradientColors: [
+          const Color(0xFFEF4444).withValues(alpha: 0.15),
+          const Color(0xFFEF4444).withValues(alpha: 0.0),
+        ],
+      ),
+      const SizedBox(height: 24),
+
+      _ChartCard(
+        title: 'Unit Service',
+        xLabels: xLabelsService,
+        yValues: yValuesService,
+        lineColor: const Color(0xFFF97316),
+        gradientColors: [
+          const Color(0xFFF97316).withValues(alpha: 0.15),
+          const Color(0xFFF97316).withValues(alpha: 0.0),
+        ],
+      ),
+    ];
+  }
+
   List<Widget> _buildOwnerContent() {
+    return [
+      const _SectionTitle('Kinerja Minggu Ini'),
+      const SizedBox(height: 12),
+      _OwnerSummaryGrid(
+        visitorsToday: c.visitorsToday,
+        walkIn: c.walkInToday,
+        callIn: c.callInToday,
+        chatIn: c.chatInToday,
+        totalServices: c.totalServicesThisWeek,
+        totalProducts: c.totalProductsSoldThisWeek,
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Pengajuan'),
+      const SizedBox(height: 12),
+      Row(
+        children: [
+          Expanded(
+            child: _RequestPill(
+              title: 'Cuti',
+              count: c.pendingLeave,
+              background: const Color(0xFFEF4444), // Red
+              onTap: widget.onTapLeave,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _RequestPill(
+              title: 'Dinas',
+              count: c.pendingOutOfOffice,
+              background: const Color(0xFF3B82F6), // Blue
+              onTap: widget.onTapOutOfOffice,
+            ),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _RequestPill(
+              title: 'Lembur',
+              count: c.pendingOvertime,
+              background: const Color(0xFF22C55E), // Green
+              onTap: widget.onTapOvertime,
+            ),
+          ),
+        ],
+      ),
+      const SizedBox(height: 24),
+
+      ..._buildVisitorCharts(),
+    ];
+  }
+
+  List<Widget> _buildStaffContent() {
     return [
       const _SectionTitle('Kinerja Minggu Ini'),
       const SizedBox(height: 12),
@@ -142,60 +262,7 @@ class _HomePageState extends State<HomePage> {
       ),
       const SizedBox(height: 24),
 
-      const _SectionTitle('Pemasukkan'),
-      const SizedBox(height: 12),
-      const _MockChartCard(),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Rata-rata Penyelesaian'),
-      const SizedBox(height: 12),
-      const _MockChartCard(),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Jam Datang'),
-      const SizedBox(height: 12),
-      const _MockChartCard(),
-    ];
-  }
-
-  List<Widget> _buildStaffContent() {
-    return [
-      const _SectionTitle('Kinerja Minggu Ini'),
-      const SizedBox(height: 12),
-      _OwnerSummaryGrid(
-        visitorsToday: c.visitorsToday,
-        walkIn: c.walkInToday,
-        callIn: c.callInToday,
-        chatIn: c.chatInToday,
-        totalServices: c.totalServicesThisWeek,
-        totalProducts: c.totalProductsSoldThisWeek,
-      ),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Kehadiran Crew'),
-      const SizedBox(height: 12),
-      _OwnerAttendanceCard(
-        present: c.present,
-        late: c.late,
-        leave: c.leave,
-        overtime: c.overtime,
-        outOfOffice: c.outOfOffice,
-      ),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Pemasukkan'),
-      const SizedBox(height: 12),
-      const _MockChartCard(),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Rata-rata Penyelesaian'),
-      const SizedBox(height: 12),
-      const _MockChartCard(),
-      const SizedBox(height: 24),
-
-      const _SectionTitle('Jam Datang'),
-      const SizedBox(height: 12),
-      const _MockChartCard(),
+      ..._buildVisitorCharts(),
     ];
   }
 
@@ -480,17 +547,27 @@ class _OwnerAttendanceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       children: [
-        _buildStatCard('Hadir', present),
-        const SizedBox(width: 8),
-        _buildStatCard('Telat', late),
-        const SizedBox(width: 8),
-        _buildStatCard('Lembur', overtime),
-        const SizedBox(width: 8),
-        _buildStatCard('Dinas', outOfOffice),
-        const SizedBox(width: 8),
-        _buildStatCard('Cuti', leave),
+        Row(
+          children: [
+            _buildStatCard('Hadir', present),
+            const SizedBox(width: 8),
+            _buildStatCard('Telat', late),
+            const SizedBox(width: 8),
+            _buildStatCard('Lembur', overtime),
+          ],
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            _buildStatCard('Dinas', outOfOffice),
+            const SizedBox(width: 8),
+            _buildStatCard('Cuti', leave),
+            const SizedBox(width: 8),
+            const Expanded(child: SizedBox()),
+          ],
+        ),
       ],
     );
   }
@@ -594,73 +671,249 @@ class _RequestPill extends StatelessWidget {
   }
 }
 
-class _MockChartCard extends StatelessWidget {
-  const _MockChartCard();
+String _formatDateAbbr(String dateStr) {
+  try {
+    final parts = dateStr.split('-');
+    if (parts.length == 3) {
+      final day = int.parse(parts[2]).toString();
+      final monthIndex = int.parse(parts[1]);
+      const months = [
+        '', 'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
+        'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'
+      ];
+      if (monthIndex >= 1 && monthIndex <= 12) {
+        return '$day ${months[monthIndex]}';
+      }
+    }
+  } catch (_) {}
+  return dateStr;
+}
+
+class _ChartCard extends StatelessWidget {
+  final String title;
+  final List<String> xLabels;
+  final List<double> yValues;
+  final Color lineColor;
+  final List<Color> gradientColors;
+
+  const _ChartCard({
+    required this.title,
+    required this.xLabels,
+    required this.yValues,
+    required this.lineColor,
+    required this.gradientColors,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 180,
       width: double.infinity,
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.06),
+          width: 1.2,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
-      child: CustomPaint(
-        painter: _ChartPainter(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0F172A),
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 180,
+            width: double.infinity,
+            child: CustomPaint(
+              painter: _LineChartPainter(
+                xLabels: xLabels,
+                yValues: yValues,
+                lineColor: lineColor,
+                gradientColors: gradientColors,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-class _ChartPainter extends CustomPainter {
+class _LineChartPainter extends CustomPainter {
+  final List<String> xLabels;
+  final List<double> yValues;
+  final Color lineColor;
+  final List<Color> gradientColors;
+
+  _LineChartPainter({
+    required this.xLabels,
+    required this.yValues,
+    required this.lineColor,
+    required this.gradientColors,
+  });
+
   @override
   void paint(Canvas canvas, Size size) {
-    final paint1 = Paint()
-      ..color = const Color(0xFF3B82F6)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+    const double leftMargin = 32;
+    const double bottomMargin = 24;
+    const double topMargin = 10;
+    const double rightMargin = 16;
 
-    final paint2 = Paint()
-      ..color = const Color(0xFFF97316)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+    final double chartWidth = size.width - leftMargin - rightMargin;
+    final double chartHeight = size.height - topMargin - bottomMargin;
 
-    final path1 = Path();
-    path1.moveTo(20, size.height - 40);
-    path1.lineTo(size.width * 0.3, size.height * 0.4);
-    path1.lineTo(size.width * 0.5, size.height * 0.7);
-    path1.lineTo(size.width * 0.7, size.height * 0.2);
-    path1.lineTo(size.width * 0.9, size.height * 0.6);
+    final gridPaint = Paint()
+      ..color = const Color(0xFFE2E8F0)
+      ..strokeWidth = 1
+      ..style = PaintingStyle.stroke;
 
-    final path2 = Path();
-    path2.moveTo(20, size.height - 20);
-    path2.lineTo(size.width * 0.4, size.height * 0.3);
-    path2.lineTo(size.width * 0.6, size.height * 0.6);
-    path2.lineTo(size.width * 0.8, size.height * 0.3);
-    path2.lineTo(size.width * 0.9, size.height * 0.5);
+    final textPainter = TextPainter(
+      textDirection: TextDirection.ltr,
+    );
 
-    canvas.drawPath(path1, paint1);
-    canvas.drawPath(path2, paint2);
+    if (yValues.isEmpty) {
+      const int gridLinesCount = 4;
+      for (int i = 0; i <= gridLinesCount; i++) {
+        final double y = topMargin + chartHeight * (1 - i / gridLinesCount);
+        canvas.drawLine(Offset(leftMargin, y), Offset(size.width - rightMargin, y), gridPaint);
+      }
+      textPainter.text = const TextSpan(
+        text: 'Tidak ada data',
+        style: TextStyle(
+          color: Color(0xFF94A3B8),
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(
+          leftMargin + (chartWidth - textPainter.width) / 2,
+          topMargin + (chartHeight - textPainter.height) / 2,
+        ),
+      );
+      return;
+    }
 
-    // Draw dots
-    final paintDot1 = Paint()..color = const Color(0xFF3B82F6);
-    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.6), 4, paintDot1);
+    double maxVal = yValues.reduce((a, b) => a > b ? a : b);
+    if (maxVal == 0) maxVal = 5;
 
-    final paintDot2 = Paint()..color = const Color(0xFFF97316);
-    canvas.drawCircle(Offset(size.width * 0.9, size.height * 0.5), 4, paintDot2);
-    
-    // Axes
-    final axisPaint = Paint()
-      ..color = Colors.black87
-      ..strokeWidth = 2;
-    canvas.drawLine(Offset(20, 20), Offset(20, size.height - 20), axisPaint);
-    canvas.drawLine(Offset(20, size.height - 20), Offset(size.width - 20, size.height - 20), axisPaint);
+    final double yMax = ((maxVal / 5).ceil() * 5).toDouble();
+
+    const int gridLinesCount = 4;
+    for (int i = 0; i <= gridLinesCount; i++) {
+      final double y = topMargin + chartHeight * (1 - i / gridLinesCount);
+      canvas.drawLine(Offset(leftMargin, y), Offset(size.width - rightMargin, y), gridPaint);
+
+      final int labelValue = (yMax * (i / gridLinesCount)).round();
+      textPainter.text = TextSpan(
+        text: labelValue.toString(),
+        style: const TextStyle(
+          color: Color(0xFF94A3B8),
+          fontSize: 9,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+      textPainter.layout();
+      textPainter.paint(
+        canvas,
+        Offset(leftMargin - textPainter.width - 6, y - textPainter.height / 2),
+      );
+    }
+
+    final int pointsCount = yValues.length;
+    final double stepX = pointsCount > 1 ? chartWidth / (pointsCount - 1) : chartWidth;
+
+    final List<Offset> points = [];
+    for (int i = 0; i < pointsCount; i++) {
+      final double x = leftMargin + i * stepX;
+      final double normalizedY = yValues[i] / yMax;
+      final double y = topMargin + chartHeight * (1 - normalizedY);
+      points.add(Offset(x, y));
+
+      if (i < xLabels.length) {
+        textPainter.text = TextSpan(
+          text: xLabels[i],
+          style: const TextStyle(
+            color: Color(0xFF94A3B8),
+            fontSize: 9,
+            fontWeight: FontWeight.w600,
+          ),
+        );
+        textPainter.layout();
+        textPainter.paint(
+          canvas,
+          Offset(x - textPainter.width / 2, size.height - bottomMargin + 6),
+        );
+      }
+    }
+
+    if (points.isNotEmpty) {
+      final fillPath = Path()
+        ..moveTo(leftMargin, topMargin + chartHeight)
+        ..lineTo(points.first.dx, points.first.dy);
+
+      for (int i = 1; i < points.length; i++) {
+        fillPath.lineTo(points[i].dx, points[i].dy);
+      }
+      fillPath.lineTo(points.last.dx, topMargin + chartHeight);
+      fillPath.close();
+
+      final fillPaint = Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: gradientColors,
+        ).createShader(
+          Rect.fromLTRB(leftMargin, topMargin, size.width - rightMargin, topMargin + chartHeight),
+        );
+      canvas.drawPath(fillPath, fillPaint);
+
+      final linePath = Path()..moveTo(points.first.dx, points.first.dy);
+      for (int i = 1; i < points.length; i++) {
+        linePath.lineTo(points[i].dx, points[i].dy);
+      }
+
+      final linePaint = Paint()
+        ..color = lineColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.5
+        ..strokeCap = StrokeCap.round;
+      canvas.drawPath(linePath, linePaint);
+
+      final dotPaint = Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.fill;
+      final borderPaint = Paint()
+        ..color = lineColor
+        ..strokeWidth = 2
+        ..style = PaintingStyle.stroke;
+
+      for (final pt in points) {
+        canvas.drawCircle(pt, 4, dotPaint);
+        canvas.drawCircle(pt, 4, borderPaint);
+      }
+    }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
 // ============================================================================

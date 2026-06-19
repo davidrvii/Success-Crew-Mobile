@@ -4,21 +4,30 @@ import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 
 import '../../domain/entities/home_summary.dart';
+import '../../domain/entities/home_attendance_summary.dart';
 import '../../domain/usecases/get_home_summary_request.dart';
 import '../../domain/usecases/refresh_home_summary_request.dart';
+import '../../../visitor_tracker/domain/entities/visit_stats.dart';
+import '../../../visitor_tracker/domain/usecases/get_visit_stats.dart';
 
 class HomeController extends ChangeNotifier {
   final GetHomeSummaryUseCase _getHomeSummaryUseCase;
   final RefreshHomeSummaryUseCase _refreshHomeSummaryUseCase;
+  final GetVisitStatsUseCase _getVisitStatsUseCase;
 
   HomeController({
     required GetHomeSummaryUseCase getHomeSummaryUseCase,
     required RefreshHomeSummaryUseCase refreshHomeSummaryUseCase,
+    required GetVisitStatsUseCase getVisitStatsUseCase,
   }) : _getHomeSummaryUseCase = getHomeSummaryUseCase,
-       _refreshHomeSummaryUseCase = refreshHomeSummaryUseCase;
+       _refreshHomeSummaryUseCase = refreshHomeSummaryUseCase,
+       _getVisitStatsUseCase = getVisitStatsUseCase;
 
   HomeSummary? _summary;
   HomeSummary? get summary => _summary;
+
+  VisitStats? _visitStats;
+  VisitStats? get visitStats => _visitStats;
 
   NetworkException? _error;
   NetworkException? get error => _error;
@@ -30,15 +39,15 @@ class HomeController extends ChangeNotifier {
   bool _isRefreshing = false;
   bool get isRefreshing => _isRefreshing;
 
-  bool get hasData => _summary != null;
+  bool get hasData => _summary != null && _visitStats != null;
   bool get hasError => _error != null;
 
-  bool get isInitialLoading => _isLoading && _summary == null;
+  bool get isInitialLoading => _isLoading && (_summary == null || _visitStats == null);
 
   int _requestToken = 0;
 
   Future<void> init() async {
-    if (_summary != null || _isLoading) return;
+    if ((_summary != null && _visitStats != null) || _isLoading) return;
     await load();
   }
 
@@ -49,15 +58,24 @@ class HomeController extends ChangeNotifier {
     _setRefreshing(false);
     _setError(null);
 
-    final ApiResponse<HomeSummary> res = await _getHomeSummaryUseCase();
+    final results = await Future.wait([
+      _getHomeSummaryUseCase(),
+      _getVisitStatsUseCase(),
+    ]);
 
     if (myToken != _requestToken) return;
 
-    if (res.isSuccess) {
-      _summary = res.data;
+    final resSummary = results[0] as ApiResponse<HomeSummary>;
+    final resStats = results[1] as ApiResponse<VisitStats>;
+
+    if (resSummary.isSuccess && resStats.isSuccess) {
+      _summary = resSummary.data;
+      _visitStats = resStats.data;
       _setError(null);
+    } else if (!resSummary.isSuccess) {
+      _setError(resSummary.error);
     } else {
-      _setError(res.error);
+      _setError(resStats.error);
     }
 
     _setLoading(false);
@@ -66,7 +84,7 @@ class HomeController extends ChangeNotifier {
   Future<void> refresh() async {
     final myToken = ++_requestToken;
 
-    if (_summary != null) {
+    if (_summary != null && _visitStats != null) {
       _setRefreshing(true);
     } else {
       _setLoading(true);
@@ -74,15 +92,24 @@ class HomeController extends ChangeNotifier {
 
     _setError(null);
 
-    final ApiResponse<HomeSummary> res = await _refreshHomeSummaryUseCase();
+    final results = await Future.wait([
+      _refreshHomeSummaryUseCase(),
+      _getVisitStatsUseCase(),
+    ]);
 
     if (myToken != _requestToken) return;
 
-    if (res.isSuccess) {
-      _summary = res.data;
+    final resSummary = results[0] as ApiResponse<HomeSummary>;
+    final resStats = results[1] as ApiResponse<VisitStats>;
+
+    if (resSummary.isSuccess && resStats.isSuccess) {
+      _summary = resSummary.data;
+      _visitStats = resStats.data;
       _setError(null);
+    } else if (!resSummary.isSuccess) {
+      _setError(resSummary.error);
     } else {
-      _setError(res.error);
+      _setError(resStats.error);
     }
 
     _setRefreshing(false);
@@ -96,6 +123,7 @@ class HomeController extends ChangeNotifier {
   void reset() {
     _requestToken++;
     _summary = null;
+    _visitStats = null;
     _error = null;
     _isLoading = false;
     _isRefreshing = false;
@@ -130,6 +158,7 @@ class HomeController extends ChangeNotifier {
   String get userName => _summary?.user.userName ?? '-';
   String get roleName => _toTitleCase(_summary?.user.roleName);
   int get unreadNotif => _summary?.unreadNotificationCount ?? 0;
+  HomeTodayAbsence? get todayAbsence => _summary?.attendance.today;
 
   int get visitorsToday => _summary?.visitors.visitorsToday ?? 0;
   int get walkInToday => _summary?.visitors.walkInToday ?? 0;

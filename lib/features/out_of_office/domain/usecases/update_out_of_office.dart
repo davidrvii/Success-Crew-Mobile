@@ -10,7 +10,8 @@ class UpdateOutOfOfficeUseCase {
   Future<ApiResponse<OutOfOffice>> call(int id, OutOfOfficeRequest request) {
     if (request.status != null &&
         request.description == null &&
-        request.date == null) {
+        request.startDate == null &&
+        request.endDate == null) {
       return _repo.updateOutOfOfficeStatus(id, request.status!);
     }
     return _repo.updateOutOfOffice(id, request);

@@ -13,6 +13,9 @@ import '../../features/leave/domain/usecases/update_leave.dart';
 import '../../features/leave/domain/usecases/delete_leave.dart';
 import '../../features/leave/presentation/controllers/leave_controller.dart';
 
+import '../../features/attendance/domain/usecases/get_attendance_history.dart';
+import '../../features/out_of_office/domain/usecases/get_out_of_office_list.dart';
+
 void registerLeaveDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<LeaveRemoteDataSource>(
@@ -50,6 +53,8 @@ void registerLeaveDi(GetIt sl) {
       updateLeave: sl<UpdateLeaveUseCase>(),
       deleteLeave: sl<DeleteLeaveUseCase>(),
       userSession: sl<UserSession>(),
+      getAttendanceHistoryUseCase: sl<GetAttendanceHistoryUseCase>(),
+      getOutOfOfficeListUseCase: sl<GetOutOfOfficeListUseCase>(),
     ),
   );
 }

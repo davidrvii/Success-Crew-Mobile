@@ -50,6 +50,22 @@ class _AttendancePageState extends State<AttendancePage> {
         final canCheckOut =
             !c.isLoading && (a != null && a.hasCheckedIn && !a.hasCheckedOut);
 
+        final isRed = a == null || (!a.hasCheckedIn && !a.hasCheckedOut);
+        final isGreen = a != null && a.hasCheckedIn && !a.hasCheckedOut;
+        final isGrey = a != null && a.hasCheckedIn && a.hasCheckedOut;
+
+        final gradientColors = isRed
+            ? [const Color(0xFFEF4444), const Color(0xFFDC2626)]
+            : isGreen
+                ? [const Color(0xFF22C55E), const Color(0xFF10B981)]
+                : [const Color(0xFF94A3B8), const Color(0xFF64748B)];
+
+        final shadowColor = isRed
+            ? const Color(0xFFEF4444)
+            : isGreen
+                ? const Color(0xFF22C55E)
+                : const Color(0xFF94A3B8);
+
         return Scaffold(
           backgroundColor: const Color(0xFFFAFBFF),
           body: SafeArea(
@@ -108,20 +124,20 @@ class _AttendancePageState extends State<AttendancePage> {
                   const SizedBox(height: 18),
 
 
-                  // 2. Large Green Card (Action card with fingerprint button)
+                  // 2. Large Dynamic Card (Action card with fingerprint button)
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(24.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(28.0),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFF22C55E), Color(0xFF10B981)],
+                      gradient: LinearGradient(
+                        colors: gradientColors,
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF22C55E).withValues(alpha: 0.25),
+                          color: shadowColor.withValues(alpha: 0.25),
                           blurRadius: 18,
                           offset: const Offset(0, 8),
                         ),
@@ -130,77 +146,80 @@ class _AttendancePageState extends State<AttendancePage> {
                     child: Column(
                       children: [
                         // Fingerprint button area
-                        HoldToActionButton(
-                          onTap: () async {
-                            final messenger = ScaffoldMessenger.of(context);
-                            if (canCheckIn) {
-                              await c.checkIn();
-                              if (c.errorMessage != null) {
-                                messenger.showSnackBar(
-                                  SnackBar(
-                                    content: Text(c.errorMessage!),
-                                    backgroundColor: const Color(0xFFEF4444),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
+                        IgnorePointer(
+                          ignoring: isGrey,
+                          child: HoldToActionButton(
+                            onTap: () async {
+                              final messenger = ScaffoldMessenger.of(context);
+                              if (canCheckIn) {
+                                await c.checkIn();
+                                if (c.errorMessage != null) {
+                                  messenger.showSnackBar(
+                                    SnackBar(
+                                      content: Text(c.errorMessage!),
+                                      backgroundColor: const Color(0xFFEF4444),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                }
+                              } else if (canCheckOut) {
+                                if (DateTime.now().hour < 17) {
+                                  messenger.showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Tidak dapat check out sebelum jam pulang"),
+                                      backgroundColor: Color(0xFFEF4444),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                await c.checkOut();
+                                if (c.errorMessage != null) {
+                                  messenger.showSnackBar(
+                                    SnackBar(
+                                      content: Text(c.errorMessage!),
+                                      backgroundColor: const Color(0xFFEF4444),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                }
                               }
-                            } else if (canCheckOut) {
-                              if (DateTime.now().hour < 17) {
-                                messenger.showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Tidak dapat check out sebelum jam pulang"),
-                                    backgroundColor: Color(0xFFEF4444),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                                return;
-                              }
-                              await c.checkOut();
-                              if (c.errorMessage != null) {
-                                messenger.showSnackBar(
-                                  SnackBar(
-                                    content: Text(c.errorMessage!),
-                                    backgroundColor: const Color(0xFFEF4444),
-                                    behavior: SnackBarBehavior.floating,
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.white.withValues(alpha: 0.08),
-                            ),
+                            },
                             child: Container(
                               padding: const EdgeInsets.all(12),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white.withValues(alpha: 0.12),
+                                color: Colors.white.withValues(alpha: 0.08),
                               ),
                               child: Container(
-                                width: 90,
-                                height: 90,
+                                padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Colors.white.withValues(alpha: 0.18),
+                                  color: Colors.white.withValues(alpha: 0.12),
                                 ),
-                                alignment: Alignment.center,
-                                child: c.isLoading
-                                    ? const SizedBox(
-                                        width: 30,
-                                        height: 30,
-                                        child: CircularProgressIndicator(
+                                child: Container(
+                                  width: 90,
+                                  height: 90,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white.withValues(alpha: 0.18),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: c.isLoading
+                                      ? const SizedBox(
+                                          width: 30,
+                                          height: 30,
+                                          child: CircularProgressIndicator(
+                                            color: Colors.white,
+                                            strokeWidth: 3,
+                                          ),
+                                        )
+                                      : const Icon(
+                                          Icons.fingerprint,
                                           color: Colors.white,
-                                          strokeWidth: 3,
+                                          size: 54,
                                         ),
-                                      )
-                                    : const Icon(
-                                        Icons.fingerprint,
-                                        color: Colors.white,
-                                        size: 54,
-                                      ),
+                                ),
                               ),
                             ),
                           ),
@@ -254,18 +273,28 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                   const SizedBox(height: 18),
 
-                  // 3. Row of 5 statistics cards
-                  Row(
+                  // 3. 2-row layout of statistics cards
+                  Column(
                     children: [
-                      _buildStatCard('Hadir', c.presentCount),
-                      const SizedBox(width: 8),
-                      _buildStatCard('Telat', c.lateCount),
-                      const SizedBox(width: 8),
-                      _buildStatCard('Lembur', c.overtimeCount),
-                      const SizedBox(width: 8),
-                      _buildStatCard('Dinas', c.outOfOfficeCount),
-                      const SizedBox(width: 8),
-                      _buildStatCard('Cuti', c.leaveCount),
+                      Row(
+                        children: [
+                          _buildStatCard('Hadir', c.presentCount),
+                          const SizedBox(width: 8),
+                          _buildStatCard('Telat', c.lateCount),
+                          const SizedBox(width: 8),
+                          _buildStatCard('Lembur', c.overtimeCount),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          _buildStatCard('Dinas', c.outOfOfficeCount),
+                          const SizedBox(width: 8),
+                          _buildStatCard('Cuti', c.leaveCount),
+                          const SizedBox(width: 8),
+                          const Expanded(child: SizedBox()),
+                        ],
+                      ),
                     ],
                   ),
                   const SizedBox(height: 24),

@@ -2,6 +2,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/storage/user_session.dart';
+import '../../../../core/utils/location_helper.dart';
+import '../../../../core/utils/date_overlap_helper.dart';
+
+import '../../../leave/domain/usecases/get_leave_list.dart';
+import '../../../out_of_office/domain/usecases/get_out_of_office_list.dart';
 
 import '../../domain/entities/attendance.dart';
 import '../../domain/usecases/checkin.dart';
@@ -15,6 +20,8 @@ class AttendanceController extends ChangeNotifier {
   final CheckOutUseCase _checkOutUseCase;
   final GetAttendanceDetailUseCase _getAttendanceDetailUseCase;
   final GetAttendanceHistoryUseCase _getAttendanceHistoryUseCase;
+  final GetLeaveListUseCase _getLeaveListUseCase;
+  final GetOutOfOfficeListUseCase _getOutOfOfficeListUseCase;
 
   AttendanceController({
     required UserSession session,
@@ -22,11 +29,15 @@ class AttendanceController extends ChangeNotifier {
     required CheckOutUseCase checkOutUseCase,
     required GetAttendanceDetailUseCase getAttendanceDetailUseCase,
     required GetAttendanceHistoryUseCase getAttendanceHistoryUseCase,
+    required GetLeaveListUseCase getLeaveListUseCase,
+    required GetOutOfOfficeListUseCase getOutOfOfficeListUseCase,
   }) : _session = session,
        _checkInUseCase = checkInUseCase,
        _checkOutUseCase = checkOutUseCase,
        _getAttendanceDetailUseCase = getAttendanceDetailUseCase,
-       _getAttendanceHistoryUseCase = getAttendanceHistoryUseCase;
+       _getAttendanceHistoryUseCase = getAttendanceHistoryUseCase,
+       _getLeaveListUseCase = getLeaveListUseCase,
+       _getOutOfOfficeListUseCase = getOutOfOfficeListUseCase;
 
   bool _loading = false;
   bool get isLoading => _loading;
@@ -208,7 +219,62 @@ class AttendanceController extends ChangeNotifier {
     _setLoading(true);
     _errorMessage = null;
 
+    final inRange = await LocationHelper.isWithinRange();
+    if (!inRange) {
+      _errorMessage = 'Diluar jangkauan lokasi toko';
+      _setLoading(false);
+      return;
+    }
+
     final now = DateTime.now();
+
+    // Check Leave overlaps
+    final leaveRes = await _getLeaveListUseCase();
+    if (leaveRes.isSuccess && leaveRes.data != null) {
+      for (final l in leaveRes.data!) {
+        final status = (l.status ?? '').toLowerCase().trim();
+        if (status == 'rejected' || status == 'ditolak') continue;
+        if (l.startDate != null && l.endDate != null) {
+          if (DateOverlapHelper.isDateInRange(now, l.startDate!, l.endDate!)) {
+            _errorMessage = 'Terdapat cuti pada tanggal tersebut';
+            _setLoading(false);
+            return;
+          }
+        }
+      }
+    }
+
+    // Check Out of Office overlaps
+    final oooRes = await _getOutOfOfficeListUseCase();
+    if (oooRes.isSuccess && oooRes.data != null) {
+      for (final o in oooRes.data!) {
+        final status = (o.status ?? '').toLowerCase().trim();
+        if (status == 'rejected' || status == 'ditolak') continue;
+        if (o.startDate != null && o.endDate != null) {
+          if (DateOverlapHelper.isDateInRange(now, o.startDate!, o.endDate!)) {
+            _errorMessage = 'Terdapat dinas pada tanggal tersebut';
+            _setLoading(false);
+            return;
+          }
+        }
+      }
+    }
+
+    // Check existing attendance on this day
+    if (_allHistory.isNotEmpty) {
+      final normalizedToday = DateOverlapHelper.normalize(now);
+      for (final h in _allHistory) {
+        if (h.attendanceDate != null && h.checkInAt != null) {
+          final normalizedAtt = DateOverlapHelper.normalize(h.attendanceDate!);
+          if (normalizedToday.isAtSameMomentAs(normalizedAtt)) {
+            _errorMessage = 'Terdapat absensi pada tanggal tersebut';
+            _setLoading(false);
+            return;
+          }
+        }
+      }
+    }
+
     final dateStr =
         '${now.year.toString().padLeft(4, '0')}-'
         '${now.month.toString().padLeft(2, '0')}-'
@@ -239,6 +305,13 @@ class AttendanceController extends ChangeNotifier {
   Future<void> checkOut({String? date}) async {
     _setLoading(true);
     _errorMessage = null;
+
+    final inRange = await LocationHelper.isWithinRange();
+    if (!inRange) {
+      _errorMessage = 'Diluar jangkauan lokasi toko';
+      _setLoading(false);
+      return;
+    }
 
     final targetDate = date ?? () {
       final now = DateTime.now();

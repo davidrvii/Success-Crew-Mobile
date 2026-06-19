@@ -224,11 +224,17 @@ class _SearchPill extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(30),
-        side: BorderSide(color: Theme.of(context).dividerColor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: TextField(
         onChanged: onChanged,
@@ -302,75 +308,83 @@ class _VisitorCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        side: BorderSide(color: Theme.of(context).dividerColor),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(18),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title row
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Title row
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  _miniChip(status),
-                ],
-              ),
-              const SizedBox(height: 10),
-
-              _kv('Keperluan', interest),
-              const SizedBox(height: 4),
-              _kv('Metode', type),
-              const SizedBox(height: 4),
-              _kv('Pengunjung', info),
-
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  _metaPill(Icons.calendar_today_outlined, date),
-                  const SizedBox(width: 8),
-                  _metaPill(Icons.access_time, time),
-                  const Spacer(),
-                  if (visitSales.isNotEmpty && visitSales != '-') ...[
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.person_outline_rounded, size: 16, color: Colors.black54),
-                        const SizedBox(width: 4),
-                        Text(
-                          visitSales,
-                          style: const TextStyle(
-                            color: Colors.black54,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
+                    _miniChip(status),
                   ],
-                  const Icon(Icons.chevron_right),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 10),
+
+                _kv('Keperluan', interest),
+                const SizedBox(height: 4),
+                _kv('Metode', type),
+                const SizedBox(height: 4),
+                _kv('Pengunjung', info),
+
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    _metaPill(Icons.calendar_today_outlined, date),
+                    const SizedBox(width: 8),
+                    _metaPill(Icons.access_time, time),
+                    const Spacer(),
+                    if (visitSales.isNotEmpty && visitSales != '-') ...[
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.person_outline_rounded, size: 16, color: Colors.black54),
+                          const SizedBox(width: 4),
+                          Text(
+                            visitSales,
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    const Icon(Icons.chevron_right),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -457,35 +471,59 @@ class _FilterSheet extends StatelessWidget {
     final options = <String>['Selesai', 'Proses', 'Batal'];
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Filter Status', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 12),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Filter Status',
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context, ''),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: const Text(
+                  'Clear',
+                  style: TextStyle(
+                    color: Color(0xFF0C5AA6),
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
           Wrap(
             spacing: 10,
             runSpacing: 10,
-            children: [
-              ChoiceChip(
-                label: const Text('Clear'),
-                selected: false,
-                onSelected: (_) => Navigator.pop(context, ''),
-              ),
-              ...options.map((e) {
-                final sel = (selected ?? '').toLowerCase() == e.toLowerCase();
-                return ChoiceChip(
-                  label: Text(e),
-                  selected: sel,
-                  onSelected: (_) => Navigator.pop(context, e),
-                );
-              }),
-            ],
+            children: options.map((e) {
+              final sel = (selected ?? '').toLowerCase() == e.toLowerCase();
+              return ChoiceChip(
+                label: Text(e),
+                selected: sel,
+                onSelected: (_) => Navigator.pop(context, e),
+              );
+            }).toList(),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           FilledButton(
             onPressed: () => Navigator.pop(context, null),
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFF0C5AA6),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
             child: const Text('Tutup'),
           ),
         ],

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../../core/widgets/hold_to_action_button.dart';
+import 'package:intl/intl.dart';
+import '../../domain/entities/home_attendance_summary.dart';
 
 class HomeStaffHeaderCard extends StatelessWidget {
   final String name;
   final String role;
   final int unreadCount;
+  final HomeTodayAbsence? todayAbsence;
   final VoidCallback? onTapNotifications;
   final VoidCallback? onTapCheckIn;
   final VoidCallback? onTapProfile;
@@ -14,6 +16,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
     required this.name,
     required this.role,
     required this.unreadCount,
+    this.todayAbsence,
     this.onTapNotifications,
     this.onTapCheckIn,
     this.onTapProfile,
@@ -21,93 +24,151 @@ class HomeStaffHeaderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final today = todayAbsence;
+    final bool hasCheckedIn = today != null && today.hasCheckedIn;
+    final bool hasCheckedOut = today is HomeTodayAbsenceCheckedIn && today.hasCheckedOut;
+
+    // Time display
+    String timeStr = '--.--';
+    if (today is HomeTodayAbsenceCheckedIn) {
+      final checkInTime = today.checkInAt;
+      final checkOutTime = today.checkOutAt;
+      if (hasCheckedOut && checkOutTime != null) {
+        timeStr = DateFormat('HH.mm').format(checkOutTime.toLocal());
+      } else if (checkInTime != null) {
+        timeStr = DateFormat('HH.mm').format(checkInTime.toLocal());
+      }
+    }
+
+    // Status / Button Text & Color
+    String statusText = 'Check In';
+    Color btnColor = const Color(0xFFEF4444); // Red initially
+    bool isClickable = true;
+
+    if (hasCheckedIn) {
+      if (hasCheckedOut) {
+        statusText = 'Selesai';
+        btnColor = const Color(0xFF94A3B8); // Grey
+        isClickable = false;
+      } else {
+        statusText = 'Check Out';
+        btnColor = const Color(0xFF22C55E); // Green
+      }
+    }
+
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFF135CAE), // Match exact blue from design
         borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
             blurRadius: 18,
-            offset: Offset(0, 10),
-            color: Color(0x22000000),
+            offset: const Offset(0, 10),
+            color: Colors.black.withOpacity(0.08),
           ),
         ],
       ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: Colors.white,
+          // Top portion (Dark blue)
+          Container(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+            color: const Color(0xFF135CAE),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      role,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFFE2E8F0),
+                      const SizedBox(height: 4),
+                      Text(
+                        role,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFFE2E8F0),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(width: 10),
-              _IconChip(
-                icon: Icons.notifications_none_rounded,
-                badge: unreadCount > 0 ? unreadCount : null,
-                onTap: onTapNotifications,
-              ),
-              const SizedBox(width: 8),
-              _IconChip(
-                icon: Icons.person_outline_rounded,
-                onTap: onTapProfile,
-              ),
-            ],
+                const SizedBox(width: 10),
+                _IconChip(
+                  icon: Icons.notifications_none_rounded,
+                  badge: unreadCount > 0 ? unreadCount : null,
+                  onTap: onTapNotifications,
+                ),
+                const SizedBox(width: 8),
+                _IconChip(
+                  icon: Icons.person_outline_rounded,
+                  onTap: onTapProfile,
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
-          HoldToActionButton(
-            onTap: onTapCheckIn ?? () {},
-            child: Material(
-              color: const Color(0xFF22C55E), // Green
-              borderRadius: BorderRadius.circular(999),
+          // Bottom portion (Medium/light blue)
+          Material(
+            color: const Color(0xFF4D88CD),
+            child: InkWell(
+              onTap: isClickable ? onTapCheckIn : null,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Check In',
-                      style: TextStyle(
+                    Text(
+                      timeStr,
+                      style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontSize: 32,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                     Container(
-                      padding: const EdgeInsets.all(4),
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      height: 36,
+                      width: 1.2,
+                      color: Colors.white.withOpacity(0.5),
+                    ),
+                    Expanded(
+                      child: Text(
+                        statusText,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      width: 52,
+                      height: 52,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: btnColor,
                         shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: btnColor.withOpacity(0.4),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       child: const Icon(
                         Icons.fingerprint,
                         color: Colors.white,
-                        size: 20,
+                        size: 32,
                       ),
                     ),
                   ],

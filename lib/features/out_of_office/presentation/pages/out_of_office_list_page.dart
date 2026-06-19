@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../controllers/out_of_office_controller.dart';
 import '../../domain/entities/out_of_office.dart';
@@ -126,7 +127,7 @@ class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
                       c.fetchOutOfOffices();
                     }
                   },
-                  backgroundColor: const Color(0xFF3B82F6),
+                  backgroundColor: const Color(0xFF1C5AA6),
                   child: const Icon(Icons.add, color: Colors.white),
                 ),
         );
@@ -136,52 +137,49 @@ class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
 
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
-      width: double.infinity,
-      height: 80,
-      margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
+      margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
-        color: const Color(0xFF1C5AA6),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: const [
+        color: const Color(0xFF0B5FA5),
+        borderRadius: BorderRadius.circular(22),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 10,
-            offset: Offset(0, 4),
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
           ),
         ],
       ),
-      child: Stack(
-        alignment: Alignment.center,
+      child: Row(
         children: [
-          Positioned(
-            left: 12,
-            child: Material(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              child: InkWell(
-                onTap: () => Navigator.maybePop(context),
-                borderRadius: BorderRadius.circular(20),
-                child: const SizedBox(
-                  width: 56,
-                  height: 56,
-                  child: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.black,
-                    size: 20,
-                  ),
-                ),
+          InkWell(
+            onTap: () => Navigator.maybePop(context),
+            borderRadius: BorderRadius.circular(14),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF0B5FA5), size: 18),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w800,
               ),
             ),
           ),
-          Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-            ),
-          ),
+          const SizedBox(width: 40),
         ],
       ),
     );
@@ -217,7 +215,7 @@ class _OutOfOfficeCard extends StatelessWidget {
               const SizedBox(height: 4),
             ],
             Text(
-              'Tanggal: ${item.date?.toString().substring(0, 10) ?? '-'}',
+              'Tanggal: ${item.startDate != null ? DateFormat('dd MMMM yyyy', 'id_ID').format(item.startDate!) : ''} s/d ${item.endDate != null ? DateFormat('dd MMMM yyyy', 'id_ID').format(item.endDate!) : ''}',
             ),
             const SizedBox(height: 4),
             Text('Keterangan: ${item.description ?? '-'}'),

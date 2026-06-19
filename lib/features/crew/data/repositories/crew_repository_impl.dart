@@ -67,7 +67,7 @@ class CrewRepositoryImpl implements CrewRepository {
       return a.attendanceDate!.toLocal().year == currentYear;
     }).toList();
 
-    final presentCount = currentYearEntries.where((a) {
+    final actualPresentCount = currentYearEntries.where((a) {
       final statusLower = (a.status ?? '').toLowerCase().trim();
       return a.checkInAt != null && statusLower != 'tidak hadir';
     }).length;
@@ -89,8 +89,27 @@ class CrewRepositoryImpl implements CrewRepository {
       return sum + calcOt;
     });
 
-    final leaveCount = res.data?.data?.totalLeave ?? 0;
-    final outOfOfficeCount = res.data?.data?.totalOutOfOffice ?? 0;
+    int leaveCount = 0;
+    int outOfOfficeCount = 0;
+
+    final historyList = res.data?.data?.history;
+    if (historyList != null) {
+      for (final h in historyList) {
+        if (h.date != null && h.date!.toLocal().year == currentYear) {
+          final statusLower = (h.status ?? '').toLowerCase().trim();
+          final isApproved = statusLower == 'approved' || statusLower == 'diterima';
+          if (isApproved) {
+            if (h.type == 'leave') {
+              leaveCount++;
+            } else if (h.type == 'out_of_office') {
+              outOfOfficeCount++;
+            }
+          }
+        }
+      }
+    }
+
+    final presentCount = actualPresentCount + outOfOfficeCount;
 
     return ApiResponse.success(
       AttendanceHistoryData(

@@ -3,7 +3,8 @@ class OutOfOffice {
   final int userId;
 
   final String? description;
-  final DateTime? date;
+  final DateTime? startDate;
+  final DateTime? endDate;
   final String? status;
 
   final DateTime? createdAt;
@@ -14,7 +15,8 @@ class OutOfOffice {
     required this.id,
     required this.userId,
     required this.description,
-    required this.date,
+    required this.startDate,
+    required this.endDate,
     required this.status,
     this.createdAt,
     this.updatedAt,

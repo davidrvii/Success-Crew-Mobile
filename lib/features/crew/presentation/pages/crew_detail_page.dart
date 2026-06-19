@@ -115,18 +115,28 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
                               ),
                               const SizedBox(height: 18),
 
-                              // 4. Statistics Row (Hadir, Telat, Lembur, Dinas, Cuti)
-                              Row(
+                              // 4. Statistics Row (Hadir, Telat, Lembur, Dinas, Cuti) - 2 rows
+                              Column(
                                 children: [
-                                  _buildStatCard('Hadir', c.presentCount),
-                                  const SizedBox(width: 8),
-                                  _buildStatCard('Telat', c.lateCount),
-                                  const SizedBox(width: 8),
-                                  _buildStatCard('Lembur', c.overtimeCount),
-                                  const SizedBox(width: 8),
-                                  _buildStatCard('Dinas', c.outOfOfficeCount),
-                                  const SizedBox(width: 8),
-                                  _buildStatCard('Cuti', c.leaveCount),
+                                  Row(
+                                    children: [
+                                      _buildStatCard('Hadir', c.presentCount),
+                                      const SizedBox(width: 8),
+                                      _buildStatCard('Telat', c.lateCount),
+                                      const SizedBox(width: 8),
+                                      _buildStatCard('Lembur', c.overtimeCount),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      _buildStatCard('Dinas', c.outOfOfficeCount),
+                                      const SizedBox(width: 8),
+                                      _buildStatCard('Cuti', c.leaveCount),
+                                      const SizedBox(width: 8),
+                                      const Expanded(child: SizedBox()),
+                                    ],
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 24),
@@ -574,17 +584,17 @@ class _BackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: const Color(0xFF0C5AA6),
-      borderRadius: BorderRadius.circular(10),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(10),
-        onTap: onPressed,
-        child: const SizedBox(
-          height: 38,
-          width: 38,
-          child: Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(14),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: const Color(0xFF0B5FA5),
+          borderRadius: BorderRadius.circular(14),
         ),
+        child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 18),
       ),
     );
   }

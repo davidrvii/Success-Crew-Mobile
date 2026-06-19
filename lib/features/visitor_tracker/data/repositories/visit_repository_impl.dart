@@ -121,6 +121,8 @@ class VisitRepositoryImpl implements VisitRepository {
   VisitStats _mapStats(VisitStatsModel m) => VisitStats(
     dailyCount: m.dailyCount,
     weeklyCount: m.weeklyCount,
+    productSoldWeekly: m.productSoldWeekly,
+    unitServiceWeekly: m.unitServiceWeekly,
     rushHour: m.rushHour,
   );
 

@@ -34,16 +34,19 @@ class LeaveRequest {
     }
 
     if (startDate != null && startDate!.isNotEmpty) {
+      map['leave_start'] = startDate;
       map['start_date'] = startDate;
       map['startDate'] = startDate;
     }
 
     if (endDate != null && endDate!.isNotEmpty) {
+      map['leave_end'] = endDate;
       map['end_date'] = endDate;
       map['endDate'] = endDate;
     }
 
     if (reason != null && reason!.isNotEmpty) {
+      map['leave_desc'] = reason;
       map['reason'] = reason;
       map['leave_reason'] = reason;
     }

@@ -6,6 +6,8 @@ class VisitStatsModel extends VisitStats {
   const VisitStatsModel({
     super.dailyCount,
     super.weeklyCount,
+    super.productSoldWeekly,
+    super.unitServiceWeekly,
     super.rushHour,
   });
 
@@ -16,6 +18,12 @@ class VisitStatsModel extends VisitStats {
           : null,
       weeklyCount: (json['weeklyCount'] as List?)
           ?.map((e) => VisitWeeklyCountModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      productSoldWeekly: (json['productSoldWeekly'] as List?)
+          ?.map((e) => ProductSoldWeeklyModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      unitServiceWeekly: (json['unitServiceWeekly'] as List?)
+          ?.map((e) => UnitServiceWeeklyModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       rushHour: (json['rushHour'] as List?)
           ?.map((e) => VisitRushHourModel.fromJson(e as Map<String, dynamic>))
@@ -70,6 +78,34 @@ class VisitRushHourModel extends VisitRushHour {
     return VisitRushHourModel(
       hour: json['hour'] as String? ?? '',
       totalVisit: _int(json['total_visit']),
+    );
+  }
+}
+
+class ProductSoldWeeklyModel extends ProductSoldWeekly {
+  const ProductSoldWeeklyModel({
+    required super.date,
+    required super.totalProductSold,
+  });
+
+  factory ProductSoldWeeklyModel.fromJson(Map<String, dynamic> json) {
+    return ProductSoldWeeklyModel(
+      date: json['date'] as String? ?? '',
+      totalProductSold: _int(json['totalProductSold'] ?? json['total_product_sold']),
+    );
+  }
+}
+
+class UnitServiceWeeklyModel extends UnitServiceWeekly {
+  const UnitServiceWeeklyModel({
+    required super.date,
+    required super.totalUnitService,
+  });
+
+  factory UnitServiceWeeklyModel.fromJson(Map<String, dynamic> json) {
+    return UnitServiceWeeklyModel(
+      date: json['date'] as String? ?? '',
+      totalUnitService: _int(json['totalUnitService'] ?? json['total_unit_service']),
     );
   }
 }

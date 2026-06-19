@@ -1,12 +1,36 @@
 class VisitStats {
   final VisitDailyCount? dailyCount;
   final List<VisitWeeklyCount>? weeklyCount;
+  final List<ProductSoldWeekly>? productSoldWeekly;
+  final List<UnitServiceWeekly>? unitServiceWeekly;
   final List<VisitRushHour>? rushHour;
 
   const VisitStats({
     this.dailyCount,
     this.weeklyCount,
+    this.productSoldWeekly,
+    this.unitServiceWeekly,
     this.rushHour,
+  });
+}
+
+class ProductSoldWeekly {
+  final String date;
+  final int totalProductSold;
+
+  const ProductSoldWeekly({
+    required this.date,
+    required this.totalProductSold,
+  });
+}
+
+class UnitServiceWeekly {
+  final String date;
+  final int totalUnitService;
+
+  const UnitServiceWeekly({
+    required this.date,
+    required this.totalUnitService,
   });
 }
 

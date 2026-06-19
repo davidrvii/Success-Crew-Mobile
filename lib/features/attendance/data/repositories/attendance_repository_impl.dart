@@ -52,6 +52,10 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       attendanceOut: dto.attendanceOut,
       overtimeStart: dto.overtimeStart,
       overtimeEnd: dto.overtimeEnd,
+      leaveStart: dto.leaveStart,
+      leaveEnd: dto.leaveEnd,
+      outOfOfficeStart: dto.outOfOfficeStart,
+      outOfOfficeEnd: dto.outOfOfficeEnd,
     );
   }
 
@@ -148,11 +152,57 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final attendanceList = data?.attendance ?? const <AttendanceDto>[];
     final mapped = attendanceList.map(_mapDto).toList();
 
-    final presentCount = data?.totalAttendance ?? 0;
-    final lateCount = data?.totalLate ?? 0;
-    final leaveCount = data?.totalLeave ?? 0;
-    final overtimeCount = data?.totalOvertime ?? 0;
-    final outOfOfficeCount = data?.totalOutOfOffice ?? 0;
+    // Calculate stats filtered by the current calendar year
+    final now = DateTime.now();
+    final currentYear = now.year;
+
+    final currentYearEntries = mapped.where((a) {
+      if (a.attendanceDate == null) return false;
+      return a.attendanceDate!.toLocal().year == currentYear;
+    }).toList();
+
+    final actualPresentCount = currentYearEntries.where((a) {
+      final statusLower = (a.status ?? '').toLowerCase().trim();
+      return a.checkInAt != null && statusLower != 'tidak hadir';
+    }).length;
+
+    final lateCount = currentYearEntries.where((a) {
+      final statusLower = (a.status ?? '').toLowerCase().trim();
+      return statusLower == 'telat';
+    }).length;
+
+    final overtimeCount = currentYearEntries.fold<int>(0, (sum, a) {
+      final ot = a.overtime ?? 0;
+      if (ot > 0) return sum + ot;
+
+      // Fallback
+      if (a.checkInAt == null || a.checkOutAt == null) return sum;
+      final diff = a.checkOutAt!.difference(a.checkInAt!);
+      final hours = diff.inHours;
+      final calcOt = hours > 8 ? hours - 8 : 0;
+      return sum + calcOt;
+    });
+
+    int leaveCount = 0;
+    int outOfOfficeCount = 0;
+
+    if (data?.history != null) {
+      for (final h in data!.history) {
+        if (h.date != null && h.date!.toLocal().year == currentYear) {
+          final statusLower = (h.status ?? '').toLowerCase().trim();
+          final isApproved = statusLower == 'approved' || statusLower == 'diterima';
+          if (isApproved) {
+            if (h.type == 'leave') {
+              leaveCount++;
+            } else if (h.type == 'out_of_office') {
+              outOfOfficeCount++;
+            }
+          }
+        }
+      }
+    }
+
+    final presentCount = actualPresentCount + outOfOfficeCount;
 
     return ApiResponse.success(
       AttendanceHistoryData(

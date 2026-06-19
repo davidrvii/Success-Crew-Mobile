@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/utils/date_overlap_helper.dart';
+import '../../../attendance/domain/usecases/get_attendance_history.dart';
+import '../../../leave/domain/usecases/get_leave_list.dart';
+
 import '../../domain/entities/out_of_office.dart';
 import '../../domain/usecases/get_out_of_office_list.dart';
 import '../../domain/usecases/create_out_of_office.dart';
@@ -14,6 +18,8 @@ class OutOfOfficeController extends ChangeNotifier {
   final UpdateOutOfOfficeUseCase _updateOutOfOffice;
   final DeleteOutOfOfficeUseCase _deleteOutOfOffice;
   final UserSession _session;
+  final GetAttendanceHistoryUseCase _getAttendanceHistoryUseCase;
+  final GetLeaveListUseCase _getLeaveListUseCase;
 
   OutOfOfficeController({
     required GetOutOfOfficeListUseCase getOutOfOfficeList,
@@ -21,11 +27,15 @@ class OutOfOfficeController extends ChangeNotifier {
     required UpdateOutOfOfficeUseCase updateOutOfOffice,
     required DeleteOutOfOfficeUseCase deleteOutOfOffice,
     required UserSession userSession,
+    required GetAttendanceHistoryUseCase getAttendanceHistoryUseCase,
+    required GetLeaveListUseCase getLeaveListUseCase,
   }) : _getOutOfOfficeList = getOutOfOfficeList,
        _createOutOfOffice = createOutOfOffice,
        _updateOutOfOffice = updateOutOfOffice,
        _deleteOutOfOffice = deleteOutOfOffice,
-       _session = userSession;
+       _session = userSession,
+       _getAttendanceHistoryUseCase = getAttendanceHistoryUseCase,
+       _getLeaveListUseCase = getLeaveListUseCase;
 
   bool _loading = false;
   bool get isLoading => _loading;
@@ -63,14 +73,65 @@ class OutOfOfficeController extends ChangeNotifier {
   }
 
   Future<bool> submitOutOfOffice({
-    required String date,
+    required String startDate,
+    required String endDate,
     required String description,
   }) async {
     _setLoading(true);
     _errorMessage = null;
 
+    final start = DateTime.parse(startDate);
+    final end = DateTime.parse(endDate);
+
+    // 1. Check Attendance overlaps
+    final attRes = await _getAttendanceHistoryUseCase();
+    if (attRes.isSuccess && attRes.data != null) {
+      for (final a in attRes.data!.history) {
+        if (a.attendanceDate != null) {
+          if (DateOverlapHelper.isDateInRange(a.attendanceDate!, start, end)) {
+            _errorMessage = 'Terdapat absensi pada tanggal tersebut';
+            _setLoading(false);
+            notifyListeners();
+            return false;
+          }
+        }
+      }
+    }
+
+    // 2. Check Leave overlaps
+    final leaveRes = await _getLeaveListUseCase();
+    if (leaveRes.isSuccess && leaveRes.data != null) {
+      for (final l in leaveRes.data!) {
+        final status = (l.status ?? '').toLowerCase().trim();
+        if (status == 'rejected' || status == 'ditolak') continue;
+        if (l.startDate != null && l.endDate != null) {
+          if (DateOverlapHelper.areRangesOverlapping(start, end, l.startDate!, l.endDate!)) {
+            _errorMessage = 'Terdapat cuti pada tanggal tersebut';
+            _setLoading(false);
+            notifyListeners();
+            return false;
+          }
+        }
+      }
+    }
+
+    // 3. Check Out of Office overlaps
+    for (final o in _outOfOffices) {
+      final status = (o.status ?? '').toLowerCase().trim();
+      if (status == 'rejected' || status == 'ditolak') continue;
+      if (o.startDate != null && o.endDate != null) {
+        if (DateOverlapHelper.areRangesOverlapping(start, end, o.startDate!, o.endDate!)) {
+          _errorMessage = 'Terdapat dinas pada tanggal tersebut';
+          _setLoading(false);
+          notifyListeners();
+          return false;
+        }
+      }
+    }
+
     final req = OutOfOfficeRequest(
-      date: date,
+      startDate: startDate,
+      endDate: endDate,
       description: description,
       status: 'pending',
     );

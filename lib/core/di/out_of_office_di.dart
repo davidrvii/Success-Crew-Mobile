@@ -16,6 +16,9 @@ import '../../features/out_of_office/domain/usecases/get_out_of_office_basic_det
 import '../../features/out_of_office/domain/usecases/update_out_of_office_status.dart';
 import '../../features/out_of_office/presentation/controllers/out_of_office_controller.dart';
 
+import '../../features/attendance/domain/usecases/get_attendance_history.dart';
+import '../../features/leave/domain/usecases/get_leave_list.dart';
+
 void registerOutOfOfficeDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<OutOfOfficeRemoteDataSource>(
@@ -61,6 +64,8 @@ void registerOutOfOfficeDi(GetIt sl) {
       updateOutOfOffice: sl<UpdateOutOfOfficeUseCase>(),
       deleteOutOfOffice: sl<DeleteOutOfOfficeUseCase>(),
       userSession: sl<UserSession>(),
+      getAttendanceHistoryUseCase: sl<GetAttendanceHistoryUseCase>(),
+      getLeaveListUseCase: sl<GetLeaveListUseCase>(),
     ),
   );
 }

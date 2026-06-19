@@ -41,6 +41,7 @@ import '../features/overtime/presentation/controllers/overtime_controller.dart';
 
 // OUT OF OFFICE
 import '../features/out_of_office/presentation/pages/out_of_office_list_page.dart';
+import '../features/out_of_office/presentation/pages/out_of_office_form_page.dart';
 import '../features/out_of_office/presentation/controllers/out_of_office_controller.dart';
 
 // NOTIFICATION
@@ -77,6 +78,7 @@ class AppGoRouter {
   static const String leave = '/leave';
   static const String leaveAdd = '/leave-add';
   static const String outOfOffice = '/out-of-office';
+  static const String outOfOfficeAdd = '/out-of-office-add';
   static const String overtime = '/overtime';
   static const String overtimeAdd = '/overtime-add';
   static const String notification = '/notification';
@@ -169,6 +171,14 @@ class AppGoRouter {
         path: outOfOffice,
         builder: (context, state) {
           return OutOfOfficeListPage(
+            controller: sl<OutOfOfficeController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: outOfOfficeAdd,
+        builder: (context, state) {
+          return OutOfOfficeFormPage(
             controller: sl<OutOfOfficeController>(),
           );
         },

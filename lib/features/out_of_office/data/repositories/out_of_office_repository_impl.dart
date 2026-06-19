@@ -204,7 +204,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
     return OutOfOfficeRequest(
       userId: userId,
       description: req.description,
-      date: req.date,
+      startDate: req.startDate,
+      endDate: req.endDate,
       status: req.status,
     );
   }
@@ -214,7 +215,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
       id: dto.id,
       userId: dto.userId,
       description: dto.description,
-      date: dto.date,
+      startDate: dto.startDate,
+      endDate: dto.endDate,
       status: dto.status,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,

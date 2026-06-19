@@ -6,6 +6,7 @@ import '../../../features/home/domain/repositories/home_repository.dart';
 import '../../../features/home/domain/usecases/get_home_summary_request.dart';
 import '../../../features/home/domain/usecases/refresh_home_summary_request.dart';
 import '../../../features/home/presentation/controllers/home_controller.dart';
+import '../../../features/visitor_tracker/domain/usecases/get_visit_stats.dart';
 import '../../../../core/storage/user_session.dart';
 
 import '../network/dio_client.dart';
@@ -35,6 +36,7 @@ void registerHomeDi(GetIt sl) {
     () => HomeController(
       getHomeSummaryUseCase: sl<GetHomeSummaryUseCase>(),
       refreshHomeSummaryUseCase: sl<RefreshHomeSummaryUseCase>(),
+      getVisitStatsUseCase: sl<GetVisitStatsUseCase>(),
     ),
   );
 }

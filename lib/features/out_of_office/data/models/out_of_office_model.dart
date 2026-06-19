@@ -3,7 +3,8 @@ class OutOfOfficeDto {
   final int userId;
 
   final String? description;
-  final DateTime? date;
+  final DateTime? startDate;
+  final DateTime? endDate;
   final String? status;
 
   final DateTime? createdAt;
@@ -14,7 +15,8 @@ class OutOfOfficeDto {
     required this.id,
     required this.userId,
     required this.description,
-    required this.date,
+    required this.startDate,
+    required this.endDate,
     required this.status,
     this.createdAt,
     this.updatedAt,
@@ -25,11 +27,15 @@ class OutOfOfficeDto {
     final userMap = json['user'] is Map<String, dynamic> ? json['user'] as Map<String, dynamic> : null;
     final uName = userMap?['user_name'] as String? ?? json['user_name'] as String? ?? json['userName'] as String?;
 
+    final startVal = _readDate(json, ['outofoffice_start', 'out_of_office_start', 'outofoffice_date', 'out_of_office_date', 'date']);
+    final endVal = _readDate(json, ['outofoffice_end', 'out_of_office_end', 'outofoffice_date', 'out_of_office_date', 'date']);
+
     return OutOfOfficeDto(
       id: _readInt(json, ['outofoffice_id', 'out_of_office_id', 'id', 'outofofficeId']) ?? 0,
       userId: _readInt(json, ['user_id', 'userId']) ?? 0,
       description: _readString(json, ['outofoffice_desc', 'out_of_office_desc', 'description', 'desc']),
-      date: _readDate(json, ['outofoffice_date', 'out_of_office_date', 'date']),
+      startDate: startVal,
+      endDate: endVal,
       status: _readString(json, ['outofoffice_status', 'out_of_office_status', 'status']),
       createdAt: _readDate(json, ['created_at', 'createdAt']),
       updatedAt: _readDate(json, ['updated_at', 'updatedAt']),

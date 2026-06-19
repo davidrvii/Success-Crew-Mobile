@@ -181,6 +181,26 @@ class CrewHistoryItemDto {
   DateTime? get overtimeEnd => details['overtime_end'] is String
       ? DateTime.tryParse(details['overtime_end'] as String)
       : null;
+
+  // Convenience getters for leave type
+  DateTime? get leaveStart {
+    final s = details['leave_start'] ?? details['leaveStart'] ?? details['start_date'] ?? details['startDate'];
+    return s is String ? DateTime.tryParse(s) : null;
+  }
+  DateTime? get leaveEnd {
+    final s = details['leave_end'] ?? details['leaveEnd'] ?? details['end_date'] ?? details['endDate'];
+    return s is String ? DateTime.tryParse(s) : null;
+  }
+
+  // Convenience getters for out of office type
+  DateTime? get outOfOfficeStart {
+    final s = details['out_of_office_start'] ?? details['outofoffice_start'] ?? details['outOfOfficeStart'] ?? details['outofofficeStart'];
+    return s is String ? DateTime.tryParse(s) : null;
+  }
+  DateTime? get outOfOfficeEnd {
+    final s = details['out_of_office_end'] ?? details['outofoffice_end'] ?? details['outOfOfficeEnd'] ?? details['outofofficeEnd'];
+    return s is String ? DateTime.tryParse(s) : null;
+  }
 }
 
 // ─────────────────────────────────────────────

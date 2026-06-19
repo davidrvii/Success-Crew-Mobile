@@ -1,152 +1,105 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import '../controllers/overtime_controller.dart';
+import '../controllers/out_of_office_controller.dart';
 
-class OvertimeFormPage extends StatefulWidget {
-  final OvertimeController controller;
+class OutOfOfficeFormPage extends StatefulWidget {
+  final OutOfOfficeController controller;
 
-  const OvertimeFormPage({super.key, required this.controller});
+  const OutOfOfficeFormPage({super.key, required this.controller});
 
   @override
-  State<OvertimeFormPage> createState() => _OvertimeFormPageState();
+  State<OutOfOfficeFormPage> createState() => _OutOfOfficeFormPageState();
 }
 
-class _OvertimeFormPageState extends State<OvertimeFormPage> {
+class _OutOfOfficeFormPageState extends State<OutOfOfficeFormPage> {
   final _formKey = GlobalKey<FormState>();
-  final _reasonController = TextEditingController();
-
-  DateTime? _date;
-  TimeOfDay? _startTime;
-  TimeOfDay? _endTime;
+  final _descriptionController = TextEditingController();
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   @override
   void dispose() {
-    _reasonController.dispose();
+    _descriptionController.dispose();
     super.dispose();
   }
 
-  Future<void> _pickDate() async {
+  Future<void> _pickStartDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: _date ?? DateTime.now(),
+      initialDate: _startDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
     );
     if (picked != null) {
       setState(() {
-        _date = picked;
-      });
-    }
-  }
-
-  Future<void> _pickStartTime() async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: _startTime ?? TimeOfDay.now(),
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      setState(() {
-        _startTime = picked;
-        // Reset endTime jika menjadi tidak valid (kurang dari startTime)
-        if (_endTime != null) {
-          final startMinutes = _startTime!.hour * 60 + _startTime!.minute;
-          final endMinutes = _endTime!.hour * 60 + _endTime!.minute;
-          if (endMinutes <= startMinutes) {
-            _endTime = null;
-          }
+        _startDate = picked;
+        if (_endDate != null && _endDate!.isBefore(_startDate!)) {
+          _endDate = null;
         }
       });
     }
   }
 
-  Future<void> _pickEndTime() async {
-    if (_startTime == null) {
+  Future<void> _pickEndDate() async {
+    if (_startDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Pilih Waktu Mulai terlebih dahulu.')),
+        const SnackBar(content: Text('Pilih Tanggal Mulai terlebih dahulu.')),
       );
       return;
     }
-
-    final picked = await showTimePicker(
+    final picked = await showDatePicker(
       context: context,
-      initialTime: _endTime ?? _startTime!,
-      builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
-      },
+      initialDate: _endDate ?? _startDate!,
+      firstDate: _startDate!,
+      lastDate: DateTime(2100),
     );
-    
     if (picked != null) {
-      final startMinutes = _startTime!.hour * 60 + _startTime!.minute;
-      final pickedMinutes = picked.hour * 60 + picked.minute;
-
-      if (pickedMinutes <= startMinutes) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Waktu Selesai harus lebih besar dari Waktu Mulai (tidak boleh lewat tengah malam).'),
-            ),
-          );
-        }
-        return;
-      }
-
       setState(() {
-        _endTime = picked;
+        _endDate = picked;
       });
     }
   }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    
-    if (_date == null || _startTime == null || _endTime == null) {
+    if (_startDate == null || _endDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Harap lengkapi Tanggal, Waktu Mulai, dan Waktu Selesai.')),
+        const SnackBar(content: Text('Harap lengkapi Tanggal Mulai dan Tanggal Selesai.')),
       );
       return;
     }
 
-    // Ekstra Proteksi (sudah dicek saat picking, tapi jaga-jaga)
-    final startMins = _startTime!.hour * 60 + _startTime!.minute;
-    final endMins = _endTime!.hour * 60 + _endTime!.minute;
-    if (endMins <= startMins) {
+    if (_endDate!.isBefore(_startDate!)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Waktu Selesai tidak valid.')),
+        const SnackBar(content: Text('Tanggal Selesai tidak boleh mendahului Tanggal Mulai.')),
       );
       return;
     }
 
-    final dateFormat = DateFormat('yyyy-MM-dd');
-    final dateStr = dateFormat.format(_date!);
+    final format = DateFormat('yyyy-MM-dd');
+    final startStr = format.format(_startDate!);
+    final endStr = format.format(_endDate!);
 
-    String formatTime(TimeOfDay t) {
-      final h = t.hour.toString().padLeft(2, '0');
-      final m = t.minute.toString().padLeft(2, '0');
-      return '$h:$m';
-    }
-
-    final success = await widget.controller.submitOvertime(
-      date: dateStr,
-      startTime: formatTime(_startTime!),
-      endTime: formatTime(_endTime!),
-      reason: _reasonController.text.trim(),
+    final success = await widget.controller.submitOutOfOffice(
+      startDate: startStr,
+      endDate: endStr,
+      description: _descriptionController.text.trim(),
     );
 
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lembur berhasil diajukan!')),
+        const SnackBar(content: Text('Dinas luar berhasil diajukan!')),
       );
       context.pop(true);
+    } else if (mounted && widget.controller.errorMessage != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(widget.controller.errorMessage!),
+          backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
@@ -157,14 +110,14 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
       body: SafeArea(
         child: Column(
           children: [
-            _buildCustomHeader(context, 'Pengajuan Lembur'),
+            _buildCustomHeader(context, 'Pengajuan Dinas'),
             Expanded(
               child: AnimatedBuilder(
                 animation: widget.controller,
                 builder: (context, _) {
                   final c = widget.controller;
-                  final dateFormat = DateFormat('dd MMMM yyyy', 'id_ID');
-        
+                  final format = DateFormat('dd MMMM yyyy', 'id_ID');
+
                   return SingleChildScrollView(
                     padding: const EdgeInsets.all(16),
                     child: Form(
@@ -203,19 +156,19 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
                                   const SizedBox(height: 16),
                                 ],
 
-                                // Tanggal Lembur
+                                // Tanggal Mulai (Picker)
                                 InkWell(
-                                  onTap: _pickDate,
+                                  onTap: _pickStartDate,
                                   child: InputDecorator(
                                     decoration: const InputDecoration(
-                                      labelText: 'Tanggal Lembur',
+                                      labelText: 'Tanggal Mulai',
                                       border: OutlineInputBorder(),
                                       suffixIcon: Icon(Icons.calendar_today),
                                     ),
                                     child: Text(
-                                      _date == null ? 'Pilih Tanggal' : dateFormat.format(_date!),
+                                      _startDate == null ? 'Pilih Tanggal' : format.format(_startDate!),
                                       style: TextStyle(
-                                        color: _date == null ? Colors.black54 : Colors.black87,
+                                        color: _startDate == null ? Colors.black54 : Colors.black87,
                                         fontSize: 16,
                                       ),
                                     ),
@@ -223,65 +176,33 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
                                 ),
                                 const SizedBox(height: 16),
 
-                                Row(
-                                  children: [
-                                    // Waktu Mulai
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: _pickStartTime,
-                                        child: InputDecorator(
-                                          decoration: const InputDecoration(
-                                            labelText: 'Waktu Mulai',
-                                            border: OutlineInputBorder(),
-                                            suffixIcon: Icon(Icons.access_time),
-                                          ),
-                                          child: Text(
-                                            _startTime == null
-                                                ? '--:--'
-                                                : '${_startTime!.hour.toString().padLeft(2, '0')}:${_startTime!.minute.toString().padLeft(2, '0')}',
-                                            style: TextStyle(
-                                              color: _startTime == null ? Colors.black54 : Colors.black87,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
+                                // Tanggal Selesai (Picker)
+                                InkWell(
+                                  onTap: _pickEndDate,
+                                  child: InputDecorator(
+                                    decoration: InputDecoration(
+                                      labelText: 'Tanggal Selesai',
+                                      border: const OutlineInputBorder(),
+                                      suffixIcon: const Icon(Icons.calendar_today),
+                                      fillColor: _startDate == null ? Colors.grey.shade100 : null,
+                                      filled: _startDate == null,
+                                    ),
+                                    child: Text(
+                                      _endDate == null ? 'Pilih Tanggal' : format.format(_endDate!),
+                                      style: TextStyle(
+                                        color: _endDate == null ? Colors.black54 : Colors.black87,
+                                        fontSize: 16,
                                       ),
                                     ),
-                                    const SizedBox(width: 16),
-                                    
-                                    // Waktu Selesai
-                                    Expanded(
-                                      child: InkWell(
-                                        onTap: _pickEndTime,
-                                        child: InputDecorator(
-                                          decoration: InputDecoration(
-                                            labelText: 'Waktu Selesai',
-                                            border: const OutlineInputBorder(),
-                                            suffixIcon: const Icon(Icons.access_time),
-                                            fillColor: _startTime == null ? Colors.grey.shade100 : null,
-                                            filled: _startTime == null,
-                                          ),
-                                          child: Text(
-                                            _endTime == null
-                                                ? '--:--'
-                                                : '${_endTime!.hour.toString().padLeft(2, '0')}:${_endTime!.minute.toString().padLeft(2, '0')}',
-                                            style: TextStyle(
-                                              color: _endTime == null ? Colors.black54 : Colors.black87,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
                                 const SizedBox(height: 16),
 
                                 TextFormField(
-                                  controller: _reasonController,
+                                  controller: _descriptionController,
                                   maxLines: 3,
                                   decoration: const InputDecoration(
-                                    labelText: 'Alasan Lembur',
+                                    labelText: 'Keterangan Dinas',
                                     border: OutlineInputBorder(),
                                   ),
                                   validator: (v) => v == null || v.isEmpty ? 'Wajib diisi' : null,
@@ -307,8 +228,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
                       ),
                     ),
                   );
-        },
-      ),
+                },
+              ),
             ),
           ],
         ),

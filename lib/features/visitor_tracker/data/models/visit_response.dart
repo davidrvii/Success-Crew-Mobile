@@ -147,7 +147,11 @@ class VisitStatsResponse {
     return VisitStatsResponse(
       statusCode: _status(json),
       message: _msg(json),
-      stats: json['dailyCount'] != null || json['weeklyCount'] != null || json['rushHour'] != null
+      stats: json['dailyCount'] != null ||
+              json['weeklyCount'] != null ||
+              json['productSoldWeekly'] != null ||
+              json['unitServiceWeekly'] != null ||
+              json['rushHour'] != null
           ? VisitStatsModel.fromJson(json)
           : null,
     );

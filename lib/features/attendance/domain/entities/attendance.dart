@@ -62,6 +62,14 @@ class CrewHistoryItem {
   final DateTime? overtimeStart;
   final DateTime? overtimeEnd;
 
+  // For type = "leave"
+  final DateTime? leaveStart;
+  final DateTime? leaveEnd;
+
+  // For type = "out_of_office"
+  final DateTime? outOfOfficeStart;
+  final DateTime? outOfOfficeEnd;
+
   const CrewHistoryItem({
     required this.id,
     required this.type,
@@ -72,6 +80,10 @@ class CrewHistoryItem {
     this.attendanceOut,
     this.overtimeStart,
     this.overtimeEnd,
+    this.leaveStart,
+    this.leaveEnd,
+    this.outOfOfficeStart,
+    this.outOfOfficeEnd,
   });
 
   bool get isAttendance => type == 'attendance';

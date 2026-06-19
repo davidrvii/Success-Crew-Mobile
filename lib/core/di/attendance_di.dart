@@ -18,6 +18,9 @@ import '../../features/attendance/domain/usecases/update_attendance.dart';
 import '../../features/attendance/domain/usecases/delete_attendance.dart';
 import '../../features/attendance/presentation/controllers/attendance_controller.dart';
 
+import '../../features/leave/domain/usecases/get_leave_list.dart';
+import '../../features/out_of_office/domain/usecases/get_out_of_office_list.dart';
+
 void registerAttendanceDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<AttendanceRemoteDataSource>(
@@ -72,6 +75,8 @@ void registerAttendanceDi(GetIt sl) {
       checkOutUseCase: sl<CheckOutUseCase>(),
       getAttendanceDetailUseCase: sl<GetAttendanceDetailUseCase>(),
       getAttendanceHistoryUseCase: sl<GetAttendanceHistoryUseCase>(),
+      getLeaveListUseCase: sl<GetLeaveListUseCase>(),
+      getOutOfOfficeListUseCase: sl<GetOutOfOfficeListUseCase>(),
     ),
   );
 }

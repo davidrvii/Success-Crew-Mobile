@@ -447,6 +447,13 @@ class _TopHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF0B5FA5),
         borderRadius: BorderRadius.circular(22),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -460,7 +467,7 @@ class _TopHeader extends StatelessWidget {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(14),
               ),
-              child: const Icon(Icons.arrow_back_ios_new, size: 18),
+              child: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF0B5FA5), size: 18),
             ),
           ),
           const SizedBox(width: 12),
@@ -502,12 +509,17 @@ class _Card extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: Color(0xFFE7E7E7)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
@@ -610,14 +622,13 @@ class _NeedCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Keperluan : ${interest.isEmpty ? '-' : interest}',
-          style: const TextStyle(color: Colors.black87),
+        _RowText(
+          label: 'Keperluan',
+          value: interest.isEmpty ? '-' : interest,
         ),
-        const SizedBox(height: 8),
-        Text(
-          'Keterangan : ${desc.isEmpty ? '-' : desc}',
-          style: const TextStyle(color: Colors.black87),
+        _RowText(
+          label: 'Keterangan',
+          value: desc.isEmpty ? '-' : desc,
         ),
       ],
     );
