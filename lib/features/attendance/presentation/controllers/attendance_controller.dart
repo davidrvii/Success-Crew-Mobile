@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/storage/user_session.dart';
@@ -42,11 +43,16 @@ class AttendanceController extends ChangeNotifier {
   bool get hasTodayRecord => _todayAttendanceId != null;
 
   // Session user details
-  String _userName = 'Rahman Suratman';
+  String _userName = '-';
   String get userName => _userName;
 
-  String _roleName = 'Teknisi';
+  String _roleName = '-';
   String get roleName => _roleName;
+
+  String _toTitleCase(String? s) {
+    if (s == null || s.trim().isEmpty) return '-';
+    return s.trim().split(' ').map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
+  }
 
   // Attendance stats
   int _presentCount = 0;
@@ -60,6 +66,9 @@ class AttendanceController extends ChangeNotifier {
 
   int _overtimeCount = 0;
   int get overtimeCount => _overtimeCount;
+
+  int _outOfOfficeCount = 0;
+  int get outOfOfficeCount => _outOfOfficeCount;
 
   // Pagination fields
   List<Attendance> _allHistory = [];
@@ -75,7 +84,11 @@ class AttendanceController extends ChangeNotifier {
   bool _isLoadingMore = false;
   bool get isLoadingMore => _isLoadingMore;
 
-  Future<void> init() => refresh();
+  Future<void> init() async {
+    await refresh();
+    _checkAutoCheckout();
+    startAutoCheckoutTimer();
+  }
 
   Future<void> refresh() async {
     _setLoading(true);
@@ -85,8 +98,13 @@ class AttendanceController extends ChangeNotifier {
     try {
       final session = await _session.readSession();
       if (session != null) {
-        _userName = session['user_name']?.toString() ?? 'Rahman Suratman';
-        _roleName = session['role_name']?.toString() ?? 'Teknisi';
+        _userName = session['user_name']?.toString().trim().isNotEmpty == true
+            ? session['user_name']!.toString()
+            : '-';
+        final rawRole = session['role_name']?.toString();
+        _roleName = (rawRole != null && rawRole.trim().isNotEmpty)
+            ? _toTitleCase(rawRole)
+            : '-';
       }
     } catch (_) {}
 
@@ -114,6 +132,7 @@ class AttendanceController extends ChangeNotifier {
       _lateCount = data.lateCount;
       _leaveCount = data.leaveCount;
       _overtimeCount = data.overtimeCount;
+      _outOfOfficeCount = data.outOfOfficeCount;
 
       // Find today's entry from history if not yet loaded from session
       if (_attendance == null) {
@@ -196,7 +215,7 @@ class AttendanceController extends ChangeNotifier {
         '${now.day.toString().padLeft(2, '0')}';
 
     // Determine status based on 09:00 limit
-    final attendanceStatus = now.hour < 9 ? 'Hadir' : 'Telat';
+    final attendanceStatus = now.hour < 9 ? 'Tepat Waktu' : 'Telat';
 
     final res = await _checkInUseCase(
       date: dateStr,
@@ -217,17 +236,18 @@ class AttendanceController extends ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<void> checkOut() async {
+  Future<void> checkOut({String? date}) async {
     _setLoading(true);
     _errorMessage = null;
 
-    final now = DateTime.now();
-    final dateStr =
-        '${now.year.toString().padLeft(4, '0')}-'
-        '${now.month.toString().padLeft(2, '0')}-'
-        '${now.day.toString().padLeft(2, '0')}';
+    final targetDate = date ?? () {
+      final now = DateTime.now();
+      return '${now.year.toString().padLeft(4, '0')}-'
+             '${now.month.toString().padLeft(2, '0')}-'
+             '${now.day.toString().padLeft(2, '0')}';
+    }();
 
-    final res = await _checkOutUseCase(date: dateStr);
+    final res = await _checkOutUseCase(date: targetDate);
 
     if (res.isSuccess && res.data != null) {
       _attendance = res.data;
@@ -237,6 +257,40 @@ class AttendanceController extends ChangeNotifier {
       _errorMessage = res.error?.message ?? 'Gagal melakukan check-out.';
     }
     _setLoading(false);
+  }
+
+  Timer? _autoCheckoutTimer;
+
+  void startAutoCheckoutTimer() {
+    _autoCheckoutTimer?.cancel();
+    _autoCheckoutTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      _checkAutoCheckout();
+    });
+  }
+
+  void _checkAutoCheckout() {
+    final att = _attendance;
+    if (att != null && att.checkInAt != null && att.checkOutAt == null) {
+      final now = DateTime.now();
+      if (att.attendanceDate != null) {
+        final checkInDate = att.attendanceDate!.toLocal();
+        final today = DateTime(now.year, now.month, now.day);
+        final checkInDay = DateTime(checkInDate.year, checkInDate.month, checkInDate.day);
+        if (today.isAfter(checkInDay)) {
+          final dateStr =
+              '${checkInDay.year.toString().padLeft(4, '0')}-'
+              '${checkInDay.month.toString().padLeft(2, '0')}-'
+              '${checkInDay.day.toString().padLeft(2, '0')}';
+          checkOut(date: dateStr);
+        }
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _autoCheckoutTimer?.cancel();
+    super.dispose();
   }
 
   void _setLoading(bool v) {

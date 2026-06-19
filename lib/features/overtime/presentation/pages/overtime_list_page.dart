@@ -66,7 +66,35 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
                 itemCount: displayOvertimes.length,
                 itemBuilder: (context, index) {
                   final overtime = displayOvertimes[index];
-                  return _OvertimeCard(overtime: overtime, controller: c);
+                  return Dismissible(
+                    key: Key('overtime_${overtime.id}'),
+                    direction: overtime.isPending ? DismissDirection.endToStart : DismissDirection.none,
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                    confirmDismiss: (direction) async {
+                      return await _showDeleteConfirmDialog(
+                        context,
+                        'Hapus Pengajuan Lembur',
+                        'Apakah Anda yakin ingin menghapus pengajuan lembur ini?',
+                      );
+                    },
+                    onDismissed: (direction) async {
+                      final success = await c.deleteOvertime(overtime.id);
+                      if (success && context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Pengajuan lembur berhasil dihapus')),
+                        );
+                      }
+                    },
+                    child: _OvertimeCard(overtime: overtime, controller: c),
+                  );
                 },
               ),
             );
@@ -86,8 +114,11 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
           floatingActionButton: c.isOwner
               ? null
               : FloatingActionButton(
-                  onPressed: () {
-                    context.push('/overtime-add');
+                  onPressed: () async {
+                    final reload = await context.push('/overtime-add');
+                    if (reload == true && mounted) {
+                      c.fetchOvertimes();
+                    }
                   },
                   backgroundColor: const Color(0xFF1DB954),
                   child: const Icon(Icons.add, color: Colors.white),
@@ -176,7 +207,7 @@ class _OvertimeCard extends StatelessWidget {
             const SizedBox(height: 4),
             if (controller.isOwner) ...[
               Text(
-                'Karyawan: ${overtime.userName ?? '-'}${overtime.userName != null ? '' : ' (ID: ${overtime.userId})'}',
+                'Crew: ${overtime.userName ?? '-'}${overtime.userName != null ? '' : ' (ID: ${overtime.userId})'}',
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 4),
@@ -294,4 +325,27 @@ class _OvertimeCard extends StatelessWidget {
         return Colors.orange;
     }
   }
+}
+
+Future<bool?> _showDeleteConfirmDialog(BuildContext context, String title, String message) {
+  return showDialog<bool>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Batal', style: TextStyle(color: Colors.grey)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Hapus', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+          ),
+        ],
+      );
+    },
+  );
 }

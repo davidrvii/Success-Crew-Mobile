@@ -3,12 +3,14 @@ class HomeAttendanceResponse {
   final int late;
   final int leave;
   final int overtime;
+  final int outOfOffice;
 
   HomeAttendanceResponse({
     required this.present,
     required this.late,
     required this.leave,
     required this.overtime,
+    required this.outOfOffice,
   });
 
   factory HomeAttendanceResponse.fromJson(Map<String, dynamic> json) {
@@ -18,6 +20,7 @@ class HomeAttendanceResponse {
         late: (json['late'] as num?)?.toInt() ?? 0,
         leave: (json['leave'] as num?)?.toInt() ?? 0,
         overtime: (json['overtime'] as num?)?.toInt() ?? 0,
+        outOfOffice: (json['outOfOffice'] as num?)?.toInt() ?? (json['out_of_office'] as num?)?.toInt() ?? 0,
       );
     }
 
@@ -26,8 +29,25 @@ class HomeAttendanceResponse {
     int lateCount = 0;
     int leaveCount = 0;
     int overtimeCount = 0;
+    int outOfOfficeCount = 0;
 
     if (history is Map<String, dynamic>) {
+      final tAtt = history['total_attendance'] ?? history['totalAttendance'];
+      final tLate = history['total_late'] ?? history['totalLate'];
+      final tLeave = history['total_leave'] ?? history['totalLeave'];
+      final tOvertime = history['total_overtime'] ?? history['totalOvertime'];
+      final tOutOfOffice = history['total_out_of_office'] ?? history['totalOutOfOffice'];
+
+      if (tAtt != null || tLate != null || tLeave != null || tOvertime != null || tOutOfOffice != null) {
+        return HomeAttendanceResponse(
+          present: (tAtt as num?)?.toInt() ?? 0,
+          late: (tLate as num?)?.toInt() ?? 0,
+          leave: (tLeave as num?)?.toInt() ?? 0,
+          overtime: (tOvertime as num?)?.toInt() ?? 0,
+          outOfOffice: (tOutOfOffice as num?)?.toInt() ?? 0,
+        );
+      }
+
       final attendances = history['attendances'];
       final now = DateTime.now();
       final currentYear = now.year;
@@ -42,6 +62,28 @@ class HomeAttendanceResponse {
               final parsed = DateTime.tryParse(rawDate);
               if (parsed != null && parsed.toLocal().year == currentYear) {
                 leaveCount++;
+              }
+            }
+          }
+        }
+      }
+
+      // Calculate outOfOffice count from history list (filtered by out_of_office type and current year)
+      final historyList = history['history'];
+      if (historyList is List) {
+        for (final h in historyList) {
+          if (h is Map<String, dynamic>) {
+            final typeStr = (h['type'] ?? '').toString().trim().toLowerCase();
+            if (typeStr == 'out_of_office') {
+              final dateStr = h['date'];
+              if (dateStr is String) {
+                final parsed = DateTime.tryParse(dateStr);
+                if (parsed != null && parsed.toLocal().year == currentYear) {
+                  final statusStr = (h['status'] ?? '').toString().toLowerCase().trim();
+                  if (statusStr == 'approved' || statusStr == 'diterima') {
+                    outOfOfficeCount++;
+                  }
+                }
               }
             }
           }
@@ -118,6 +160,7 @@ class HomeAttendanceResponse {
       late: lateCount,
       leave: leaveCount,
       overtime: overtimeCount,
+      outOfOffice: outOfOfficeCount,
     );
   }
 
@@ -127,6 +170,7 @@ class HomeAttendanceResponse {
       'late': late,
       'leave': leave,
       'overtime': overtime,
+      'outOfOffice': outOfOffice,
     };
   }
 }

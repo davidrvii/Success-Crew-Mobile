@@ -152,6 +152,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
     final lateCount = data?.totalLate ?? 0;
     final leaveCount = data?.totalLeave ?? 0;
     final overtimeCount = data?.totalOvertime ?? 0;
+    final outOfOfficeCount = data?.totalOutOfOffice ?? 0;
 
     return ApiResponse.success(
       AttendanceHistoryData(
@@ -160,6 +161,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         lateCount: lateCount,
         leaveCount: leaveCount,
         overtimeCount: overtimeCount,
+        outOfOfficeCount: outOfOfficeCount,
       ),
     );
   }

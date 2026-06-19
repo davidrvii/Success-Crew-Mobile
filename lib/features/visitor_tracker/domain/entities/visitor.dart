@@ -4,7 +4,6 @@ class Visitor {
   final int visitorId;
   final String? visitorName;
   final String? visitorPhone;
-  final String? visitorInformation;
   final String? visitorCompany;
   final String? visitorCategory;
   final DateTime? createdAt;
@@ -15,7 +14,6 @@ class Visitor {
     required this.visitorId,
     this.visitorName,
     this.visitorPhone,
-    this.visitorInformation,
     this.visitorCompany,
     this.visitorCategory,
     this.createdAt,

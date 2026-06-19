@@ -122,8 +122,13 @@ class HomeController extends ChangeNotifier {
 
   // ======= Derived UI helpers =======
 
+  String _toTitleCase(String? s) {
+    if (s == null || s.trim().isEmpty) return '-';
+    return s.trim().split(' ').map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
+  }
+
   String get userName => _summary?.user.userName ?? '-';
-  String get roleName => _summary?.user.roleName ?? '-';
+  String get roleName => _toTitleCase(_summary?.user.roleName);
   int get unreadNotif => _summary?.unreadNotificationCount ?? 0;
 
   int get visitorsToday => _summary?.visitors.visitorsToday ?? 0;
@@ -135,7 +140,12 @@ class HomeController extends ChangeNotifier {
   int get late => _summary?.attendance.lateCount ?? 0;
   int get leave => _summary?.attendance.leaveCount ?? 0;
   int get overtime => _summary?.attendance.overtimeCount ?? 0;
+  int get outOfOffice => _summary?.attendance.outOfOfficeCount ?? 0;
 
   int get pendingLeave => _summary?.requests.pendingLeaveCount ?? 0;
+  int get pendingOutOfOffice => _summary?.requests.pendingOutOfOfficeCount ?? 0;
   int get pendingOvertime => _summary?.requests.pendingOvertimeCount ?? 0;
+
+  int get totalServicesThisWeek => _summary?.visitors.totalServicesThisWeek ?? 0;
+  int get totalProductsSoldThisWeek => _summary?.visitors.totalProductsSoldThisWeek ?? 0;
 }

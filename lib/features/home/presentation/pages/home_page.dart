@@ -18,6 +18,7 @@ class HomePage extends StatefulWidget {
 
   final VoidCallback? onTapCheckIn;
   final VoidCallback? onTapLeave;
+  final VoidCallback? onTapOutOfOffice;
   final VoidCallback? onTapOvertime;
 
   const HomePage({
@@ -28,6 +29,7 @@ class HomePage extends StatefulWidget {
     this.onTapProfile,
     this.onTapCheckIn,
     this.onTapLeave,
+    this.onTapOutOfOffice,
     this.onTapOvertime,
   });
 
@@ -83,13 +85,15 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildOwnerContent() {
     return [
-      const _SectionTitle('Ringkasan Pengunjung'),
+      const _SectionTitle('Kinerja Minggu Ini'),
       const SizedBox(height: 12),
       _OwnerSummaryGrid(
         visitorsToday: c.visitorsToday,
         walkIn: c.walkInToday,
         callIn: c.callInToday,
         chatIn: c.chatInToday,
+        totalServices: c.totalServicesThisWeek,
+        totalProducts: c.totalProductsSoldThisWeek,
       ),
       const SizedBox(height: 24),
 
@@ -105,7 +109,16 @@ class _HomePageState extends State<HomePage> {
               onTap: widget.onTapLeave,
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
+          Expanded(
+            child: _RequestPill(
+              title: 'Dinas',
+              count: c.pendingOutOfOffice,
+              background: const Color(0xFF3B82F6), // Blue
+              onTap: widget.onTapOutOfOffice,
+            ),
+          ),
+          const SizedBox(width: 8),
           Expanded(
             child: _RequestPill(
               title: 'Lembur',
@@ -115,6 +128,17 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Kehadiran Crew'),
+      const SizedBox(height: 12),
+      _OwnerAttendanceCard(
+        present: c.present,
+        late: c.late,
+        leave: c.leave,
+        overtime: c.overtime,
+        outOfOffice: c.outOfOffice,
       ),
       const SizedBox(height: 24),
 
@@ -136,34 +160,42 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildStaffContent() {
     return [
-      const _SectionTitle('Ringkasan Kinerja'),
+      const _SectionTitle('Kinerja Minggu Ini'),
       const SizedBox(height: 12),
-      _BusinessSummaryGrid(
-        visitors: c.visitorsToday,
-        approachingDeadline: 16, // Dummy for now
-        passedDeadline: 12, // Dummy for now
-        complaints: 8, // Dummy for now
+      _OwnerSummaryGrid(
+        visitorsToday: c.visitorsToday,
+        walkIn: c.walkInToday,
+        callIn: c.callInToday,
+        chatIn: c.chatInToday,
+        totalServices: c.totalServicesThisWeek,
+        totalProducts: c.totalProductsSoldThisWeek,
       ),
       const SizedBox(height: 24),
 
-      const _SectionTitle('Kehadiran Karyawan'),
+      const _SectionTitle('Kehadiran Crew'),
       const SizedBox(height: 12),
       _OwnerAttendanceCard(
         present: c.present,
         late: c.late,
         leave: c.leave,
         overtime: c.overtime,
+        outOfOffice: c.outOfOffice,
       ),
       const SizedBox(height: 24),
 
-      const _SectionTitle('Service Melewati Batas'),
+      const _SectionTitle('Pemasukkan'),
       const SizedBox(height: 12),
-      const _ServiceList(isOverdue: true),
-
+      const _MockChartCard(),
       const SizedBox(height: 24),
-      const _SectionTitle('Service Mendekati Batas'),
+
+      const _SectionTitle('Rata-rata Penyelesaian'),
       const SizedBox(height: 12),
-      const _ServiceList(isOverdue: false),
+      const _MockChartCard(),
+      const SizedBox(height: 24),
+
+      const _SectionTitle('Jam Datang'),
+      const SizedBox(height: 12),
+      const _MockChartCard(),
     ];
   }
 
@@ -265,12 +297,16 @@ class _OwnerSummaryGrid extends StatelessWidget {
   final int walkIn;
   final int callIn;
   final int chatIn;
+  final int totalServices;
+  final int totalProducts;
 
   const _OwnerSummaryGrid({
     required this.visitorsToday,
     required this.walkIn,
     required this.callIn,
     required this.chatIn,
+    required this.totalServices,
+    required this.totalProducts,
   });
 
   @override
@@ -283,7 +319,7 @@ class _OwnerSummaryGrid extends StatelessWidget {
             children: [
               Expanded(
                 child: _OwnerGridCard(
-                  title: 'Pengunjung\nHari Ini',
+                  title: 'Pengunjung\n',
                   value: visitorsToday.toString(),
                   color: const Color(0xFF1E88FF), // Blue
                   icon: Icons.people_alt_rounded,
@@ -295,7 +331,7 @@ class _OwnerSummaryGrid extends StatelessWidget {
                   title: 'Walk-In\n',
                   value: walkIn.toString(),
                   color: const Color(0xFF2ED3A2), // Green
-                  icon: Icons.schedule_rounded,
+                  icon: Icons.directions_walk_rounded,
                 ),
               ),
             ],
@@ -311,7 +347,7 @@ class _OwnerSummaryGrid extends StatelessWidget {
                   title: 'Call-In\n',
                   value: callIn.toString(),
                   color: const Color(0xFF5B5FEA), // Indigo
-                  icon: Icons.error_outline_rounded,
+                  icon: Icons.call_rounded,
                 ),
               ),
               const SizedBox(width: 12),
@@ -320,7 +356,32 @@ class _OwnerSummaryGrid extends StatelessWidget {
                   title: 'Chat-In\n',
                   value: chatIn.toString(),
                   color: const Color(0xFF9A7BFF), // Purple
-                  icon: Icons.check_circle_outline_rounded,
+                  icon: Icons.chat_rounded,
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 12),
+        IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: _OwnerGridCard(
+                  title: 'Unit Service\n',
+                  value: totalServices.toString(),
+                  color: const Color(0xFFF97316), // Orange
+                  icon: Icons.build_rounded,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _OwnerGridCard(
+                  title: 'Produk Terjual\n',
+                  value: totalProducts.toString(),
+                  color: const Color(0xFFEF4444), // Red
+                  icon: Icons.shopping_bag_rounded,
                 ),
               ),
             ],
@@ -407,84 +468,78 @@ class _OwnerAttendanceCard extends StatelessWidget {
   final int late;
   final int leave;
   final int overtime;
+  final int outOfOffice;
 
   const _OwnerAttendanceCard({
     required this.present,
     required this.late,
     required this.leave,
     required this.overtime,
+    required this.outOfOffice,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF6366F1), // Indigo
-        borderRadius: BorderRadius.circular(22),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x336366F1),
-            blurRadius: 16,
-            offset: Offset(0, 8),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          _AttItem(label: 'Hadir', value: present),
-          _VLine(),
-          _AttItem(label: 'Telat', value: late),
-          _VLine(),
-          _AttItem(label: 'Cuti', value: leave),
-          _VLine(),
-          _AttItem(label: 'Lembur', value: overtime),
-        ],
-      ),
-    );
-  }
-}
-
-class _AttItem extends StatelessWidget {
-  final String label;
-  final int value;
-
-  const _AttItem({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: Color(0xDFFFFFFF),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          value.toString(),
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w800,
-            color: Colors.white,
-          ),
-        ),
+        _buildStatCard('Hadir', present),
+        const SizedBox(width: 8),
+        _buildStatCard('Telat', late),
+        const SizedBox(width: 8),
+        _buildStatCard('Lembur', overtime),
+        const SizedBox(width: 8),
+        _buildStatCard('Dinas', outOfOffice),
+        const SizedBox(width: 8),
+        _buildStatCard('Cuti', leave),
       ],
     );
   }
-}
 
-class _VLine extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      height: 32,
-      color: Colors.white.withValues(alpha: 0.5),
+  Widget _buildStatCard(String title, int count) {
+    final isAlertLeave = title == 'Cuti' && count >= 16;
+    final valueColor = isAlertLeave ? const Color(0xFFEF4444) : const Color(0xFF0F172A);
+
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 14),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: Colors.black.withValues(alpha: 0.06),
+            width: 1.2,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                color: Color(0xFF94A3B8),
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              count.toString(),
+              style: TextStyle(
+                color: valueColor,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -612,225 +667,7 @@ class _ChartPainter extends CustomPainter {
 // STAFF WIDGETS
 // ============================================================================
 
-class _BusinessSummaryGrid extends StatelessWidget {
-  final int visitors;
-  final int approachingDeadline;
-  final int passedDeadline;
-  final int complaints;
 
-  const _BusinessSummaryGrid({
-    required this.visitors,
-    required this.approachingDeadline,
-    required this.passedDeadline,
-    required this.complaints,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: _GridCard(
-                title: 'Pengunjung\nHari Ini',
-                value: visitors.toString(),
-                color: const Color(0xFF3B82F6), // Blue
-                icon: Icons.people_outline,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _GridCard(
-                title: 'Mendekati\nBatas',
-                value: approachingDeadline.toString(),
-                color: const Color(0xFFFACC15), // Yellow
-                icon: Icons.access_time,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _GridCard(
-                title: 'Melewati\nBatas',
-                value: passedDeadline.toString(),
-                color: const Color(0xFFEF4444), // Red
-                icon: Icons.error_outline,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _GridCard(
-                title: 'Komplain',
-                value: complaints.toString(),
-                color: const Color(0xFF6366F1), // Indigo
-                icon: Icons.thumb_down_alt_outlined,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class _GridCard extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color color;
-  final IconData icon;
-
-  const _GridCard({
-    required this.title,
-    required this.value,
-    required this.color,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 10),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.3),
-            blurRadius: 12,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topRight,
-            child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.2),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: Colors.white, size: 24),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  height: 1.2,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  height: 1,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ServiceList extends StatelessWidget {
-  final bool isOverdue;
-
-  const _ServiceList({required this.isOverdue});
-
-  @override
-  Widget build(BuildContext context) {
-    // Dummy UI
-    return Column(
-      children: List.generate(3, (index) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: const Color(0xFFE5E7EB)),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFE5E7EB),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Printer - Epson G3730',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: Color(0xFF0F172A),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      'Budi Suheru',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                    const Text(
-                      'Kerusakan : Tidak Menyala',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                    const Text(
-                      'Status : Diagnosa',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF6B7280),
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      isOverdue ? 'Batas dilewati : ${index + 1} hari' : 'Batas waktu : ${index + 2} hari lagi',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        color: isOverdue ? const Color(0xFFEF4444) : const Color(0xFFFACC15),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
-  }
-}
 
 class _InlineWarning extends StatelessWidget {
   final String text;

@@ -38,10 +38,13 @@ class _VisitorPageState extends State<VisitorPage> {
 
           floatingActionButton: FloatingActionButton(
             onPressed: () async {
-              await context.push('/visitor-add');
-              c.refresh();
+              final reload = await context.push('/visitor-add');
+              if (reload == true && mounted) {
+                c.refresh();
+              }
             },
-            child: const Icon(Icons.add),
+            backgroundColor: const Color(0xFF0C5AA6),
+            child: const Icon(Icons.add, color: Colors.white),
           ),
           body: SafeArea(
             child: Padding(
@@ -96,7 +99,7 @@ class _VisitorPageState extends State<VisitorPage> {
           final visitorName = _nonEmpty(v.visitorName);
           final visitorInterest = _nonEmpty(v.visitorInterest);
           final visitType = _nonEmpty(v.visitType);
-          final visitorInfo = _nonEmpty(v.visitorInformation);
+          final visitorInfo = _nonEmpty(v.visitorCategory);
 
           final status = _nonEmpty(v.visitorStatus);
           final date = _formatDate(v.createdAt);
@@ -137,6 +140,7 @@ class _VisitorPageState extends State<VisitorPage> {
               status: status,
               date: date,
               time: time,
+              visitSales: _nonEmpty(v.visitSales),
               onTap: () async {
                 await context.push('/visit-detail', extra: v.visitId);
                 c.refresh();
@@ -281,6 +285,7 @@ class _VisitorCard extends StatelessWidget {
   final String status;
   final String date;
   final String time;
+  final String visitSales;
   final VoidCallback onTap;
 
   const _VisitorCard({
@@ -291,6 +296,7 @@ class _VisitorCard extends StatelessWidget {
     required this.status,
     required this.date,
     required this.time,
+    required this.visitSales,
     required this.onTap,
   });
 
@@ -343,6 +349,24 @@ class _VisitorCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   _metaPill(Icons.access_time, time),
                   const Spacer(),
+                  if (visitSales.isNotEmpty && visitSales != '-') ...[
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(Icons.person_outline_rounded, size: 16, color: Colors.black54),
+                        const SizedBox(width: 4),
+                        Text(
+                          visitSales,
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 8),
+                  ],
                   const Icon(Icons.chevron_right),
                 ],
               ),
@@ -387,17 +411,24 @@ class _VisitorCard extends StatelessWidget {
   Widget _miniChip(String text) {
     final t = text.trim().toLowerCase();
 
-    final Color bg = t.contains('follow')
-        ? const Color(0xFF0B5FA5) // Blue
-        : (t.contains('proses') || t.contains('pending')
-            ? const Color(0xFFEAB308) // Yellow
-            : (t.contains('selesai') || t.contains('done')
-                ? const Color(0xFF16A34A) // Green
-                : (t.contains('batal') || t.contains('cancel')
-                    ? const Color(0xFFDC2626) // Red
-                    : const Color(0xFF64748B))));
+    final Color bg = t.contains('proses') || t.contains('pending')
+        ? const Color(0xFFEAB308) // Yellow
+        : (t.contains('selesai') || t.contains('done')
+            ? const Color(0xFF16A34A) // Green
+            : (t.contains('batal') || t.contains('cancel')
+                ? const Color(0xFFDC2626) // Red
+                : const Color(0xFF64748B)));
 
-    final shown = text.trim().isEmpty ? '-' : text.trim();
+    String shown = text.trim().isEmpty ? '-' : text.trim();
+    if (t == 'pending' || t == 'proses') {
+      shown = 'PROSES';
+    } else if (t == 'done' || t == 'selesai') {
+      shown = 'SELESAI';
+    } else if (t == 'cancel' || t == 'batal') {
+      shown = 'BATAL';
+    } else {
+      shown = shown.toUpperCase();
+    }
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -423,7 +454,7 @@ class _FilterSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = <String>['Selesai', 'Proses', 'Batal', 'Follow Up'];
+    final options = <String>['Selesai', 'Proses', 'Batal'];
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),

@@ -127,6 +127,12 @@ class ProfileRepositoryImpl implements ProfileRepository {
       officeName: dto.officeName,
       createdAt: dto.createdAt,
       updatedAt: dto.updatedAt,
+      crewStatus: dto.crewStatus,
+      contractStatus: dto.contractStatus,
+      userPhone: dto.userPhone,
+      userBirth: dto.userBirth,
+      startWork: dto.startWork,
+      endWork: dto.endWork,
     );
   }
 

@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: c.isLoading ? null : _submit,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
-                    foregroundColor: Colors.black,
+                    foregroundColor: const Color(0xFF1C5AA6),
                     elevation: 6,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 26,

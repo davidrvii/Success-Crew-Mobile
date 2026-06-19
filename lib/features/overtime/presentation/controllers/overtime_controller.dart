@@ -4,6 +4,7 @@ import '../../domain/entities/overtime.dart';
 import '../../domain/usecases/get_overtime_list.dart';
 import '../../domain/usecases/create_overtime.dart';
 import '../../domain/usecases/update_overtime.dart';
+import '../../domain/usecases/delete_overtime.dart';
 import '../../data/models/overtime_request.dart';
 import '../../../../core/storage/user_session.dart';
 
@@ -11,16 +12,19 @@ class OvertimeController extends ChangeNotifier {
   final GetOvertimeListUseCase _getOvertimeList;
   final CreateOvertimeUseCase _createOvertime;
   final UpdateOvertimeUseCase _updateOvertime;
+  final DeleteOvertimeUseCase _deleteOvertime;
   final UserSession _session;
 
   OvertimeController({
     required GetOvertimeListUseCase getOvertimeList,
     required CreateOvertimeUseCase createOvertime,
     required UpdateOvertimeUseCase updateOvertime,
+    required DeleteOvertimeUseCase deleteOvertime,
     required UserSession userSession,
   }) : _getOvertimeList = getOvertimeList,
        _createOvertime = createOvertime,
        _updateOvertime = updateOvertime,
+       _deleteOvertime = deleteOvertime,
        _session = userSession;
 
   bool _loading = false;
@@ -103,6 +107,24 @@ class OvertimeController extends ChangeNotifier {
       return true;
     } else {
       _errorMessage = res.error?.message ?? 'Gagal memperbarui status lembur';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteOvertime(int id) async {
+    _setLoading(true);
+    _errorMessage = null;
+
+    final res = await _deleteOvertime(id);
+
+    _setLoading(false);
+
+    if (res.isSuccess) {
+      fetchOvertimes(); // Refresh data after success
+      return true;
+    } else {
+      _errorMessage = res.error?.message ?? 'Gagal menghapus lembur';
       notifyListeners();
       return false;
     }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../domain/entities/crew_member.dart';
 import '../../../attendance/domain/entities/attendance.dart';
@@ -22,11 +23,12 @@ class CrewDetailPage extends StatefulWidget {
 
 class _CrewDetailPageState extends State<CrewDetailPage> {
   late final ScrollController _scrollController;
-  CrewDetailController get c => widget.controller;
+  late final CrewDetailController c;
 
   @override
   void initState() {
     super.initState();
+    c = widget.controller;
     _scrollController = ScrollController()..addListener(_onScroll);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       c.init(widget.member.userId);
@@ -75,6 +77,14 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
                               // 1. Top profile card layout
                               _TopProfileCard(
                                 onBack: () => Navigator.of(context).maybePop(),
+                                onEdit: c.detail != null
+                                    ? () async {
+                                        final reload = await context.push('/crew-edit', extra: c.detail);
+                                        if (reload == true && mounted) {
+                                          c.refresh(widget.member.userId);
+                                        }
+                                      }
+                                    : null,
                                 avatar: _buildAvatarProvider(c.detail?.userPhoto ?? widget.member.userPhoto),
                                 name: c.displayName.isNotEmpty ? c.displayName : widget.member.userName,
                                 role: c.displayRole.isNotEmpty ? c.displayRole : widget.member.roleName,
@@ -86,11 +96,11 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
                               _SectionCard(
                                 title: 'Personal',
                                 children: [
-                                  _kv('ID Pegawai', c.displayEmployeeId),
                                   _kv('Email', c.displayEmail.isNotEmpty ? c.displayEmail : widget.member.userEmail),
                                   _kv('Telepon', c.displayPhone),
                                   _kv('Tanggal Lahir', c.displayBirthDate),
                                   _kv('Mulai Bekerja', c.displayStartWorkDate),
+                                  _kv('Selesai Bekerja', c.displayEndWorkDate),
                                 ],
                               ),
                               const SizedBox(height: 14),
@@ -99,23 +109,24 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
                               _SectionCard(
                                 title: 'Pekerjaan',
                                 children: [
-                                  _kv('Divisi', c.displayDivision),
                                   _kv('Posisi', c.displayPosition),
                                   _kv('Lokasi', c.displayLocation.isNotEmpty ? c.displayLocation : widget.member.officeName),
                                 ],
                               ),
                               const SizedBox(height: 18),
 
-                              // 4. Statistics Row (Hadir, Telat, Cuti, Lembur)
+                              // 4. Statistics Row (Hadir, Telat, Lembur, Dinas, Cuti)
                               Row(
                                 children: [
                                   _buildStatCard('Hadir', c.presentCount),
                                   const SizedBox(width: 8),
                                   _buildStatCard('Telat', c.lateCount),
                                   const SizedBox(width: 8),
-                                  _buildStatCard('Cuti', c.leaveCount),
-                                  const SizedBox(width: 8),
                                   _buildStatCard('Lembur', c.overtimeCount),
+                                  const SizedBox(width: 8),
+                                  _buildStatCard('Dinas', c.outOfOfficeCount),
+                                  const SizedBox(width: 8),
+                                  _buildStatCard('Cuti', c.leaveCount),
                                 ],
                               ),
                               const SizedBox(height: 24),
@@ -257,9 +268,9 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.015),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
@@ -471,6 +482,7 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
 
 class _TopProfileCard extends StatelessWidget {
   final VoidCallback onBack;
+  final VoidCallback? onEdit;
   final ImageProvider? avatar;
   final String name;
   final String role;
@@ -478,6 +490,7 @@ class _TopProfileCard extends StatelessWidget {
 
   const _TopProfileCard({
     required this.onBack,
+    this.onEdit,
     required this.avatar,
     required this.name,
     required this.role,
@@ -501,9 +514,16 @@ class _TopProfileCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Align(
-            alignment: Alignment.centerLeft,
-            child: _BackButton(onPressed: onBack),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _BackButton(onPressed: onBack),
+              if (onEdit != null)
+                IconButton(
+                  onPressed: onEdit!,
+                  icon: const Icon(Icons.edit, color: Color(0xFF0C5AA6)),
+                ),
+            ],
           ),
           const SizedBox(height: 8),
           CircleAvatar(

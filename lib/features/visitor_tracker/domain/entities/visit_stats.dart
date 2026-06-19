@@ -15,16 +15,16 @@ class VisitDailyCount {
   final int callIn;
   final int chatIn;
   final int walkIn;
-  final int totalUnitService;
-  final int totalProductSold;
+  final int unitServiced;
+  final int productSold;
 
   const VisitDailyCount({
     required this.totalVisit,
     required this.callIn,
     required this.chatIn,
     required this.walkIn,
-    required this.totalUnitService,
-    required this.totalProductSold,
+    required this.unitServiced,
+    required this.productSold,
   });
 }
 

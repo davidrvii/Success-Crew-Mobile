@@ -8,8 +8,8 @@ class CrewRequest {
   final String? startWork; // YYYY-MM-DD
   final String? endWork;   // YYYY-MM-DD
   final String? roleName;
-  final String? roleDivision;
   final String? officeName;
+  final String? userPassword;
 
   const CrewRequest({
     this.userName,
@@ -21,8 +21,8 @@ class CrewRequest {
     this.startWork,
     this.endWork,
     this.roleName,
-    this.roleDivision,
     this.officeName,
+    this.userPassword,
   });
 
   Map<String, dynamic> toJson() {
@@ -36,8 +36,9 @@ class CrewRequest {
     if (startWork != null) map['start_work'] = startWork;
     if (endWork != null) map['end_work'] = endWork;
     if (roleName != null) map['role_name'] = roleName;
-    if (roleDivision != null) map['role_division'] = roleDivision;
     if (officeName != null) map['office_name'] = officeName;
+    if (userPassword != null) map['user_password'] = userPassword;
     return map;
   }
 }
+

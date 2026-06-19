@@ -196,7 +196,7 @@ class VisitDetailController extends ChangeNotifier {
       return false;
     }
     
-    await refreshAll();
+    await loadFollowUps();
     return true;
   }
 
@@ -267,7 +267,7 @@ class VisitDetailController extends ChangeNotifier {
     final res = await _deleteFollowUp(visitId!, followUpId);
     if (!res.isSuccess) return false;
 
-    await refreshAll();
+    await loadFollowUps();
     return true;
   }
 

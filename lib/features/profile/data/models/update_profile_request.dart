@@ -8,6 +8,8 @@ class UpdateProfileRequest {
   final String? userName;
   final String? userEmail;
   final String? userPassword;
+  final String? userPhone;
+  final String? userBirth;
 
   final File? photoFile;
 
@@ -17,6 +19,8 @@ class UpdateProfileRequest {
     this.userName,
     this.userEmail,
     this.userPassword,
+    this.userPhone,
+    this.userBirth,
     this.photoFile,
   });
 
@@ -32,6 +36,12 @@ class UpdateProfileRequest {
     }
     if (userPassword != null && userPassword!.isNotEmpty) {
       map['user_password'] = userPassword;
+    }
+    if (userPhone != null && userPhone!.isNotEmpty) {
+      map['user_phone'] = userPhone;
+    }
+    if (userBirth != null && userBirth!.isNotEmpty) {
+      map['user_birth'] = userBirth;
     }
 
     return map;

@@ -30,8 +30,8 @@ class VisitDailyCountModel extends VisitDailyCount {
     required super.callIn,
     required super.chatIn,
     required super.walkIn,
-    required super.totalUnitService,
-    required super.totalProductSold,
+    required super.unitServiced,
+    required super.productSold,
   });
 
   factory VisitDailyCountModel.fromJson(Map<String, dynamic> json) {
@@ -40,8 +40,8 @@ class VisitDailyCountModel extends VisitDailyCount {
       callIn: _int(json['call_in']),
       chatIn: _int(json['chat_in']),
       walkIn: _int(json['walk_in']),
-      totalUnitService: _int(json['total_unit_service']),
-      totalProductSold: _int(json['total_product_sold']),
+      unitServiced: _int(json['unit_serviced']),
+      productSold: _int(json['product_sold']),
     );
   }
 }

@@ -142,7 +142,7 @@ class _IconChip extends StatelessWidget {
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              Center(child: Icon(icon, color: const Color(0xFF0F172A), size: 22)),
+              Center(child: Icon(icon, color: const Color(0xFF1C5AA6), size: 22)),
               if (badge != null)
                 Positioned(
                   right: -4,

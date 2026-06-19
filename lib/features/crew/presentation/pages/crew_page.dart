@@ -30,6 +30,16 @@ class _CrewPageState extends State<CrewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFBFF),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final reload = await context.push('/crew-add');
+          if (reload == true && mounted) {
+            c.refresh();
+          }
+        },
+        backgroundColor: const Color(0xFF0C5AA6),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
       body: SafeArea(
         child: AnimatedBuilder(
           animation: c,
@@ -83,7 +93,7 @@ class _CrewPageState extends State<CrewPage> {
                             });
                           },
                           decoration: InputDecoration(
-                            hintText: 'Cari karyawan atau posisi...',
+                            hintText: 'Cari crew atau posisi...',
                             hintStyle: const TextStyle(
                               color: Color(0xFF94A3B8),
                               fontSize: 14,
@@ -110,8 +120,8 @@ class _CrewPageState extends State<CrewPage> {
                       child: Center(
                         child: Text(
                           _searchQuery.isEmpty
-                              ? 'Tidak ada data karyawan.'
-                              : 'Karyawan tidak ditemukan.',
+                              ? 'Tidak ada data crew.'
+                              : 'Crew tidak ditemukan.',
                           style: const TextStyle(
                             color: Color(0xFF64748B),
                             fontSize: 14,
@@ -237,7 +247,7 @@ class _CrewPageState extends State<CrewPage> {
               borderRadius: BorderRadius.circular(100),
             ),
             child: Text(
-              m.roleName,
+              m.roleName.trim().split(' ').map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join(' '),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(

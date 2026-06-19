@@ -4,6 +4,7 @@ import '../../domain/entities/out_of_office.dart';
 import '../../domain/usecases/get_out_of_office_list.dart';
 import '../../domain/usecases/create_out_of_office.dart';
 import '../../domain/usecases/update_out_of_office.dart';
+import '../../domain/usecases/delete_out_of_office.dart';
 import '../../data/models/out_of_office_request.dart';
 import '../../../../core/storage/user_session.dart';
 
@@ -11,16 +12,19 @@ class OutOfOfficeController extends ChangeNotifier {
   final GetOutOfOfficeListUseCase _getOutOfOfficeList;
   final CreateOutOfOfficeUseCase _createOutOfOffice;
   final UpdateOutOfOfficeUseCase _updateOutOfOffice;
+  final DeleteOutOfOfficeUseCase _deleteOutOfOffice;
   final UserSession _session;
 
   OutOfOfficeController({
     required GetOutOfOfficeListUseCase getOutOfOfficeList,
     required CreateOutOfOfficeUseCase createOutOfOffice,
     required UpdateOutOfOfficeUseCase updateOutOfOffice,
+    required DeleteOutOfOfficeUseCase deleteOutOfOffice,
     required UserSession userSession,
   }) : _getOutOfOfficeList = getOutOfOfficeList,
        _createOutOfOffice = createOutOfOffice,
        _updateOutOfOffice = updateOutOfOffice,
+       _deleteOutOfOffice = deleteOutOfOffice,
        _session = userSession;
 
   bool _loading = false;
@@ -99,6 +103,24 @@ class OutOfOfficeController extends ChangeNotifier {
       return true;
     } else {
       _errorMessage = res.error?.message ?? 'Gagal memperbarui status dinas luar';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> deleteOutOfOffice(int id) async {
+    _setLoading(true);
+    _errorMessage = null;
+
+    final res = await _deleteOutOfOffice(id);
+
+    _setLoading(false);
+
+    if (res.isSuccess) {
+      fetchOutOfOffices(); // Refresh data after success
+      return true;
+    } else {
+      _errorMessage = res.error?.message ?? 'Gagal menghapus dinas luar';
       notifyListeners();
       return false;
     }

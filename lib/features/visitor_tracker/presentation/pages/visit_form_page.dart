@@ -25,7 +25,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
   final _companyController = TextEditingController(); // perusahaan/instansi
   final _notesController = TextEditingController(); // catatan kunjungan 
   final _interestController = TextEditingController(); // interest pengunjung 
-  final _salesController = TextEditingController(); // nama sales 
+  final _visitSalesController = TextEditingController(); // visit sales 
 
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -47,7 +47,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
     _userId = await session.readUserId();
     if (name != null && mounted) {
       setState(() {
-        _salesController.text = name;
+        _visitSalesController.text = name;
       });
     }
   }
@@ -60,7 +60,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
     _companyController.dispose();
     _notesController.dispose();
     _interestController.dispose();
-    _salesController.dispose();
+    _visitSalesController.dispose();
     super.dispose();
   }
 
@@ -108,24 +108,25 @@ class _VisitFormPageState extends State<VisitFormPage> {
     );
 
     final success = await widget.controller.submitVisit(
-      customerName: _nameController.text.trim(),
-      customerPhone: _phoneController.text.trim(),
-      customerAddress: _companyController.text.trim(), 
+      visitorName: _nameController.text.trim(),
+      visitorPhone: _phoneController.text.trim(),
+      visitorCompany: _companyController.text.trim(), 
       purpose: _interestController.text.trim(), // keperluan
-      notes: _selectedType, // status pengunjung
+      visitorCategory: _selectedType, // status pengunjung
       visitDesc: _notesController.text.trim(), // catatan kunjungan
       visitType: _selectedMethod, // metode kunjungan
       status: _selectedStatus,
       createdAt: combinedDateTime,
       userId: _userId,
       visitorId: _selectedVisitorId,
+      visitSales: _visitSalesController.text.trim(),
     );
 
     if (success && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Pengunjung berhasil ditambahkan!')),
       );
-      context.pop();
+      context.pop(true);
     }
   }
 
@@ -195,7 +196,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
                                 setState(() {
                                   _selectedVisitorId = selection.visitorId;
                                   _phoneController.text = selection.visitorPhone ?? '';
-                                  _selectedType = selection.visitorInformation ?? 'Baru';
+                                  _selectedType = selection.visitorCategory ?? 'Baru';
                                   
                                   _companyController.text = selection.visitorCompany ?? '';
                                 });
@@ -307,7 +308,6 @@ class _VisitFormPageState extends State<VisitFormPage> {
                                 border: OutlineInputBorder(),
                               ),
                               items: const [
-                                DropdownMenuItem(value: 'Follow Up', child: Text('Follow Up')),
                                 DropdownMenuItem(value: 'Proses', child: Text('Proses')),
                                 DropdownMenuItem(value: 'Selesai', child: Text('Selesai')),
                                 DropdownMenuItem(value: 'Batal', child: Text('Batal')),
@@ -391,16 +391,14 @@ class _VisitFormPageState extends State<VisitFormPage> {
                             ),
                             const SizedBox(height: 16),
 
-                            // Nama Sales (default logged in user)
+                            // Visit Sales (default logged in user)
                             TextFormField(
-                              controller: _salesController,
-                              readOnly: true,
+                              controller: _visitSalesController,
                               decoration: const InputDecoration(
-                                labelText: 'Nama Sales',
+                                labelText: 'Visit Sales',
                                 border: OutlineInputBorder(),
-                                fillColor: Color(0xFFF1F5F9),
-                                filled: true,
                               ),
+                              validator: (v) => v == null || v.trim().isEmpty ? 'Visit sales wajib diisi' : null,
                             ),
                             const SizedBox(height: 32),
 

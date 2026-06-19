@@ -10,6 +10,7 @@ import '../../features/profile/domain/usecases/get_user_basic.dart';
 import '../../features/profile/domain/usecases/get_user_detail.dart';
 import '../../features/profile/domain/usecases/update_profile.dart';
 import '../../features/profile/presentation/controllers/profile_controller.dart';
+import '../../features/auth/domain/usecases/logout_usecase.dart';
 
 void registerProfileDi(GetIt sl) {
   // Data Sources
@@ -43,6 +44,7 @@ void registerProfileDi(GetIt sl) {
       getUserDetail: sl<GetUserDetailUseCase>(),
       updateProfile: sl<UpdateProfileUseCase>(),
       session: sl<UserSession>(),
+      logout: sl<LogoutUseCase>(),
     ),
   );
 }

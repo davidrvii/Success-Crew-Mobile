@@ -20,7 +20,6 @@ class UserDetail {
   final DateTime? userBirth;
   final DateTime? startWork;
   final DateTime? endWork;
-  final String? roleDivision;
 
   // Statistics
   final int? totalAttendance;
@@ -49,7 +48,6 @@ class UserDetail {
     this.userBirth,
     this.startWork,
     this.endWork,
-    this.roleDivision,
     this.totalAttendance,
     this.totalLate,
     this.totalLeave,

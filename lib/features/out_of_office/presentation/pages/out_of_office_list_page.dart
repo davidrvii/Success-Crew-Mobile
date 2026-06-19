@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../controllers/leave_controller.dart';
-import '../../domain/entities/leave.dart';
+import '../controllers/out_of_office_controller.dart';
+import '../../domain/entities/out_of_office.dart';
 import '../../../../core/widgets/list_shimmer_view.dart';
 
-class LeaveListPage extends StatefulWidget {
-  final LeaveController controller;
+class OutOfOfficeListPage extends StatefulWidget {
+  final OutOfOfficeController controller;
 
-  const LeaveListPage({super.key, required this.controller});
+  const OutOfOfficeListPage({super.key, required this.controller});
 
   @override
-  State<LeaveListPage> createState() => _LeaveListPageState();
+  State<OutOfOfficeListPage> createState() => _OutOfOfficeListPageState();
 }
 
-class _LeaveListPageState extends State<LeaveListPage> {
+class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
   @override
   void initState() {
     super.initState();
@@ -31,9 +31,9 @@ class _LeaveListPageState extends State<LeaveListPage> {
         final c = widget.controller;
 
         Widget body;
-        if (c.isLoading && c.leaves.isEmpty) {
+        if (c.isLoading && c.outOfOffices.isEmpty) {
           body = const ListShimmerView();
-        } else if (c.errorMessage != null && c.leaves.isEmpty) {
+        } else if (c.errorMessage != null && c.outOfOffices.isEmpty) {
           body = Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -41,34 +41,38 @@ class _LeaveListPageState extends State<LeaveListPage> {
                 Text(c.errorMessage!),
                 const SizedBox(height: 16),
                 ElevatedButton(
-                  onPressed: c.fetchLeaves,
+                  onPressed: c.fetchOutOfOffices,
                   child: const Text('Coba Lagi'),
                 ),
               ],
             ),
           );
         } else {
-          final displayLeaves = c.isOwner
-              ? c.leaves.where((l) => l.isPending).toList()
-              : c.leaves;
+          final displayList = c.isOwner
+              ? c.outOfOffices.where((o) => o.isPending).toList()
+              : c.outOfOffices;
 
-          if (displayLeaves.isEmpty) {
+          if (displayList.isEmpty) {
             body = Center(
-              child: Text(c.isOwner
-                  ? 'Tidak ada pengajuan cuti.'
-                  : 'Belum ada data cuti.'),
+              child: Text(
+                c.isOwner
+                    ? 'Tidak ada pengajuan dinas luar.'
+                    : 'Belum ada data dinas luar.',
+              ),
             );
           } else {
             body = RefreshIndicator(
-              onRefresh: c.fetchLeaves,
+              onRefresh: c.fetchOutOfOffices,
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
-                itemCount: displayLeaves.length,
+                itemCount: displayList.length,
                 itemBuilder: (context, index) {
-                  final leave = displayLeaves[index];
+                  final item = displayList[index];
                   return Dismissible(
-                    key: Key('leave_${leave.id}'),
-                    direction: leave.isPending ? DismissDirection.endToStart : DismissDirection.none,
+                    key: Key('ooo_${item.id}'),
+                    direction: item.isPending
+                        ? DismissDirection.endToStart
+                        : DismissDirection.none,
                     background: Container(
                       alignment: Alignment.centerRight,
                       padding: const EdgeInsets.only(right: 20),
@@ -81,19 +85,21 @@ class _LeaveListPageState extends State<LeaveListPage> {
                     confirmDismiss: (direction) async {
                       return await _showDeleteConfirmDialog(
                         context,
-                        'Hapus Pengajuan Cuti',
-                        'Apakah Anda yakin ingin menghapus pengajuan cuti ini?',
+                        'Hapus Pengajuan Dinas',
+                        'Apakah Anda yakin ingin menghapus pengajuan dinas ini?',
                       );
                     },
                     onDismissed: (direction) async {
-                      final success = await c.deleteLeave(leave.id);
+                      final success = await c.deleteOutOfOffice(item.id);
                       if (success && context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Pengajuan cuti berhasil dihapus')),
+                          const SnackBar(
+                            content: Text('Pengajuan dinas berhasil dihapus'),
+                          ),
                         );
                       }
                     },
-                    child: _LeaveCard(leave: leave, controller: c),
+                    child: _OutOfOfficeCard(item: item, controller: c),
                   );
                 },
               ),
@@ -106,7 +112,7 @@ class _LeaveListPageState extends State<LeaveListPage> {
           body: SafeArea(
             child: Column(
               children: [
-                _buildCustomHeader(context, 'Cuti'),
+                _buildCustomHeader(context, 'Dinas Luar'),
                 Expanded(child: body),
               ],
             ),
@@ -115,12 +121,12 @@ class _LeaveListPageState extends State<LeaveListPage> {
               ? null
               : FloatingActionButton(
                   onPressed: () async {
-                    final reload = await context.push('/leave-add');
+                    final reload = await context.push('/out-of-office-add');
                     if (reload == true && mounted) {
-                      c.fetchLeaves();
+                      c.fetchOutOfOffices();
                     }
                   },
-                  backgroundColor: const Color(0xFF1C5AA6),
+                  backgroundColor: const Color(0xFF3B82F6),
                   child: const Icon(Icons.add, color: Colors.white),
                 ),
         );
@@ -134,8 +140,8 @@ class _LeaveListPageState extends State<LeaveListPage> {
       height: 80,
       margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       decoration: BoxDecoration(
-        color: const Color(0xFF1C5AA6), // Brand blue
-        borderRadius: BorderRadius.circular(28), // Rounded rectangle shape
+        color: const Color(0xFF1C5AA6),
+        borderRadius: BorderRadius.circular(28),
         boxShadow: const [
           BoxShadow(
             color: Color(0x1A000000),
@@ -182,23 +188,21 @@ class _LeaveListPageState extends State<LeaveListPage> {
   }
 }
 
-class _LeaveCard extends StatelessWidget {
-  final Leave leave;
-  final LeaveController controller;
+class _OutOfOfficeCard extends StatelessWidget {
+  final OutOfOffice item;
+  final OutOfOfficeController controller;
 
-  const _LeaveCard({required this.leave, required this.controller});
+  const _OutOfOfficeCard({required this.item, required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
         title: Text(
-          leave.leaveType ?? 'Cuti',
+          'Dinas Luar',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Column(
@@ -207,15 +211,17 @@ class _LeaveCard extends StatelessWidget {
             const SizedBox(height: 4),
             if (controller.isOwner) ...[
               Text(
-                'Crew: ${leave.userName ?? '-'}${leave.userName != null ? '' : ' (ID: ${leave.userId})'}',
+                'Crew: ${item.userName ?? '(ID: ${item.userId})'}',
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               const SizedBox(height: 4),
             ],
-            Text('${leave.startDate?.toString().substring(0, 10) ?? ''} s/d ${leave.endDate?.toString().substring(0, 10) ?? ''}'),
+            Text(
+              'Tanggal: ${item.date?.toString().substring(0, 10) ?? '-'}',
+            ),
             const SizedBox(height: 4),
-            Text('Alasan: ${leave.reason ?? '-'}'),
-            if (controller.isOwner && leave.isPending) ...[
+            Text('Keterangan: ${item.description ?? '-'}'),
+            if (controller.isOwner && item.isPending) ...[
               const SizedBox(height: 12),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -225,7 +231,10 @@ class _LeaveCard extends StatelessWidget {
                     style: OutlinedButton.styleFrom(
                       foregroundColor: Colors.red,
                       side: const BorderSide(color: Colors.red),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -238,7 +247,10 @@ class _LeaveCard extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -254,15 +266,15 @@ class _LeaveCard extends StatelessWidget {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: _getStatusColor(leave.status).withValues(alpha: 0.1),
+            color: _statusColor(item.status).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
-            leave.status?.toUpperCase() ?? 'PENDING',
+            item.status?.toUpperCase() ?? 'PENDING',
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: _getStatusColor(leave.status),
+              color: _statusColor(item.status),
             ),
           ),
         ),
@@ -275,9 +287,11 @@ class _LeaveCard extends StatelessWidget {
       context: context,
       builder: (dialogCtx) => AlertDialog(
         title: Text(approve ? 'Terima Pengajuan' : 'Tolak Pengajuan'),
-        content: Text(approve
-            ? 'Apakah Anda yakin ingin menyetujui pengajuan cuti ini?'
-            : 'Apakah Anda yakin ingin menolak pengajuan cuti ini?'),
+        content: Text(
+          approve
+              ? 'Apakah Anda yakin ingin menyetujui pengajuan dinas ini?'
+              : 'Apakah Anda yakin ingin menolak pengajuan dinas ini?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogCtx),
@@ -287,17 +301,20 @@ class _LeaveCard extends StatelessWidget {
             onPressed: () async {
               Navigator.pop(dialogCtx);
               final success = await controller.updateStatus(
-                leave.id,
+                item.id,
                 approve ? 'approved' : 'rejected',
               );
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(success
-                        ? (approve
-                            ? 'Pengajuan cuti berhasil disetujui'
-                            : 'Pengajuan cuti berhasil ditolak')
-                        : (controller.errorMessage ?? 'Gagal memperbarui status')),
+                    content: Text(
+                      success
+                          ? (approve
+                              ? 'Pengajuan dinas berhasil disetujui'
+                              : 'Pengajuan dinas berhasil ditolak')
+                          : (controller.errorMessage ??
+                              'Gagal memperbarui status'),
+                    ),
                   ),
                 );
               }
@@ -315,7 +332,7 @@ class _LeaveCard extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String? status) {
+  Color _statusColor(String? status) {
     switch (status?.toLowerCase()) {
       case 'approved':
         return Colors.green;
@@ -327,7 +344,11 @@ class _LeaveCard extends StatelessWidget {
   }
 }
 
-Future<bool?> _showDeleteConfirmDialog(BuildContext context, String title, String message) {
+Future<bool?> _showDeleteConfirmDialog(
+  BuildContext context,
+  String title,
+  String message,
+) {
   return showDialog<bool>(
     context: context,
     builder: (BuildContext context) {
@@ -342,7 +363,13 @@ Future<bool?> _showDeleteConfirmDialog(BuildContext context, String title, Strin
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Hapus', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+            child: const Text(
+              'Hapus',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       );

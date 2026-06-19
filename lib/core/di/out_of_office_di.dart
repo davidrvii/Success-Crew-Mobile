@@ -59,6 +59,7 @@ void registerOutOfOfficeDi(GetIt sl) {
       getOutOfOfficeList: sl<GetOutOfOfficeListUseCase>(),
       createOutOfOffice: sl<CreateOutOfOfficeUseCase>(),
       updateOutOfOffice: sl<UpdateOutOfOfficeUseCase>(),
+      deleteOutOfOffice: sl<DeleteOutOfOfficeUseCase>(),
       userSession: sl<UserSession>(),
     ),
   );

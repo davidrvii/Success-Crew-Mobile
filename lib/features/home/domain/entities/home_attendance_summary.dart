@@ -4,6 +4,7 @@ class HomeAttendanceSummary {
   final int lateCount;
   final int leaveCount;
   final int overtimeCount;
+  final int outOfOfficeCount;
 
   const HomeAttendanceSummary({
     required this.today,
@@ -11,6 +12,7 @@ class HomeAttendanceSummary {
     required this.lateCount,
     required this.leaveCount,
     required this.overtimeCount,
+    required this.outOfOfficeCount,
   });
 }
 

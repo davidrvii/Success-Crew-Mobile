@@ -20,7 +20,6 @@ class UserDetailDto {
   final DateTime? userBirth;
   final DateTime? startWork;
   final DateTime? endWork;
-  final String? roleDivision;
 
   final int? totalAttendance;
   final int? totalLate;
@@ -47,7 +46,6 @@ class UserDetailDto {
     this.userBirth,
     this.startWork,
     this.endWork,
-    this.roleDivision,
     this.totalAttendance,
     this.totalLate,
     this.totalLeave,
@@ -74,7 +72,6 @@ class UserDetailDto {
       userBirth: _tryParseDate(json['user_birth']),
       startWork: _tryParseDate(json['start_work']),
       endWork: _tryParseDate(json['end_work']),
-      roleDivision: json['role_division'] as String?,
       totalAttendance: (json['total_attendance'] as num?)?.toInt(),
       totalLate: (json['total_late'] as num?)?.toInt(),
       totalLeave: (json['total_leave'] as num?)?.toInt(),

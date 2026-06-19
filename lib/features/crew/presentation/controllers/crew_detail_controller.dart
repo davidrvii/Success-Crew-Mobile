@@ -4,16 +4,21 @@ import '../../../profile/domain/entities/user_detail.dart';
 import '../../../attendance/domain/entities/attendance.dart';
 import '../../domain/usecases/get_crew_detail.dart';
 import '../../domain/usecases/get_crew_attendance_history.dart';
+import '../../domain/usecases/update_crew.dart';
+import '../../data/models/crew_request.dart';
 
 class CrewDetailController extends ChangeNotifier {
   final GetCrewDetailUseCase _getCrewDetail;
   final GetCrewAttendanceHistoryUseCase _getCrewAttendanceHistory;
+  final UpdateCrewUseCase _updateCrew;
 
   CrewDetailController({
     required GetCrewDetailUseCase getCrewDetailUseCase,
     required GetCrewAttendanceHistoryUseCase getCrewAttendanceHistoryUseCase,
+    required UpdateCrewUseCase updateCrewUseCase,
   })  : _getCrewDetail = getCrewDetailUseCase,
-        _getCrewAttendanceHistory = getCrewAttendanceHistoryUseCase;
+        _getCrewAttendanceHistory = getCrewAttendanceHistoryUseCase,
+        _updateCrew = updateCrewUseCase;
 
   // ===== Loading states =====
   bool _isLoading = false;
@@ -44,8 +49,13 @@ class CrewDetailController extends ChangeNotifier {
   bool get isLoadingMore => _isLoadingMore;
 
   // ===== Computed fields for UI (matching ProfileController layout) =====
+  String _toTitleCase(String? s) {
+    if (s == null || s.trim().isEmpty) return '-';
+    return s.trim().split(' ').map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
+  }
+
   String get displayName => _detail?.userName ?? '-';
-  String get displayRole => _detail?.roleName ?? '-';
+  String get displayRole => _toTitleCase(_detail?.roleName);
   String get displayEmail => _detail?.userEmail ?? '-';
   String get displayEmployeeId => _detail?.userId.toString() ?? '-';
   String get displayPhone => _detail?.userPhone ?? '-';
@@ -55,18 +65,21 @@ class CrewDetailController extends ChangeNotifier {
   String get displayStartWorkDate => _detail?.startWork != null
       ? DateFormat('dd MMM yyyy').format(_detail!.startWork!)
       : '-';
-  String get displayDivision => _detail?.roleDivision ?? _detail?.roleName ?? '-';
-  String get displayPosition => _detail?.roleName ?? '-';
+  String get displayEndWorkDate => _detail?.endWork != null
+      ? DateFormat('dd MMM yyyy').format(_detail!.endWork!)
+      : '-';
+  String get displayPosition => _toTitleCase(_detail?.roleName);
   String get displayLocation => _detail?.officeName ?? '-';
   String get displayEmploymentStatus => _detail?.contractStatus != null
-      ? '${_detail!.contractStatus} - ${_detail!.crewStatus ?? "Aktif"}'
-      : 'Karyawan Tetap - Aktif';
+      ? '${_detail!.contractStatus} - ${_detail!.crewStatus ?? "-"}'
+      : '-';
 
   // Stats
   int get presentCount => _stats?.presentCount ?? 0;
   int get lateCount => _stats?.lateCount ?? 0;
   int get leaveCount => _stats?.leaveCount ?? 0;
   int get overtimeCount => _stats?.overtimeCount ?? 0;
+  int get outOfOfficeCount => _stats?.outOfOfficeCount ?? 0;
 
   Future<void> init(int userId) async {
     _isLoading = true;
@@ -132,6 +145,30 @@ class CrewDetailController extends ChangeNotifier {
   }
 
   Future<void> refresh(int userId) => init(userId);
+
+  Future<bool> updateCrew(int userId, CrewRequest request) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    final res = await _updateCrew(userId, request);
+    _isLoading = false;
+
+    if (res.isSuccess && res.data != null) {
+      _detail = res.data;
+      _fillUiFieldsFromDetail();
+      notifyListeners();
+      return true;
+    } else {
+      _errorMessage = res.error?.message ?? 'Gagal mengubah crew.';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  void _fillUiFieldsFromDetail() {
+    // If needed, we can sync or refresh the UI fields
+  }
 
   String _extractError(dynamic err) {
     try {

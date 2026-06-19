@@ -14,14 +14,13 @@ class VisitModel {
   final String? visitorName;
   final String? visitorPhone;
   final String? visitorCompany;
-  final String? visitorInformation;
   final String? visitorCategory;
 
   final String? visitorInterest;
   final String? visitorStatus;
   final String? visitType;
   final String? visitDesc;
-  final String? salesName;
+  final String? visitSales;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -38,13 +37,12 @@ class VisitModel {
     this.visitorName,
     this.visitorPhone,
     this.visitorCompany,
-    this.visitorInformation,
     this.visitorCategory,
     this.visitorInterest,
     this.visitorStatus,
     this.visitType,
     this.visitDesc,
-    this.salesName,
+    this.visitSales,
     this.createdAt,
     this.updatedAt,
     this.followUps,
@@ -63,13 +61,12 @@ class VisitModel {
       visitorName: json['visitor_name'] as String?,
       visitorPhone: json['visitor_phone'] as String?,
       visitorCompany: json['visitor_company'] as String?,
-      visitorInformation: json['visitor_information'] as String? ?? json['visit_desc'] as String?,
       visitorCategory: json['visitor_category'] as String? ?? json['visitory_category'] as String?,
       visitorInterest: json['visitor_interest'] as String? ?? json['visit_interest'] as String? ?? json['interest'] as String?,
       visitorStatus: json['visitor_status'] as String? ?? json['visit_status'] as String?,
       visitType: json['visit_type'] as String?,
       visitDesc: json['visit_desc'] as String?,
-      salesName: json['sales_name'] as String? ?? json['visit_sales'] as String? ?? json['user_name'] as String?,
+      visitSales: json['visit_sales'] as String? ?? json['sales_name'] as String? ?? json['user_name'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
       followUps: (json['Follow UP'] as List?)

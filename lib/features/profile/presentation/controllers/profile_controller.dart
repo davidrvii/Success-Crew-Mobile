@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/storage/user_session.dart';
+import '../../../auth/domain/usecases/logout_usecase.dart';
 
 import '../../domain/entities/user_basic.dart';
 import '../../domain/entities/user_detail.dart';
@@ -17,16 +18,19 @@ class ProfileController extends ChangeNotifier {
   final GetUserDetailUseCase _getUserDetail;
   final UpdateProfileUseCase _updateProfile;
   final UserSession _session;
+  final LogoutUseCase _logout;
 
   ProfileController({
     required GetUserBasicUseCase getUserBasic,
     required GetUserDetailUseCase getUserDetail,
     required UpdateProfileUseCase updateProfile,
     required UserSession session,
+    required LogoutUseCase logout,
   }) : _getUserBasic = getUserBasic,
        _getUserDetail = getUserDetail,
        _updateProfile = updateProfile,
-       _session = session;
+       _session = session,
+       _logout = logout;
 
   // ===== state =====
   bool _loading = false;
@@ -46,6 +50,7 @@ class ProfileController extends ChangeNotifier {
   String? phone;
   String? birthDateText;
   String? startWorkDateText;
+  String? endWorkDateText;
 
   String? position;
   String? employmentStatusText;
@@ -54,6 +59,9 @@ class ProfileController extends ChangeNotifier {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  DateTime? birthDate;
 
   File? _selectedPhoto;
   File? get selectedPhoto => _selectedPhoto;
@@ -62,8 +70,13 @@ class ProfileController extends ChangeNotifier {
   bool get isEditing => _editing;
 
   // ===== computed for UI =====
+  String _toTitleCase(String? s) {
+    if (s == null || s.trim().isEmpty) return '-';
+    return s.trim().split(' ').map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
+  }
+
   String get displayName => detail?.userName ?? basic?.userName ?? '-';
-  String get displayRole => detail?.roleName ?? basic?.roleName ?? '-';
+  String get displayRole => _toTitleCase(detail?.roleName ?? basic?.roleName);
   String get displayEmail => detail?.userEmail ?? '-';
   String get displayOffice => detail?.officeName ?? '-';
 
@@ -72,14 +85,14 @@ class ProfileController extends ChangeNotifier {
   String get displayPhone => _dashIfEmpty(phone);
   String get displayBirthDate => _dashIfEmpty(birthDateText);
   String get displayStartWorkDate => _dashIfEmpty(startWorkDateText);
+  String get displayEndWorkDate => _dashIfEmpty(endWorkDateText);
 
   // Job Info
-  String get displayDivision => _dashIfEmpty(detail?.roleDivision ?? detail?.roleName);
-  String get displayPosition => _dashIfEmpty(position);
+  String get displayPosition => _toTitleCase(position);
   String get displayLocation => _dashIfEmpty(detail?.officeName);
 
   String get displayEmploymentStatus =>
-      _dashIfEmpty(employmentStatusText ?? 'Karyawan Tetap - Aktif');
+      _dashIfEmpty(employmentStatusText);
 
   void setEditing(bool v) {
     _editing = v;
@@ -134,6 +147,8 @@ class ProfileController extends ChangeNotifier {
     final newName = nameController.text.trim();
     final newEmail = emailController.text.trim();
     final newPass = passwordController.text;
+    final newPhone = phoneController.text.trim();
+    final newBirth = birthDate != null ? DateFormat('yyyy-MM-dd').format(birthDate!) : null;
 
     final request = UpdateProfileRequest(
       userName: (newName.isNotEmpty && newName != current.userName)
@@ -143,6 +158,10 @@ class ProfileController extends ChangeNotifier {
           ? newEmail
           : null,
       userPassword: (newPass.isNotEmpty) ? newPass : null,
+      userPhone: (newPhone != current.userPhone) ? newPhone : null,
+      userBirth: (newBirth != null && (current.userBirth == null || DateFormat('yyyy-MM-dd').format(current.userBirth!) != newBirth))
+          ? newBirth
+          : null,
       photoFile: _selectedPhoto,
     );
 
@@ -178,22 +197,22 @@ class ProfileController extends ChangeNotifier {
   }
 
   Future<void> logout() async {
-    await _session.clear();
+    await _logout();
   }
 
   void disposeControllers() {
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
+    phoneController.dispose();
   }
 
   // ===== internal helpers =====
   void _fillDefaultUiFields() {
-    employmentStatusText ??= 'Karyawan Tetap - Aktif';
-
     phone ??= '-';
     birthDateText ??= '-';
     startWorkDateText ??= '-';
+    endWorkDateText ??= '-';
   }
 
   Future<void> _fillFromSession() async {
@@ -214,7 +233,8 @@ class ProfileController extends ChangeNotifier {
     phone = d.userPhone ?? phone;
     birthDateText = d.userBirth != null ? DateFormat('dd MMM yyyy').format(d.userBirth!) : birthDateText;
     startWorkDateText = d.startWork != null ? DateFormat('dd MMM yyyy').format(d.startWork!) : startWorkDateText;
-    employmentStatusText = d.contractStatus != null ? '${d.contractStatus} - ${d.crewStatus ?? "Aktif"}' : employmentStatusText;
+    endWorkDateText = d.endWork != null ? DateFormat('dd MMM yyyy').format(d.endWork!) : '-';
+    employmentStatusText = d.contractStatus != null ? '${d.contractStatus} - ${d.crewStatus ?? "-"}' : null;
   }
 
   void _fillFormFromDetail() {
@@ -223,6 +243,8 @@ class ProfileController extends ChangeNotifier {
     nameController.text = d.userName;
     emailController.text = d.userEmail;
     passwordController.text = '';
+    phoneController.text = d.userPhone ?? '';
+    birthDate = d.userBirth;
   }
 
   Future<void> _run(Future<void> Function() job) async {

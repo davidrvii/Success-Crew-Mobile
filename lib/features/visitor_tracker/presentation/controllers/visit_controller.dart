@@ -71,17 +71,18 @@ class VisitorController extends ChangeNotifier {
   }
 
   Future<bool> submitVisit({
-    required String customerName,
-    required String customerPhone,
-    required String customerAddress,
+    required String visitorName,
+    required String visitorPhone,
+    required String visitorCompany,
     required String purpose,
-    required String notes,
+    required String visitorCategory,
     required String visitDesc,
     required String visitType,
     required String status,
     required DateTime createdAt,
     required int? userId,
     int? visitorId,
+    String? visitSales,
   }) async {
     isLoading = true;
     errorMessage = null;
@@ -90,15 +91,16 @@ class VisitorController extends ChangeNotifier {
     final req = VisitRequest(
       userId: userId,
       visitorId: visitorId,
-      customerName: customerName,
-      customerPhone: customerPhone,
-      customerAddress: customerAddress,
+      visitorName: visitorName,
+      visitorPhone: visitorPhone,
+      visitorCompany: visitorCompany,
       purpose: purpose,
       status: status,
-      notes: notes,
+      visitorCategory: visitorCategory,
       visitType: visitType,
       visitDesc: visitDesc,
       createdAt: createdAt,
+      visitSales: visitSales,
     );
 
     final res = await _createVisit(req);
@@ -166,7 +168,17 @@ class VisitorController extends ChangeNotifier {
 
     if (statusFilter != null && statusFilter!.trim().isNotEmpty) {
       final f = statusFilter!.trim().toLowerCase();
-      data = data.where((v) => (v.visitorStatus ?? '').toLowerCase() == f);
+      data = data.where((v) {
+        final raw = (v.visitorStatus ?? '').trim().toLowerCase();
+        final normalized = (raw == 'pending' || raw == 'proses')
+            ? 'proses'
+            : (raw == 'done' || raw == 'selesai')
+                ? 'selesai'
+                : (raw == 'cancel' || raw == 'batal')
+                    ? 'batal'
+                    : raw;
+        return normalized == f;
+      });
     }
 
     final q = query.trim().toLowerCase();

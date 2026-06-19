@@ -107,11 +107,6 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                   const SizedBox(height: 18),
 
-                  // Error message banner
-                  if (c.errorMessage != null) ...[
-                    _ErrorBanner(message: c.errorMessage!),
-                    const SizedBox(height: 14),
-                  ],
 
                   // 2. Large Green Card (Action card with fingerprint button)
                   Container(
@@ -136,11 +131,40 @@ class _AttendancePageState extends State<AttendancePage> {
                       children: [
                         // Fingerprint button area
                         HoldToActionButton(
-                          onTap: () {
+                          onTap: () async {
+                            final messenger = ScaffoldMessenger.of(context);
                             if (canCheckIn) {
-                              c.checkIn();
+                              await c.checkIn();
+                              if (c.errorMessage != null) {
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(c.errorMessage!),
+                                    backgroundColor: const Color(0xFFEF4444),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
                             } else if (canCheckOut) {
-                              c.checkOut();
+                              if (DateTime.now().hour < 17) {
+                                messenger.showSnackBar(
+                                  const SnackBar(
+                                    content: Text("Tidak dapat check out sebelum jam pulang"),
+                                    backgroundColor: Color(0xFFEF4444),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                                return;
+                              }
+                              await c.checkOut();
+                              if (c.errorMessage != null) {
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text(c.errorMessage!),
+                                    backgroundColor: const Color(0xFFEF4444),
+                                    behavior: SnackBarBehavior.floating,
+                                  ),
+                                );
+                              }
                             }
                           },
                           child: Container(
@@ -230,16 +254,18 @@ class _AttendancePageState extends State<AttendancePage> {
                   ),
                   const SizedBox(height: 18),
 
-                  // 3. Row of 4 statistics cards
+                  // 3. Row of 5 statistics cards
                   Row(
                     children: [
                       _buildStatCard('Hadir', c.presentCount),
                       const SizedBox(width: 8),
                       _buildStatCard('Telat', c.lateCount),
                       const SizedBox(width: 8),
-                      _buildStatCard('Cuti', c.leaveCount),
-                      const SizedBox(width: 8),
                       _buildStatCard('Lembur', c.overtimeCount),
+                      const SizedBox(width: 8),
+                      _buildStatCard('Dinas', c.outOfOfficeCount),
+                      const SizedBox(width: 8),
+                      _buildStatCard('Cuti', c.leaveCount),
                     ],
                   ),
                   const SizedBox(height: 24),
@@ -310,9 +336,9 @@ class _AttendancePageState extends State<AttendancePage> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.015),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
@@ -457,29 +483,6 @@ class _AttendancePageState extends State<AttendancePage> {
     final diff = a.checkOutAt!.difference(a.checkInAt!);
     final hours = diff.inHours;
     return hours > 8 ? hours - 8 : 0;
-  }
-}
-
-class _ErrorBanner extends StatelessWidget {
-  final String message;
-  const _ErrorBanner({required this.message});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFE1E1),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Text(
-        message,
-        style: const TextStyle(
-          color: Color(0xFF8B0000),
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
   }
 }
 

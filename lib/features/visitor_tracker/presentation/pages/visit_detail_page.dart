@@ -110,7 +110,7 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
             child: _SimpleList(
               isLoading: c.isLoadingFollowUps,
               error: c.followUpsError,
-              emptyText: 'No Follow Ups',
+              emptyText: 'No Follow Up',
               items: c.followUps.map((f) {
                 return Dismissible(
                   key: Key('followup_${f.followUpId}'),
@@ -281,7 +281,7 @@ class _FollowUpForm extends StatefulWidget {
 
 class _FollowUpFormState extends State<_FollowUpForm> {
   final _notes = TextEditingController();
-  String _selectedStatus = 'Follow Up';
+  String _selectedStatus = 'Proses';
 
   @override
   void dispose() {
@@ -304,9 +304,8 @@ class _FollowUpFormState extends State<_FollowUpForm> {
             initialValue: _selectedStatus,
             decoration: const InputDecoration(labelText: 'Status', border: OutlineInputBorder()),
             items: const [
-              DropdownMenuItem(value: 'Follow Up', child: Text('Follow Up')),
-              DropdownMenuItem(value: 'Selesai', child: Text('Selesai')),
               DropdownMenuItem(value: 'Proses', child: Text('Proses')),
+              DropdownMenuItem(value: 'Selesai', child: Text('Selesai')),
               DropdownMenuItem(value: 'Batal', child: Text('Batal')),
             ],
             onChanged: (val) {
@@ -551,7 +550,14 @@ class _VisitSummaryCard extends StatelessWidget {
     final type = v?.visitType ?? 'Walk-In';
     final date = _formatDate(v?.createdAt);
     final time = _formatTime(v?.createdAt);
-    final status = v?.visitorStatus ?? '-';
+    final rawStatus = (v?.visitorStatus ?? '').trim().toLowerCase();
+    final status = (rawStatus == 'pending' || rawStatus == 'proses')
+        ? 'Proses'
+        : (rawStatus == 'done' || rawStatus == 'selesai')
+            ? 'Selesai'
+            : (rawStatus == 'cancel' || rawStatus == 'batal')
+                ? 'Batal'
+                : (v?.visitorStatus ?? '-');
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -566,7 +572,7 @@ class _VisitSummaryCard extends StatelessWidget {
         _RowText(label: 'Tanggal', value: date),
         _RowText(label: 'Jam datang', value: time),
         _RowText(label: 'Status kunjungan', value: status),
-        _RowText(label: 'Sales', value: v?.salesName ?? '-'),
+        _RowText(label: 'Visit Sales', value: v?.visitSales ?? '-'),
       ],
     );
   }
@@ -585,7 +591,7 @@ class _VisitorInfoCard extends StatelessWidget {
         _RowText(label: 'Nama', value: v?.visitorName ?? '-'),
         _RowText(label: 'Telepon', value: v?.visitorPhone ?? '-'),
         _RowText(label: 'Perusahaan/Instansi', value: v?.visitorCompany ?? '-'),
-        _RowText(label: 'Status Pengunjung', value: v?.visitorInformation ?? '-'),
+        _RowText(label: 'Status Pengunjung', value: v?.visitorCategory ?? '-'),
       ],
     );
   }

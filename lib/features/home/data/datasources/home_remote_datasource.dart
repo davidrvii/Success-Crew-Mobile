@@ -9,6 +9,7 @@ import '../models/home_leave_response.dart';
 import '../models/home_notification_response.dart';
 import '../models/home_overtime_response.dart';
 import '../models/home_user_basic_response.dart';
+import '../models/home_out_of_office_response.dart';
 import '../../../visitor_tracker/data/models/visit_response.dart';
 
 abstract class HomeRemoteDataSource {
@@ -32,7 +33,12 @@ abstract class HomeRemoteDataSource {
 
   Future<ApiResponse<HomeOvertimeResponse>> getOvertimeAll();
 
+  Future<ApiResponse<HomeOutOfOfficeResponse>> getOutOfOfficeCrew(int userId);
+
+  Future<ApiResponse<HomeOutOfOfficeResponse>> getOutOfOfficeAll();
+
   Future<ApiResponse<VisitListResponse>> getVisitSummary();
+  Future<ApiResponse<VisitListResponse>> getVisitList();
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -109,9 +115,33 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
+  Future<ApiResponse<HomeOutOfOfficeResponse>> getOutOfOfficeCrew(int userId) {
+    return _get(
+      path: ApiPaths.outOfOfficeCrew(userId),
+      parser: HomeOutOfOfficeResponse.fromJson,
+    );
+  }
+
+  @override
+  Future<ApiResponse<HomeOutOfOfficeResponse>> getOutOfOfficeAll() {
+    return _get(
+      path: ApiPaths.outOfOfficeAll,
+      parser: HomeOutOfOfficeResponse.fromJson,
+    );
+  }
+
+  @override
   Future<ApiResponse<VisitListResponse>> getVisitSummary() {
     return _get(
       path: ApiPaths.visitAll,
+      parser: VisitListResponse.fromJson,
+    );
+  }
+
+  @override
+  Future<ApiResponse<VisitListResponse>> getVisitList() {
+    return _get(
+      path: ApiPaths.visitList,
       parser: VisitListResponse.fromJson,
     );
   }

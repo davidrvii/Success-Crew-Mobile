@@ -51,12 +51,14 @@ void registerCrewDi(GetIt sl) {
   sl.registerFactory<CrewController>(
     () => CrewController(
       getCrewListUseCase: sl<GetCrewListUseCase>(),
+      addCrewUseCase: sl<AddCrewUseCase>(),
     ),
   );
   sl.registerFactory<CrewDetailController>(
     () => CrewDetailController(
       getCrewDetailUseCase: sl<GetCrewDetailUseCase>(),
       getCrewAttendanceHistoryUseCase: sl<GetCrewAttendanceHistoryUseCase>(),
+      updateCrewUseCase: sl<UpdateCrewUseCase>(),
     ),
   );
 }

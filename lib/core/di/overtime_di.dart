@@ -59,6 +59,7 @@ void registerOvertimeDi(GetIt sl) {
       getOvertimeList: sl<GetOvertimeListUseCase>(),
       createOvertime: sl<CreateOvertimeUseCase>(),
       updateOvertime: sl<UpdateOvertimeUseCase>(),
+      deleteOvertime: sl<DeleteOvertimeUseCase>(),
       userSession: sl<UserSession>(),
     ),
   );

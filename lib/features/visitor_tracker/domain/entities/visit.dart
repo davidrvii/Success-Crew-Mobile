@@ -12,14 +12,13 @@ class Visit {
   final String? visitorName;
   final String? visitorPhone;
   final String? visitorCompany;
-  final String? visitorInformation;
   final String? visitorCategory;
 
   final String? visitorInterest;
   final String? visitorStatus;
   final String? visitType;
+  final String? visitSales;
   final String? visitDesc;
-  final String? salesName;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -36,13 +35,12 @@ class Visit {
     this.visitorName,
     this.visitorPhone,
     this.visitorCompany,
-    this.visitorInformation,
     this.visitorCategory,
     this.visitorInterest,
     this.visitorStatus,
     this.visitType,
+    this.visitSales,
     this.visitDesc,
-    this.salesName,
     this.createdAt,
     this.updatedAt,
     this.followUps,

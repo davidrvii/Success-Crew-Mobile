@@ -97,7 +97,7 @@ class _LeaveFormPageState extends State<LeaveFormPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Cuti berhasil diajukan!')),
       );
-      context.pop();
+      context.pop(true);
     }
   }
 

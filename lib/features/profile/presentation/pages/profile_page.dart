@@ -9,20 +9,20 @@ import '../controllers/profile_controller.dart';
 
 class ProfilePage extends StatefulWidget {
   final ProfileController controller;
-  final VoidCallback? onLoggedOut;
 
-  const ProfilePage({super.key, required this.controller, this.onLoggedOut});
+  const ProfilePage({super.key, required this.controller});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  ProfileController get c => widget.controller;
+  late final ProfileController c;
 
   @override
   void initState() {
     super.initState();
+    c = widget.controller;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       c.init();
     });
@@ -38,12 +38,8 @@ class _ProfilePageState extends State<ProfilePage> {
     await c.logout();
     if (!mounted) return;
 
-    if (widget.onLoggedOut != null) {
-      widget.onLoggedOut!.call();
-      return;
-    }
-
-    Navigator.of(context).popUntil((r) => r.isFirst);
+    // Clear entire navigation stack and go to login
+    context.go('/login');
   }
 
   @override
@@ -61,9 +57,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   _TopProfileCard(
                     onBack: () => Navigator.of(context).maybePop(),
-                    onEdit: () {
+                    onEdit: () async {
+                      if (c.detail == null) return;
                       c.setEditing(true); // Populate text controllers
-                      context.push('/edit-profile');
+                      final reload = await context.push('/edit-profile', extra: c.detail);
+                      if (reload == true && mounted) {
+                        c.refresh();
+                      }
                     },
                     avatar: _buildAvatarProvider(
                       c.detail?.userPhoto,
@@ -83,11 +83,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   _SectionCard(
                     title: 'Personal',
                     children: [
-                      _kv('ID Pegawai', c.displayEmployeeId),
                       _kv('Email', c.displayEmail),
                       _kv('Telepon', c.displayPhone),
                       _kv('Tanggal Lahir', c.displayBirthDate),
                       _kv('Mulai Bekerja', c.displayStartWorkDate),
+                      _kv('Selesai Bekerja', c.displayEndWorkDate),
                     ],
                   ),
                   const SizedBox(height: 14),
@@ -95,7 +95,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   _SectionCard(
                     title: 'Pekerjaan',
                     children: [
-                      _kv('Divisi', c.displayDivision),
                       _kv('Posisi', c.displayPosition),
                       _kv('Lokasi', c.displayLocation),
                     ],

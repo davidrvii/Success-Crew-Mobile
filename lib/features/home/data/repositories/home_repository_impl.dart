@@ -14,6 +14,7 @@ import '../models/home_absence_response.dart';
 import '../models/home_attendance_response.dart';
 import '../models/home_leave_response.dart';
 import '../models/home_notification_response.dart';
+import '../models/home_out_of_office_response.dart';
 import '../models/home_overtime_response.dart';
 import '../models/home_user_basic_response.dart';
 import '../../../visitor_tracker/data/models/visit_response.dart';
@@ -50,9 +51,13 @@ class HomeRepositoryImpl implements HomeRepository {
         ? _remote.getOvertimeAll()
         : _remote.getOvertimeCrew(userId);
 
+    final outOfOfficeF = isOwner
+        ? _remote.getOutOfOfficeAll()
+        : _remote.getOutOfOfficeCrew(userId);
+
     final attendanceF = _remote.getAttendanceCrew(userId);
 
-    final visitF = isOwner ? _remote.getVisitSummary() : null;
+    final visitF = isOwner ? _remote.getVisitSummary() : _remote.getVisitList();
 
     final notifRes = await _requireSuccess(notifF);
     if (!notifRes.isSuccess) return ApiResponse.failure(notifRes.error!);
@@ -68,12 +73,12 @@ class HomeRepositoryImpl implements HomeRepository {
     final overtimeRes = await _requireSuccess(overtimeF);
     if (!overtimeRes.isSuccess) return ApiResponse.failure(overtimeRes.error!);
 
-    VisitListResponse? visit;
-    if (visitF != null) {
-      final visitRes = await _requireSuccess(visitF);
-      if (!visitRes.isSuccess) return ApiResponse.failure(visitRes.error!);
-      visit = visitRes.data;
-    }
+    final outOfOfficeRes = await _requireSuccess(outOfOfficeF);
+    if (!outOfOfficeRes.isSuccess) return ApiResponse.failure(outOfOfficeRes.error!);
+
+    final visitRes = await _requireSuccess(visitF);
+    if (!visitRes.isSuccess) return ApiResponse.failure(visitRes.error!);
+    final visit = visitRes.data;
 
     final todayAttendanceId = await _session.readTodayAttendanceId();
     final todayAbsenceRes = await _resolveTodayAbsence(todayAttendanceId);
@@ -87,6 +92,7 @@ class HomeRepositoryImpl implements HomeRepository {
       attendance: attendanceRes.data!,
       leave: leaveRes.data!,
       overtime: overtimeRes.data!,
+      outOfOffice: outOfOfficeRes.data!,
       visit: visit,
       todayAbsence: todayAbsenceRes.data!,
     );
@@ -174,12 +180,23 @@ class HomeRepositoryImpl implements HomeRepository {
     return dt.year == now.year && dt.month == now.month && dt.day == now.day;
   }
 
+  bool _isThisWeek(DateTime? dt) {
+    if (dt == null) return false;
+    final now = DateTime.now();
+    final monday = now.subtract(Duration(days: now.weekday - 1));
+    final startOfWeek = DateTime(monday.year, monday.month, monday.day);
+    final endOfWeek = startOfWeek.add(const Duration(days: 7));
+    return dt.isAfter(startOfWeek.subtract(const Duration(seconds: 1))) &&
+        dt.isBefore(endOfWeek);
+  }
+
   HomeSummary _buildSummary({
     required HomeUserBasicResponse userBasic,
     required HomeNotificationResponse notif,
     required HomeAttendanceResponse attendance,
     required HomeLeaveResponse leave,
     required HomeOvertimeResponse overtime,
+    required HomeOutOfOfficeResponse outOfOffice,
     required VisitListResponse? visit,
     required HomeTodayAbsence todayAbsence,
   }) {
@@ -194,6 +211,8 @@ class HomeRepositoryImpl implements HomeRepository {
     int walkInToday = 0;
     int callInToday = 0;
     int chatInToday = 0;
+    int totalServicesThisWeek = 0;
+    int totalProductsSoldThisWeek = 0;
 
     if (visit != null) {
       for (final v in visit.visits) {
@@ -208,6 +227,17 @@ class HomeRepositoryImpl implements HomeRepository {
             chatInToday++;
           }
         }
+
+        if (_isThisWeek(v.createdAt)) {
+          if (v.unitsServiced != null) {
+            totalServicesThisWeek += v.unitsServiced!.length;
+          }
+          if (v.productsSold != null) {
+            for (final p in v.productsSold!) {
+              totalProductsSoldThisWeek += (p.quantity ?? 0);
+            }
+          }
+        }
       }
     }
 
@@ -220,9 +250,11 @@ class HomeRepositoryImpl implements HomeRepository {
         lateCount: attendance.late,
         leaveCount: attendance.leave,
         overtimeCount: attendance.overtime,
+        outOfOfficeCount: attendance.outOfOffice,
       ),
       requests: HomeRequestSummary(
         pendingLeaveCount: leave.pendingCount,
+        pendingOutOfOfficeCount: outOfOffice.pendingCount,
         pendingOvertimeCount: overtime.pendingCount,
       ),
       visitors: HomeVisitSummary(
@@ -232,6 +264,8 @@ class HomeRepositoryImpl implements HomeRepository {
         chatInToday: chatInToday,
         totalRevenue: 0,
         totalDistance: 0,
+        totalServicesThisWeek: totalServicesThisWeek,
+        totalProductsSoldThisWeek: totalProductsSoldThisWeek,
       ),
     );
   }

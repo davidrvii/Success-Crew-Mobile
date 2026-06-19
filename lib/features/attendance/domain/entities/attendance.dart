@@ -112,6 +112,7 @@ class AttendanceHistoryData {
   final int lateCount;
   final int leaveCount;
   final int overtimeCount;
+  final int outOfOfficeCount;
 
   const AttendanceHistoryData({
     required this.history,
@@ -119,5 +120,6 @@ class AttendanceHistoryData {
     required this.lateCount,
     required this.leaveCount,
     required this.overtimeCount,
+    required this.outOfOfficeCount,
   });
 }

@@ -90,6 +90,7 @@ class CrewRepositoryImpl implements CrewRepository {
     });
 
     final leaveCount = res.data?.data?.totalLeave ?? 0;
+    final outOfOfficeCount = res.data?.data?.totalOutOfOffice ?? 0;
 
     return ApiResponse.success(
       AttendanceHistoryData(
@@ -98,6 +99,7 @@ class CrewRepositoryImpl implements CrewRepository {
         lateCount: lateCount,
         leaveCount: leaveCount,
         overtimeCount: overtimeCount,
+        outOfOfficeCount: outOfOfficeCount,
       ),
     );
   }
@@ -183,7 +185,6 @@ class CrewRepositoryImpl implements CrewRepository {
       userBirth: dto.userBirth,
       startWork: dto.startWork,
       endWork: dto.endWork,
-      roleDivision: dto.roleDivision,
       totalAttendance: dto.totalAttendance,
       totalLate: dto.totalLate,
       totalLeave: dto.totalLeave,

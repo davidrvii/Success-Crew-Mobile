@@ -27,6 +27,7 @@ import '../features/attendance/presentation/controllers/attendance_controller.da
 import '../features/profile/presentation/pages/profile_page.dart';
 import '../features/profile/presentation/pages/edit_profile_page.dart';
 import '../features/profile/presentation/controllers/profile_controller.dart';
+import '../features/profile/domain/entities/user_detail.dart';
 
 // LEAVE
 import '../features/leave/presentation/pages/leave_list_page.dart';
@@ -38,6 +39,10 @@ import '../features/overtime/presentation/pages/overtime_list_page.dart';
 import '../features/overtime/presentation/pages/overtime_form_page.dart';
 import '../features/overtime/presentation/controllers/overtime_controller.dart';
 
+// OUT OF OFFICE
+import '../features/out_of_office/presentation/pages/out_of_office_list_page.dart';
+import '../features/out_of_office/presentation/controllers/out_of_office_controller.dart';
+
 // NOTIFICATION
 import '../features/notification/presentation/pages/notification_page.dart';
 import '../features/notification/presentation/controllers/notification_controller.dart';
@@ -46,6 +51,8 @@ import '../features/notification/presentation/controllers/notification_controlle
 import '../features/crew/domain/entities/crew_member.dart';
 import '../features/crew/presentation/pages/crew_page.dart';
 import '../features/crew/presentation/pages/crew_detail_page.dart';
+import '../features/crew/presentation/pages/crew_add_page.dart';
+import '../features/crew/presentation/pages/crew_edit_page.dart';
 import '../features/crew/presentation/controllers/crew_controller.dart';
 import '../features/crew/presentation/controllers/crew_detail_controller.dart';
 
@@ -69,6 +76,7 @@ class AppGoRouter {
   static const String editProfile = '/edit-profile';
   static const String leave = '/leave';
   static const String leaveAdd = '/leave-add';
+  static const String outOfOffice = '/out-of-office';
   static const String overtime = '/overtime';
   static const String overtimeAdd = '/overtime-add';
   static const String notification = '/notification';
@@ -126,7 +134,9 @@ class AppGoRouter {
       GoRoute(
         path: editProfile,
         builder: (context, state) {
+          final detail = state.extra as UserDetail;
           return EditProfilePage(
+            detail: detail,
             controller: sl<ProfileController>(),
           );
         },
@@ -156,6 +166,14 @@ class AppGoRouter {
         },
       ),
       GoRoute(
+        path: outOfOffice,
+        builder: (context, state) {
+          return OutOfOfficeListPage(
+            controller: sl<OutOfOfficeController>(),
+          );
+        },
+      ),
+      GoRoute(
         path: overtimeAdd,
         builder: (context, state) {
           return OvertimeFormPage(
@@ -181,6 +199,24 @@ class AppGoRouter {
           );
         },
       ),
+      GoRoute(
+        path: '/crew-add',
+        builder: (context, state) {
+          return CrewAddPage(
+            controller: sl<CrewController>(),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/crew-edit',
+        builder: (context, state) {
+          final detail = state.extra as UserDetail;
+          return CrewEditPage(
+            detail: detail,
+            controller: sl<CrewDetailController>(),
+          );
+        },
+      ),
 
       // MAIN SHELL (BottomNav)
       StatefulShellRoute.indexedStack(
@@ -201,6 +237,7 @@ class AppGoRouter {
                       onTapProfile: () => context.push(profile),
                       onTapNotifications: () => context.push(notification),
                       onTapLeave: () => context.push(leave),
+                      onTapOutOfOffice: () => context.push(outOfOffice),
                       onTapOvertime: () => context.push(overtime),
                       onTapCheckIn: () => context.go(absence),
                     ),

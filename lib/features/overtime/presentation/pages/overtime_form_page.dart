@@ -134,7 +134,7 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Lembur berhasil diajukan!')),
       );
-      context.pop();
+      context.pop(true);
     }
   }
 
