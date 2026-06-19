@@ -1,3 +1,8 @@
+/// File: lib/features/leave/data/models/leave_request.dart
+/// Generated Documentation for leave_request.dart
+
+/// Class representing `LeaveRequest`.
+/// Auto-generated class documentation.
 class LeaveRequest {
   final int? userId;
 

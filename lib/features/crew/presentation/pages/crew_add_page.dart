@@ -1,9 +1,14 @@
+/// File: lib/features/crew/presentation/pages/crew_add_page.dart
+/// Generated Documentation for crew_add_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../controllers/crew_controller.dart';
 import '../../data/models/crew_request.dart';
 
+/// Class representing `CrewAddPage`.
+/// Auto-generated class documentation.
 class CrewAddPage extends StatefulWidget {
   final CrewController controller;
 
@@ -13,6 +18,8 @@ class CrewAddPage extends StatefulWidget {
   State<CrewAddPage> createState() => _CrewAddPageState();
 }
 
+/// Class representing `_CrewAddPageState`.
+/// Auto-generated class documentation.
 class _CrewAddPageState extends State<CrewAddPage> {
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +39,8 @@ class _CrewAddPageState extends State<CrewAddPage> {
   String _selectedLocation = 'Success Comp Cibubur';
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
@@ -40,6 +49,8 @@ class _CrewAddPageState extends State<CrewAddPage> {
     super.dispose();
   }
 
+  /// Method `_pickDate` returning `Future<void>`.
+  /// Handles logic operations related to `_pickDate`.
   Future<void> _pickDate(BuildContext context, String type) async {
     final now = DateTime.now();
     DateTime initialDate;
@@ -76,6 +87,8 @@ class _CrewAddPageState extends State<CrewAddPage> {
     }
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -114,6 +127,8 @@ class _CrewAddPageState extends State<CrewAddPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
@@ -421,6 +436,8 @@ class _CrewAddPageState extends State<CrewAddPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),

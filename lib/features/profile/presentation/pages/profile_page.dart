@@ -1,3 +1,6 @@
+/// File: lib/features/profile/presentation/pages/profile_page.dart
+/// Generated Documentation for profile_page.dart
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -7,6 +10,8 @@ import 'package:go_router/go_router.dart';
 
 import '../controllers/profile_controller.dart';
 
+/// Class representing `ProfilePage`.
+/// Auto-generated class documentation.
 class ProfilePage extends StatefulWidget {
   final ProfileController controller;
 
@@ -16,10 +21,14 @@ class ProfilePage extends StatefulWidget {
   State<ProfilePage> createState() => _ProfilePageState();
 }
 
+/// Class representing `_ProfilePageState`.
+/// Auto-generated class documentation.
 class _ProfilePageState extends State<ProfilePage> {
   late final ProfileController c;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c = widget.controller;
@@ -29,11 +38,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     c.disposeControllers();
     super.dispose();
   }
 
+  /// Method `_onLogout` returning `Future<void>`.
+  /// Handles logic operations related to `_onLogout`.
   Future<void> _onLogout() async {
     await c.logout();
     if (!mounted) return;
@@ -43,6 +56,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: c,
@@ -111,6 +126,8 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  /// Method `_kv` returning `Widget`.
+  /// Handles logic operations related to `_kv`.
   Widget _kv(String k, String v) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
@@ -186,6 +203,8 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
+/// Class representing `_TopProfileCard`.
+/// Auto-generated class documentation.
 class _TopProfileCard extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback onEdit;
@@ -204,6 +223,8 @@ class _TopProfileCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 16),
@@ -274,11 +295,15 @@ class _TopProfileCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_BackButton`.
+/// Auto-generated class documentation.
 class _BackButton extends StatelessWidget {
   final VoidCallback onPressed;
   const _BackButton({required this.onPressed});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
@@ -296,6 +321,8 @@ class _BackButton extends StatelessWidget {
   }
 }
 
+/// Class representing `_SectionCard`.
+/// Auto-generated class documentation.
 class _SectionCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
@@ -303,6 +330,8 @@ class _SectionCard extends StatelessWidget {
   const _SectionCard({required this.title, required this.children});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
@@ -337,11 +366,15 @@ class _SectionCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_LogoutButton`.
+/// Auto-generated class documentation.
 class _LogoutButton extends StatelessWidget {
   final VoidCallback? onPressed;
   const _LogoutButton({required this.onPressed});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return SizedBox(
       height: 56,
@@ -374,11 +407,15 @@ class _LogoutButton extends StatelessWidget {
   }
 }
 
+/// Class representing `_ErrorBanner`.
+/// Auto-generated class documentation.
 class _ErrorBanner extends StatelessWidget {
   final String message;
   const _ErrorBanner({required this.message});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),

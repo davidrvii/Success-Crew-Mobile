@@ -1,8 +1,13 @@
+/// File: lib/features/leave/presentation/pages/leave_form_page.dart
+/// Generated Documentation for leave_form_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../controllers/leave_controller.dart';
 
+/// Class representing `LeaveFormPage`.
+/// Auto-generated class documentation.
 class LeaveFormPage extends StatefulWidget {
   final LeaveController controller;
 
@@ -12,6 +17,8 @@ class LeaveFormPage extends StatefulWidget {
   State<LeaveFormPage> createState() => _LeaveFormPageState();
 }
 
+/// Class representing `_LeaveFormPageState`.
+/// Auto-generated class documentation.
 class _LeaveFormPageState extends State<LeaveFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _typeController = TextEditingController();
@@ -21,12 +28,16 @@ class _LeaveFormPageState extends State<LeaveFormPage> {
   DateTime? _endDate;
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _typeController.dispose();
     _reasonController.dispose();
     super.dispose();
   }
 
+  /// Method `_pickStartDate` returning `Future<void>`.
+  /// Handles logic operations related to `_pickStartDate`.
   Future<void> _pickStartDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -45,6 +56,8 @@ class _LeaveFormPageState extends State<LeaveFormPage> {
     }
   }
 
+  /// Method `_pickEndDate` returning `Future<void>`.
+  /// Handles logic operations related to `_pickEndDate`.
   Future<void> _pickEndDate() async {
     if (_startDate == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,6 +78,8 @@ class _LeaveFormPageState extends State<LeaveFormPage> {
     }
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (_startDate == null || _endDate == null) {
@@ -110,6 +125,8 @@ class _LeaveFormPageState extends State<LeaveFormPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F8),
@@ -254,6 +271,8 @@ class _LeaveFormPageState extends State<LeaveFormPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),

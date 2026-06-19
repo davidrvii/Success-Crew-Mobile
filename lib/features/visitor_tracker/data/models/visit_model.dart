@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/data/models/visit_model.dart
+/// Generated Documentation for visit_model.dart
+
 import 'visitor_model.dart';
 import 'followup_model.dart';
 import 'product_sold_model.dart';
@@ -6,6 +9,8 @@ import 'unit_serviced_model.dart';
 DateTime? _dt(dynamic v) => v is String ? DateTime.tryParse(v) : null;
 int? _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v');
 
+/// Class representing `VisitModel`.
+/// Auto-generated class documentation.
 class VisitModel {
   final int visitId;
   final int? visitorId;

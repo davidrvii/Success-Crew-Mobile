@@ -1,3 +1,6 @@
+/// File: lib/features/profile/data/repositories/profile_repository_impl.dart
+/// Generated Documentation for profile_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -13,6 +16,8 @@ import '../models/update_profile_request.dart';
 import '../models/user_basic_model.dart';
 import '../models/user_detail_model.dart';
 
+/// Class representing `ProfileRepositoryImpl`.
+/// Auto-generated class documentation.
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource _remote;
   final UserSession _session;
@@ -20,6 +25,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   ProfileRepositoryImpl(this._remote, this._session);
 
   @override
+  /// Method `getUserBasic` returning `Future<ApiResponse<UserBasic>>`.
+  /// Handles logic operations related to `getUserBasic`.
   Future<ApiResponse<UserBasic>> getUserBasic() async {
     final userIdRes = await _requireUserId();
     if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
@@ -43,6 +50,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  /// Method `getUserDetail` returning `Future<ApiResponse<UserDetail>>`.
+  /// Handles logic operations related to `getUserDetail`.
   Future<ApiResponse<UserDetail>> getUserDetail() async {
     final userIdRes = await _requireUserId();
     if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
@@ -66,6 +75,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  /// Method `updateProfile` returning `Future<ApiResponse<UserDetail>>`.
+  /// Handles logic operations related to `updateProfile`.
   Future<ApiResponse<UserDetail>> updateProfile(
     UpdateProfileRequest request,
   ) async {
@@ -93,6 +104,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   // ========= helpers =========
+  /// Method `_requireUserId` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<ApiResponse<int>> _requireUserId() async {
     final int? userId = await _session.readUserId();
     if (userId == null) {
@@ -136,6 +149,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
     );
   }
 
+  /// Method `_syncSessionAfterUpdate` returning `Future<void>`.
+  /// Handles logic operations related to `_syncSessionAfterUpdate`.
   Future<void> _syncSessionAfterUpdate(UserDetailDto dto) async {
     final raw = await _session.readSession();
     if (raw == null) return;

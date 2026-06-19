@@ -1,3 +1,8 @@
+/// File: lib/features/auth/data/models/login_response.dart
+/// Generated Documentation for login_response.dart
+
+/// Class representing `LoginResponse`.
+/// Auto-generated class documentation.
 class LoginResponse {
   final int statusCode;
   final String message;
@@ -20,6 +25,8 @@ class LoginResponse {
   }
 }
 
+/// Class representing `LoginResult`.
+/// Auto-generated class documentation.
 class LoginResult {
   final int userId;
   final String userName;

@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_out_of_office_response.dart
+/// Generated Documentation for home_out_of_office_response.dart
+
+/// Class representing `HomeOutOfOfficeResponse`.
+/// Auto-generated class documentation.
 class HomeOutOfOfficeResponse {
   final int pendingCount;
 

@@ -1,3 +1,6 @@
+/// File: lib/app.dart
+/// Generated Documentation for app.dart
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,10 +19,14 @@ import 'features/notification/presentation/controllers/notification_controller.d
 import 'features/visitor_tracker/presentation/controllers/visit_controller.dart';
 import 'features/visitor_tracker/presentation/controllers/visit_detail_controller.dart';
 
+/// Class representing `App`.
+/// Auto-generated class documentation.
 class App extends StatelessWidget {
   const App({super.key});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [

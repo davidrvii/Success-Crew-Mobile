@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/data/datasources/visit_remote_datasource.dart
+/// Generated Documentation for visit_remote_datasource.dart
+
 import '../../../../core/config/api_paths.dart';
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/dio_client.dart';
@@ -18,115 +21,191 @@ import '../models/visitor_request.dart';
 
 abstract class VisitRemoteDataSource {
   // VISIT
+  /// Method `getAllVisits` returning `Future<ApiResponse<VisitListResponse>>`.
+  /// Handles logic operations related to `getAllVisits`.
   Future<ApiResponse<VisitListResponse>> getAllVisits();
+  /// Method `getVisitList` returning `Future<ApiResponse<VisitListResponse>>`.
+  /// Handles logic operations related to `getVisitList`.
   Future<ApiResponse<VisitListResponse>> getVisitList();
+  /// Method `getVisitStats` returning `Future<ApiResponse<VisitStatsResponse>>`.
+  /// Handles logic operations related to `getVisitStats`.
   Future<ApiResponse<VisitStatsResponse>> getVisitStats();
+  /// Method `getVisitDetail` returning `Future<ApiResponse<VisitDetailResponse>>`.
+  /// Handles logic operations related to `getVisitDetail`.
   Future<ApiResponse<VisitDetailResponse>> getVisitDetail(int visitId);
+  /// Method `createVisit` returning `Future<ApiResponse<VisitMutationResponse>>`.
+  /// Handles logic operations related to `createVisit`.
   Future<ApiResponse<VisitMutationResponse>> createVisit(VisitRequest request);
+  /// Method `updateVisit` returning `Future<ApiResponse<VisitMutationResponse>>`.
+  /// Handles logic operations related to `updateVisit`.
   Future<ApiResponse<VisitMutationResponse>> updateVisit(
     int visitId,
     VisitRequest request,
   );
+  /// Method `getVisitors` returning `Future<ApiResponse<VisitorListResponse>>`.
+  /// Handles logic operations related to `getVisitors`.
   Future<ApiResponse<VisitorListResponse>> getVisitors();
+  /// Method `getVisitorDetail` returning `Future<ApiResponse<VisitorDetailResponse>>`.
+  /// Handles logic operations related to `getVisitorDetail`.
   Future<ApiResponse<VisitorDetailResponse>> getVisitorDetail(int id);
+  /// Method `createVisitor` returning `Future<ApiResponse<VisitorMutationResponse>>`.
+  /// Handles logic operations related to `createVisitor`.
   Future<ApiResponse<VisitorMutationResponse>> createVisitor(VisitorRequest request);
+  /// Method `updateVisitor` returning `Future<ApiResponse<VisitorMutationResponse>>`.
+  /// Handles logic operations related to `updateVisitor`.
   Future<ApiResponse<VisitorMutationResponse>> updateVisitor(
     int visitorId,
     VisitorRequest request,
   );
+  /// Method `deleteVisitor` returning `Future<ApiResponse<VisitorDeleteResponse>>`.
+  /// Handles logic operations related to `deleteVisitor`.
   Future<ApiResponse<VisitorDeleteResponse>> deleteVisitor(int visitorId);
+  /// Method `deleteVisit` returning `Future<ApiResponse<VisitDeleteResponse>>`.
+  /// Handles logic operations related to `deleteVisit`.
   Future<ApiResponse<VisitDeleteResponse>> deleteVisit(int visitId);
 
   // FOLLOW-UP
+  /// Method `getAllFollowUps` returning `Future<ApiResponse<FollowUpListResponse>>`.
+  /// Handles logic operations related to `getAllFollowUps`.
   Future<ApiResponse<FollowUpListResponse>> getAllFollowUps();
+  /// Method `getFollowUps` returning `Future<ApiResponse<FollowUpListResponse>>`.
+  /// Handles logic operations related to `getFollowUps`.
   Future<ApiResponse<FollowUpListResponse>> getFollowUps(int visitId);
+  /// Method `addFollowUp` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `addFollowUp`.
   Future<ApiResponse<FollowUpMutationResponse>> addFollowUp(
     FollowUpRequest request,
   );
+  /// Method `createFollowUp` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `createFollowUp`.
   Future<ApiResponse<FollowUpMutationResponse>> createFollowUp(
     int visitId,
     FollowUpRequest request,
   );
+  /// Method `updateFollowUpNonNested` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `updateFollowUpNonNested`.
   Future<ApiResponse<FollowUpMutationResponse>> updateFollowUpNonNested(
     int followUpId,
     FollowUpRequest request,
   );
+  /// Method `updateFollowUp` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `updateFollowUp`.
   Future<ApiResponse<FollowUpMutationResponse>> updateFollowUp(
     int visitId,
     int followUpId,
     FollowUpRequest request,
   );
+  /// Method `deleteFollowUpNonNested` returning `Future<ApiResponse<FollowUpDeleteResponse>>`.
+  /// Handles logic operations related to `deleteFollowUpNonNested`.
   Future<ApiResponse<FollowUpDeleteResponse>> deleteFollowUpNonNested(
     int followUpId,
   );
+  /// Method `deleteFollowUp` returning `Future<ApiResponse<FollowUpDeleteResponse>>`.
+  /// Handles logic operations related to `deleteFollowUp`.
   Future<ApiResponse<FollowUpDeleteResponse>> deleteFollowUp(
     int visitId,
     int followUpId,
   );
 
   // PRODUCTS SOLD
+  /// Method `getProductsSold` returning `Future<ApiResponse<ProductSoldListResponse>>`.
+  /// Handles logic operations related to `getProductsSold`.
   Future<ApiResponse<ProductSoldListResponse>> getProductsSold(int visitId);
+  /// Method `createProductSold` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `createProductSold`.
   Future<ApiResponse<ProductSoldMutationResponse>> createProductSold(
     int visitId,
     ProductSoldRequest request,
   );
+  /// Method `updateProductSold` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `updateProductSold`.
   Future<ApiResponse<ProductSoldMutationResponse>> updateProductSold(
     int visitId,
     int productSoldId,
     ProductSoldRequest request,
   );
+  /// Method `deleteProductSold` returning `Future<ApiResponse<ProductSoldDeleteResponse>>`.
+  /// Handles logic operations related to `deleteProductSold`.
   Future<ApiResponse<ProductSoldDeleteResponse>> deleteProductSold(
     int visitId,
     int productSoldId,
   );
 
+  /// Method `getAllProductsSold` returning `Future<ApiResponse<ProductSoldListResponse>>`.
+  /// Handles logic operations related to `getAllProductsSold`.
   Future<ApiResponse<ProductSoldListResponse>> getAllProductsSold();
+  /// Method `addProductSold` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `addProductSold`.
   Future<ApiResponse<ProductSoldMutationResponse>> addProductSold(
     ProductSoldRequest request,
   );
+  /// Method `updateProductSoldNonNested` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `updateProductSoldNonNested`.
   Future<ApiResponse<ProductSoldMutationResponse>> updateProductSoldNonNested(
     int productSoldId,
     ProductSoldRequest request,
   );
+  /// Method `deleteProductSoldNonNested` returning `Future<ApiResponse<ProductSoldDeleteResponse>>`.
+  /// Handles logic operations related to `deleteProductSoldNonNested`.
   Future<ApiResponse<ProductSoldDeleteResponse>> deleteProductSoldNonNested(
     int productSoldId,
   );
 
   // UNITS SERVICED
+  /// Method `getUnitsServiced` returning `Future<ApiResponse<UnitServicedListResponse>>`.
+  /// Handles logic operations related to `getUnitsServiced`.
   Future<ApiResponse<UnitServicedListResponse>> getUnitsServiced(int visitId);
+  /// Method `createUnitServiced` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `createUnitServiced`.
   Future<ApiResponse<UnitServicedMutationResponse>> createUnitServiced(
     int visitId,
     UnitServicedRequest request,
   );
+  /// Method `updateUnitServiced` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `updateUnitServiced`.
   Future<ApiResponse<UnitServicedMutationResponse>> updateUnitServiced(
     int visitId,
     int unitServicedId,
     UnitServicedRequest request,
   );
+  /// Method `deleteUnitServiced` returning `Future<ApiResponse<UnitServicedDeleteResponse>>`.
+  /// Handles logic operations related to `deleteUnitServiced`.
   Future<ApiResponse<UnitServicedDeleteResponse>> deleteUnitServiced(
     int visitId,
     int unitServicedId,
   );
 
+  /// Method `getAllUnitsServiced` returning `Future<ApiResponse<UnitServicedListResponse>>`.
+  /// Handles logic operations related to `getAllUnitsServiced`.
   Future<ApiResponse<UnitServicedListResponse>> getAllUnitsServiced();
+  /// Method `addUnitServiced` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `addUnitServiced`.
   Future<ApiResponse<UnitServicedMutationResponse>> addUnitServiced(
     UnitServicedRequest request,
   );
+  /// Method `updateUnitServicedNonNested` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `updateUnitServicedNonNested`.
   Future<ApiResponse<UnitServicedMutationResponse>> updateUnitServicedNonNested(
     int unitServicedId,
     UnitServicedRequest request,
   );
+  /// Method `deleteUnitServicedNonNested` returning `Future<ApiResponse<UnitServicedDeleteResponse>>`.
+  /// Handles logic operations related to `deleteUnitServicedNonNested`.
   Future<ApiResponse<UnitServicedDeleteResponse>> deleteUnitServicedNonNested(
     int unitServicedId,
   );
 }
 
+/// Class representing `VisitRemoteDataSourceImpl`.
+/// Auto-generated class documentation.
 class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   final DioClient _client;
   VisitRemoteDataSourceImpl(this._client);
 
   // VISIT
   @override
+  /// Method `getAllVisits` returning `Future<ApiResponse<VisitListResponse>>`.
+  /// Handles logic operations related to `getAllVisits`.
   Future<ApiResponse<VisitListResponse>> getAllVisits() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitAll),
@@ -136,6 +215,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getVisitList` returning `Future<ApiResponse<VisitListResponse>>`.
+  /// Handles logic operations related to `getVisitList`.
   Future<ApiResponse<VisitListResponse>> getVisitList() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitList),
@@ -145,6 +226,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getVisitStats` returning `Future<ApiResponse<VisitStatsResponse>>`.
+  /// Handles logic operations related to `getVisitStats`.
   Future<ApiResponse<VisitStatsResponse>> getVisitStats() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitStats),
@@ -154,6 +237,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getVisitors` returning `Future<ApiResponse<VisitorListResponse>>`.
+  /// Handles logic operations related to `getVisitors`.
   Future<ApiResponse<VisitorListResponse>> getVisitors() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitorAll),
@@ -163,6 +248,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getVisitorDetail` returning `Future<ApiResponse<VisitorDetailResponse>>`.
+  /// Handles logic operations related to `getVisitorDetail`.
   Future<ApiResponse<VisitorDetailResponse>> getVisitorDetail(int id) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitorDetail(id)),
@@ -172,6 +259,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `createVisitor` returning `Future<ApiResponse<VisitorMutationResponse>>`.
+  /// Handles logic operations related to `createVisitor`.
   Future<ApiResponse<VisitorMutationResponse>> createVisitor(
     VisitorRequest request,
   ) {
@@ -183,6 +272,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateVisitor` returning `Future<ApiResponse<VisitorMutationResponse>>`.
+  /// Handles logic operations related to `updateVisitor`.
   Future<ApiResponse<VisitorMutationResponse>> updateVisitor(
     int visitorId,
     VisitorRequest request,
@@ -196,6 +287,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteVisitor` returning `Future<ApiResponse<VisitorDeleteResponse>>`.
+  /// Handles logic operations related to `deleteVisitor`.
   Future<ApiResponse<VisitorDeleteResponse>> deleteVisitor(int visitorId) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.visitorDelete(visitorId)),
@@ -205,6 +298,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getVisitDetail` returning `Future<ApiResponse<VisitDetailResponse>>`.
+  /// Handles logic operations related to `getVisitDetail`.
   Future<ApiResponse<VisitDetailResponse>> getVisitDetail(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitDetail(visitId)),
@@ -214,6 +309,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `createVisit` returning `Future<ApiResponse<VisitMutationResponse>>`.
+  /// Handles logic operations related to `createVisit`.
   Future<ApiResponse<VisitMutationResponse>> createVisit(VisitRequest request) {
     return ApiResponse.guard(
       request: () => _client.post(ApiPaths.visitAdd, data: request.toJson()),
@@ -223,6 +320,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateVisit` returning `Future<ApiResponse<VisitMutationResponse>>`.
+  /// Handles logic operations related to `updateVisit`.
   Future<ApiResponse<VisitMutationResponse>> updateVisit(
     int visitId,
     VisitRequest request,
@@ -236,6 +335,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteVisit` returning `Future<ApiResponse<VisitDeleteResponse>>`.
+  /// Handles logic operations related to `deleteVisit`.
   Future<ApiResponse<VisitDeleteResponse>> deleteVisit(int visitId) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.visitDelete(visitId)),
@@ -246,6 +347,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   // FOLLOW-UP
   @override
+  /// Method `getAllFollowUps` returning `Future<ApiResponse<FollowUpListResponse>>`.
+  /// Handles logic operations related to `getAllFollowUps`.
   Future<ApiResponse<FollowUpListResponse>> getAllFollowUps() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.followUpAll),
@@ -255,6 +358,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getFollowUps` returning `Future<ApiResponse<FollowUpListResponse>>`.
+  /// Handles logic operations related to `getFollowUps`.
   Future<ApiResponse<FollowUpListResponse>> getFollowUps(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitFollowUps(visitId)),
@@ -264,6 +369,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `addFollowUp` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `addFollowUp`.
   Future<ApiResponse<FollowUpMutationResponse>> addFollowUp(
     FollowUpRequest request,
   ) {
@@ -278,6 +385,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `createFollowUp` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `createFollowUp`.
   Future<ApiResponse<FollowUpMutationResponse>> createFollowUp(
     int visitId,
     FollowUpRequest request,
@@ -293,6 +402,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateFollowUpNonNested` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `updateFollowUpNonNested`.
   Future<ApiResponse<FollowUpMutationResponse>> updateFollowUpNonNested(
     int followUpId,
     FollowUpRequest request,
@@ -308,6 +419,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateFollowUp` returning `Future<ApiResponse<FollowUpMutationResponse>>`.
+  /// Handles logic operations related to `updateFollowUp`.
   Future<ApiResponse<FollowUpMutationResponse>> updateFollowUp(
     int visitId,
     int followUpId,
@@ -324,6 +437,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteFollowUpNonNested` returning `Future<ApiResponse<FollowUpDeleteResponse>>`.
+  /// Handles logic operations related to `deleteFollowUpNonNested`.
   Future<ApiResponse<FollowUpDeleteResponse>> deleteFollowUpNonNested(
     int followUpId,
   ) {
@@ -335,6 +450,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteFollowUp` returning `Future<ApiResponse<FollowUpDeleteResponse>>`.
+  /// Handles logic operations related to `deleteFollowUp`.
   Future<ApiResponse<FollowUpDeleteResponse>> deleteFollowUp(
     int visitId,
     int followUpId,
@@ -349,6 +466,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   // PRODUCTS SOLD
   @override
+  /// Method `getProductsSold` returning `Future<ApiResponse<ProductSoldListResponse>>`.
+  /// Handles logic operations related to `getProductsSold`.
   Future<ApiResponse<ProductSoldListResponse>> getProductsSold(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitProductsSold(visitId)),
@@ -358,6 +477,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `createProductSold` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `createProductSold`.
   Future<ApiResponse<ProductSoldMutationResponse>> createProductSold(
     int visitId,
     ProductSoldRequest request,
@@ -373,6 +494,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateProductSold` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `updateProductSold`.
   Future<ApiResponse<ProductSoldMutationResponse>> updateProductSold(
     int visitId,
     int productSoldId,
@@ -389,6 +512,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteProductSold` returning `Future<ApiResponse<ProductSoldDeleteResponse>>`.
+  /// Handles logic operations related to `deleteProductSold`.
   Future<ApiResponse<ProductSoldDeleteResponse>> deleteProductSold(
     int visitId,
     int productSoldId,
@@ -402,6 +527,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getAllProductsSold` returning `Future<ApiResponse<ProductSoldListResponse>>`.
+  /// Handles logic operations related to `getAllProductsSold`.
   Future<ApiResponse<ProductSoldListResponse>> getAllProductsSold() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.productSoldAll),
@@ -411,6 +538,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `addProductSold` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `addProductSold`.
   Future<ApiResponse<ProductSoldMutationResponse>> addProductSold(
     ProductSoldRequest request,
   ) {
@@ -425,6 +554,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateProductSoldNonNested` returning `Future<ApiResponse<ProductSoldMutationResponse>>`.
+  /// Handles logic operations related to `updateProductSoldNonNested`.
   Future<ApiResponse<ProductSoldMutationResponse>> updateProductSoldNonNested(
     int productSoldId,
     ProductSoldRequest request,
@@ -440,6 +571,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteProductSoldNonNested` returning `Future<ApiResponse<ProductSoldDeleteResponse>>`.
+  /// Handles logic operations related to `deleteProductSoldNonNested`.
   Future<ApiResponse<ProductSoldDeleteResponse>> deleteProductSoldNonNested(
     int productSoldId,
   ) {
@@ -454,6 +587,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
 
   // UNITS SERVICED
   @override
+  /// Method `getUnitsServiced` returning `Future<ApiResponse<UnitServicedListResponse>>`.
+  /// Handles logic operations related to `getUnitsServiced`.
   Future<ApiResponse<UnitServicedListResponse>> getUnitsServiced(int visitId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.visitUnitsServiced(visitId)),
@@ -463,6 +598,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `createUnitServiced` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `createUnitServiced`.
   Future<ApiResponse<UnitServicedMutationResponse>> createUnitServiced(
     int visitId,
     UnitServicedRequest request,
@@ -478,6 +615,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateUnitServiced` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `updateUnitServiced`.
   Future<ApiResponse<UnitServicedMutationResponse>> updateUnitServiced(
     int visitId,
     int unitServicedId,
@@ -494,6 +633,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteUnitServiced` returning `Future<ApiResponse<UnitServicedDeleteResponse>>`.
+  /// Handles logic operations related to `deleteUnitServiced`.
   Future<ApiResponse<UnitServicedDeleteResponse>> deleteUnitServiced(
     int visitId,
     int unitServicedId,
@@ -508,6 +649,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `getAllUnitsServiced` returning `Future<ApiResponse<UnitServicedListResponse>>`.
+  /// Handles logic operations related to `getAllUnitsServiced`.
   Future<ApiResponse<UnitServicedListResponse>> getAllUnitsServiced() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.unitServicedAll),
@@ -517,6 +660,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `addUnitServiced` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `addUnitServiced`.
   Future<ApiResponse<UnitServicedMutationResponse>> addUnitServiced(
     UnitServicedRequest request,
   ) {
@@ -531,6 +676,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `updateUnitServicedNonNested` returning `Future<ApiResponse<UnitServicedMutationResponse>>`.
+  /// Handles logic operations related to `updateUnitServicedNonNested`.
   Future<ApiResponse<UnitServicedMutationResponse>> updateUnitServicedNonNested(
     int unitServicedId,
     UnitServicedRequest request,
@@ -546,6 +693,8 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   }
 
   @override
+  /// Method `deleteUnitServicedNonNested` returning `Future<ApiResponse<UnitServicedDeleteResponse>>`.
+  /// Handles logic operations related to `deleteUnitServicedNonNested`.
   Future<ApiResponse<UnitServicedDeleteResponse>> deleteUnitServicedNonNested(
     int unitServicedId,
   ) {

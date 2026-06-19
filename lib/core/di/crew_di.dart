@@ -1,3 +1,6 @@
+/// File: lib/core/di/crew_di.dart
+/// Generated Documentation for crew_di.dart
+
 import 'package:get_it/get_it.dart';
 import '../../features/crew/data/datasources/crew_remote_datasource.dart';
 import '../../features/crew/data/repositories/crew_repository_impl.dart';
@@ -13,6 +16,8 @@ import '../../features/crew/presentation/controllers/crew_controller.dart';
 import '../../features/crew/presentation/controllers/crew_detail_controller.dart';
 import '../network/dio_client.dart';
 
+/// Method `registerCrewDi` returning `void`.
+/// Handles logic operations related to `registerCrewDi`.
 void registerCrewDi(GetIt sl) {
   // DataSource
   sl.registerLazySingleton<CrewRemoteDataSource>(

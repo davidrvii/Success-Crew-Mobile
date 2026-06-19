@@ -1,3 +1,6 @@
+/// File: lib/core/di/core_di.dart
+/// Generated Documentation for core_di.dart
+
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +12,8 @@ import '../network/interceptors/log_interceptor.dart';
 import '../storage/token_storage.dart';
 import '../storage/user_session.dart';
 
+/// Method `registerCoreDi` returning `void`.
+/// Handles logic operations related to `registerCoreDi`.
 void registerCoreDi(GetIt sl) {
   // STORAGE (Secure)
   sl.registerLazySingleton<FlutterSecureStorage>(

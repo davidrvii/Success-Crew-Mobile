@@ -1,3 +1,6 @@
+/// File: lib/features/crew/data/repositories/crew_repository_impl.dart
+/// Generated Documentation for crew_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../profile/data/models/user_detail_model.dart';
@@ -10,11 +13,15 @@ import '../datasources/crew_remote_datasource.dart';
 import '../models/crew_member_model.dart';
 import '../models/crew_request.dart';
 
+/// Class representing `CrewRepositoryImpl`.
+/// Auto-generated class documentation.
 class CrewRepositoryImpl implements CrewRepository {
   final CrewRemoteDataSource _remote;
   CrewRepositoryImpl(this._remote);
 
   @override
+  /// Method `getCrewList` returning `Future<ApiResponse<List<CrewMember>>>`.
+  /// Handles logic operations related to `getCrewList`.
   Future<ApiResponse<List<CrewMember>>> getCrewList() async {
     final res = await _remote.getCrewList();
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -33,6 +40,8 @@ class CrewRepositoryImpl implements CrewRepository {
   }
 
   @override
+  /// Method `getCrewDetail` returning `Future<ApiResponse<UserDetail>>`.
+  /// Handles logic operations related to `getCrewDetail`.
   Future<ApiResponse<UserDetail>> getCrewDetail(int userId) async {
     final res = await _remote.getCrewDetail(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -51,6 +60,8 @@ class CrewRepositoryImpl implements CrewRepository {
   }
 
   @override
+  /// Method `getCrewAttendanceHistory` returning `Future<ApiResponse<AttendanceHistoryData>>`.
+  /// Handles logic operations related to `getCrewAttendanceHistory`.
   Future<ApiResponse<AttendanceHistoryData>> getCrewAttendanceHistory(int userId) async {
     final res = await _remote.getCrewAttendanceHistory(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -124,6 +135,8 @@ class CrewRepositoryImpl implements CrewRepository {
   }
 
   @override
+  /// Method `getAllUsers` returning `Future<ApiResponse<List<CrewMember>>>`.
+  /// Handles logic operations related to `getAllUsers`.
   Future<ApiResponse<List<CrewMember>>> getAllUsers() async {
     final res = await _remote.getAllUsers();
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -142,6 +155,8 @@ class CrewRepositoryImpl implements CrewRepository {
   }
 
   @override
+  /// Method `addCrew` returning `Future<ApiResponse<UserDetail>>`.
+  /// Handles logic operations related to `addCrew`.
   Future<ApiResponse<UserDetail>> addCrew(CrewRequest request) async {
     final res = await _remote.addCrew(request);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -160,6 +175,8 @@ class CrewRepositoryImpl implements CrewRepository {
   }
 
   @override
+  /// Method `updateCrew` returning `Future<ApiResponse<UserDetail>>`.
+  /// Handles logic operations related to `updateCrew`.
   Future<ApiResponse<UserDetail>> updateCrew(int userId, CrewRequest request) async {
     final res = await _remote.updateCrew(userId, request);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -178,6 +195,8 @@ class CrewRepositoryImpl implements CrewRepository {
   }
 
   @override
+  /// Method `deleteUser` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `deleteUser`.
   Future<ApiResponse<int>> deleteUser(int userId) async {
     final res = await _remote.deleteUser(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);

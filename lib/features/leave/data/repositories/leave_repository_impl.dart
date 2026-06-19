@@ -1,3 +1,6 @@
+/// File: lib/features/leave/data/repositories/leave_repository_impl.dart
+/// Generated Documentation for leave_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -9,6 +12,8 @@ import '../datasources/leave_remote_datasource.dart';
 import '../models/leave_model.dart';
 import '../models/leave_request.dart';
 
+/// Class representing `LeaveRepositoryImpl`.
+/// Auto-generated class documentation.
 class LeaveRepositoryImpl implements LeaveRepository {
   final LeaveRemoteDataSource _remote;
   final UserSession _session;
@@ -16,6 +21,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
   LeaveRepositoryImpl(this._remote, this._session);
 
   @override
+  /// Method `getLeaveList` returning `Future<ApiResponse<List<Leave>>>`.
+  /// Handles logic operations related to `getLeaveList`.
   Future<ApiResponse<List<Leave>>> getLeaveList() async {
     final session = await _session.readSession();
     final roleName = (session?['role_name'] as String?)?.trim().toLowerCase();
@@ -38,6 +45,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
+  /// Method `getLeaveDetail` returning `Future<ApiResponse<Leave>>`.
+  /// Handles logic operations related to `getLeaveDetail`.
   Future<ApiResponse<Leave>> getLeaveDetail(int id) async {
     final res = await _remote.getLeaveDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -56,6 +65,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
+  /// Method `createLeave` returning `Future<ApiResponse<Leave>>`.
+  /// Handles logic operations related to `createLeave`.
   Future<ApiResponse<Leave>> createLeave(LeaveRequest request) async {
     final ensured = await _ensureUserIdInRequest(request);
 
@@ -76,6 +87,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
+  /// Method `updateLeave` returning `Future<ApiResponse<Leave>>`.
+  /// Handles logic operations related to `updateLeave`.
   Future<ApiResponse<Leave>> updateLeave(int id, LeaveRequest request) async {
     final ensured = await _ensureUserIdInRequest(request);
 
@@ -96,6 +109,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
   }
 
   @override
+  /// Method `deleteLeave` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `deleteLeave`.
   Future<ApiResponse<int>> deleteLeave(int id) async {
     final res = await _remote.deleteLeave(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -115,6 +130,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
 
   // ========= helpers =========
 
+  /// Method `_requireUserId` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<ApiResponse<int>> _requireUserId() async {
     final int? userId = await _session.readUserId();
     if (userId == null) {
@@ -128,6 +145,8 @@ class LeaveRepositoryImpl implements LeaveRepository {
     return ApiResponse.success(userId);
   }
 
+  /// Method `_ensureUserIdInRequest` returning `Future<LeaveRequest>`.
+  /// Handles logic operations related to `_ensureUserIdInRequest`.
   Future<LeaveRequest> _ensureUserIdInRequest(LeaveRequest req) async {
     if (req.userId != null) return req;
 

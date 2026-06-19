@@ -1,3 +1,8 @@
+/// File: lib/features/out_of_office/data/models/out_of_office_model.dart
+/// Generated Documentation for out_of_office_model.dart
+
+/// Class representing `OutOfOfficeDto`.
+/// Auto-generated class documentation.
 class OutOfOfficeDto {
   final int id;
   final int userId;
@@ -46,6 +51,8 @@ class OutOfOfficeDto {
 
 /// LIST RESPONSE
 
+/// Class representing `OutOfOfficeListResponse`.
+/// Auto-generated class documentation.
 class OutOfOfficeListResponse {
   final int statusCode;
   final String message;
@@ -88,6 +95,8 @@ class OutOfOfficeListResponse {
 
 /// DETAIL RESPONSE
 
+/// Class representing `OutOfOfficeDetailResponse`.
+/// Auto-generated class documentation.
 class OutOfOfficeDetailResponse {
   final int statusCode;
   final String message;
@@ -117,6 +126,8 @@ class OutOfOfficeDetailResponse {
 
 /// CREATE RESPONSE
 
+/// Class representing `CreateOutOfOfficeResponse`.
+/// Auto-generated class documentation.
 class CreateOutOfOfficeResponse {
   final int statusCode;
   final String message;
@@ -147,6 +158,8 @@ class CreateOutOfOfficeResponse {
 
 /// UPDATE RESPONSE
 
+/// Class representing `UpdateOutOfOfficeResponse`.
+/// Auto-generated class documentation.
 class UpdateOutOfOfficeResponse {
   final int statusCode;
   final String message;
@@ -176,6 +189,8 @@ class UpdateOutOfOfficeResponse {
 
 /// DELETE RESPONSE
 
+/// Class representing `DeleteOutOfOfficeResponse`.
+/// Auto-generated class documentation.
 class DeleteOutOfOfficeResponse {
   final int statusCode;
   final String message;
@@ -205,6 +220,8 @@ class DeleteOutOfOfficeResponse {
 
 /// BASIC DTO AND RESPONSES
 
+/// Class representing `OutOfOfficeBasicDto`.
+/// Auto-generated class documentation.
 class OutOfOfficeBasicDto {
   final int id;
   final String status;
@@ -225,6 +242,8 @@ class OutOfOfficeBasicDto {
   }
 }
 
+/// Class representing `OutOfOfficeBasicListResponse`.
+/// Auto-generated class documentation.
 class OutOfOfficeBasicListResponse {
   final int statusCode;
   final String message;
@@ -267,6 +286,8 @@ class OutOfOfficeBasicListResponse {
   }
 }
 
+/// Class representing `OutOfOfficeBasicDetailResponse`.
+/// Auto-generated class documentation.
 class OutOfOfficeBasicDetailResponse {
   final int statusCode;
   final String message;

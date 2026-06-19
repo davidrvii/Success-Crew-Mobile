@@ -1,9 +1,14 @@
+/// File: lib/core/network/interceptors/auth_interceptor.dart
+/// Generated Documentation for auth_interceptor.dart
+
 import 'package:dio/dio.dart';
 
 import '../../config/.env.dart';
 import '../../storage/token_storage.dart';
 import '../../storage/user_session.dart';
 
+/// Class representing `AuthInterceptor`.
+/// Auto-generated class documentation.
 class AuthInterceptor extends Interceptor {
   final TokenStorage tokenStorage;
   final UserSession? userSession;
@@ -11,6 +16,8 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor({required this.tokenStorage, this.userSession});
 
   @override
+  /// Method `onRequest` returning `void`.
+  /// Handles logic operations related to `onRequest`.
   void onRequest(
     RequestOptions options,
     RequestInterceptorHandler handler,
@@ -26,6 +33,8 @@ class AuthInterceptor extends Interceptor {
   }
 
   @override
+  /// Method `onError` returning `void`.
+  /// Handles logic operations related to `onError`.
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     final status = err.response?.statusCode;
 

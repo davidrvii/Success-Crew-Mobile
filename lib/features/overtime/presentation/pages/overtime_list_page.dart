@@ -1,3 +1,6 @@
+/// File: lib/features/overtime/presentation/pages/overtime_list_page.dart
+/// Generated Documentation for overtime_list_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +9,8 @@ import '../controllers/overtime_controller.dart';
 import '../../domain/entities/overtime.dart';
 import '../../../../core/widgets/list_shimmer_view.dart';
 
+/// Class representing `OvertimeListPage`.
+/// Auto-generated class documentation.
 class OvertimeListPage extends StatefulWidget {
   final OvertimeController controller;
 
@@ -15,8 +20,12 @@ class OvertimeListPage extends StatefulWidget {
   State<OvertimeListPage> createState() => _OvertimeListPageState();
 }
 
+/// Class representing `_OvertimeListPageState`.
+/// Auto-generated class documentation.
 class _OvertimeListPageState extends State<OvertimeListPage> {
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,6 +34,8 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.controller,
@@ -129,6 +140,8 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -180,6 +193,8 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
   }
 }
 
+/// Class representing `_OvertimeCard`.
+/// Auto-generated class documentation.
 class _OvertimeCard extends StatelessWidget {
   final Overtime overtime;
   final OvertimeController controller;
@@ -187,6 +202,8 @@ class _OvertimeCard extends StatelessWidget {
   const _OvertimeCard({required this.overtime, required this.controller});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
@@ -270,6 +287,8 @@ class _OvertimeCard extends StatelessWidget {
     );
   }
 
+  /// Method `_showConfirmDialog` returning `void`.
+  /// Handles logic operations related to `_showConfirmDialog`.
   void _showConfirmDialog(BuildContext context, bool approve) {
     showDialog(
       context: context,
@@ -327,6 +346,8 @@ class _OvertimeCard extends StatelessWidget {
   }
 }
 
+/// Method `_showDeleteConfirmDialog` returning `Future<bool?>`.
+/// Handles logic operations related to `_showDeleteConfirmDialog`.
 Future<bool?> _showDeleteConfirmDialog(BuildContext context, String title, String message) {
   return showDialog<bool>(
     context: context,

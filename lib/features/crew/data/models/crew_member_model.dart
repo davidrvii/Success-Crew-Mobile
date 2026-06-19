@@ -1,3 +1,8 @@
+/// File: lib/features/crew/data/models/crew_member_model.dart
+/// Generated Documentation for crew_member_model.dart
+
+/// Class representing `CrewMemberDto`.
+/// Auto-generated class documentation.
 class CrewMemberDto {
   final int userId;
   final String userName;
@@ -27,6 +32,8 @@ class CrewMemberDto {
   }
 }
 
+/// Class representing `CrewListResponse`.
+/// Auto-generated class documentation.
 class CrewListResponse {
   final int statusCode;
   final String message;

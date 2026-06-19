@@ -1,3 +1,6 @@
+/// File: lib/core/di/visit_di.dart
+/// Generated Documentation for visit_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../../features/visitor_tracker/data/datasources/visit_remote_datasource.dart';
@@ -40,6 +43,8 @@ import '../../features/visitor_tracker/presentation/controllers/visit_detail_con
 
 import '../network/dio_client.dart';
 
+/// Method `registerVisitDi` returning `void`.
+/// Handles logic operations related to `registerVisitDi`.
 void registerVisitDi(GetIt sl) {
   // datasource
   sl.registerLazySingleton<VisitRemoteDataSource>(

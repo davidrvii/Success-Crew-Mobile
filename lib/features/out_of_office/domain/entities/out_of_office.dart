@@ -1,3 +1,8 @@
+/// File: lib/features/out_of_office/domain/entities/out_of_office.dart
+/// Generated Documentation for out_of_office.dart
+
+/// Class representing `OutOfOffice`.
+/// Auto-generated class documentation.
 class OutOfOffice {
   final int id;
   final int userId;

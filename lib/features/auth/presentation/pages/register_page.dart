@@ -1,7 +1,12 @@
+/// File: lib/features/auth/presentation/pages/register_page.dart
+/// Generated Documentation for register_page.dart
+
 import 'package:flutter/material.dart';
 
 import '../controllers/register_controller.dart';
 
+/// Class representing `RegisterPage`.
+/// Auto-generated class documentation.
 class RegisterPage extends StatefulWidget {
   final RegisterController controller;
 
@@ -20,7 +25,10 @@ class RegisterPage extends StatefulWidget {
   State<RegisterPage> createState() => _RegisterPageState();
 }
 
+/// Class representing `_RegisterPageState`.
+/// Auto-generated class documentation.
 class _RegisterPageState extends State<RegisterPage> {
+  /// Getter for `c` returning `RegisterController`.
   RegisterController get c => widget.controller;
 
   final _nameC = TextEditingController();
@@ -46,6 +54,8 @@ class _RegisterPageState extends State<RegisterPage> {
   ];
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c.addListener(_onChanged);
@@ -56,6 +66,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _nameC.dispose();
     _emailC.dispose();
@@ -66,11 +78,15 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
+  /// Method `_onChanged` returning `void`.
+  /// Handles logic operations related to `_onChanged`.
   void _onChanged() {
     if (!mounted) return;
     setState(() {});
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     final ok = await c.register(
       name: _nameC.text,
@@ -92,6 +108,8 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     const bg = Color(0xFFF6F7FB);
     const blue = Color(0xFF1C5AA6);
@@ -293,11 +311,15 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 }
 
+/// Class representing `_Label`.
+/// Auto-generated class documentation.
 class _Label extends StatelessWidget {
   final String text;
   const _Label(this.text);
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
@@ -313,6 +335,8 @@ class _Label extends StatelessWidget {
   }
 }
 
+/// Class representing `_Option`.
+/// Auto-generated class documentation.
 class _Option {
   final int id;
   final String label;

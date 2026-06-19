@@ -1,3 +1,6 @@
+/// File: lib/features/out_of_office/presentation/pages/out_of_office_list_page.dart
+/// Generated Documentation for out_of_office_list_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +9,8 @@ import '../controllers/out_of_office_controller.dart';
 import '../../domain/entities/out_of_office.dart';
 import '../../../../core/widgets/list_shimmer_view.dart';
 
+/// Class representing `OutOfOfficeListPage`.
+/// Auto-generated class documentation.
 class OutOfOfficeListPage extends StatefulWidget {
   final OutOfOfficeController controller;
 
@@ -15,8 +20,12 @@ class OutOfOfficeListPage extends StatefulWidget {
   State<OutOfOfficeListPage> createState() => _OutOfOfficeListPageState();
 }
 
+/// Class representing `_OutOfOfficeListPageState`.
+/// Auto-generated class documentation.
 class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,6 +34,8 @@ class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.controller,
@@ -135,6 +146,8 @@ class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -186,6 +199,8 @@ class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
   }
 }
 
+/// Class representing `_OutOfOfficeCard`.
+/// Auto-generated class documentation.
 class _OutOfOfficeCard extends StatelessWidget {
   final OutOfOffice item;
   final OutOfOfficeController controller;
@@ -193,6 +208,8 @@ class _OutOfOfficeCard extends StatelessWidget {
   const _OutOfOfficeCard({required this.item, required this.controller});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
@@ -280,6 +297,8 @@ class _OutOfOfficeCard extends StatelessWidget {
     );
   }
 
+  /// Method `_showConfirmDialog` returning `void`.
+  /// Handles logic operations related to `_showConfirmDialog`.
   void _showConfirmDialog(BuildContext context, bool approve) {
     showDialog(
       context: context,
@@ -342,6 +361,8 @@ class _OutOfOfficeCard extends StatelessWidget {
   }
 }
 
+/// Method `_showDeleteConfirmDialog` returning `Future<bool?>`.
+/// Handles logic operations related to `_showDeleteConfirmDialog`.
 Future<bool?> _showDeleteConfirmDialog(
   BuildContext context,
   String title,

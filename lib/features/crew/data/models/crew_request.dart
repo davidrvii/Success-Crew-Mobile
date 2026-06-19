@@ -1,3 +1,8 @@
+/// File: lib/features/crew/data/models/crew_request.dart
+/// Generated Documentation for crew_request.dart
+
+/// Class representing `CrewRequest`.
+/// Auto-generated class documentation.
 class CrewRequest {
   final String? userName;
   final String? crewStatus;

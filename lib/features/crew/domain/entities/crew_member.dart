@@ -1,3 +1,8 @@
+/// File: lib/features/crew/domain/entities/crew_member.dart
+/// Generated Documentation for crew_member.dart
+
+/// Class representing `CrewMember`.
+/// Auto-generated class documentation.
 class CrewMember {
   final int userId;
   final String userName;

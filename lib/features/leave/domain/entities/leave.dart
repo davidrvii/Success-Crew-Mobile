@@ -1,3 +1,8 @@
+/// File: lib/features/leave/domain/entities/leave.dart
+/// Generated Documentation for leave.dart
+
+/// Class representing `Leave`.
+/// Auto-generated class documentation.
 class Leave {
   final int id;
   final int userId;

@@ -1,3 +1,6 @@
+/// File: lib/features/notification/data/repositories/notification_repository_impl.dart
+/// Generated Documentation for notification_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -9,6 +12,8 @@ import '../../domain/repositories/notification_repository.dart';
 import '../datasources/notification_remote_datasource.dart';
 import '../models/notification_model.dart';
 
+/// Class representing `NotificationRepositoryImpl`.
+/// Auto-generated class documentation.
 class NotificationRepositoryImpl implements NotificationRepository {
   final NotificationRemoteDataSource _remote;
   final UserSession _session;
@@ -16,6 +21,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   NotificationRepositoryImpl(this._remote, this._session);
 
   @override
+  /// Method `getNotifications` returning `Future<ApiResponse<List<AppNotification>>>`.
+  /// Handles logic operations related to `getNotifications`.
   Future<ApiResponse<List<AppNotification>>> getNotifications() async {
     final userIdRes = await _requireUserId();
     if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
@@ -30,6 +37,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `getNotificationDetail` returning `Future<ApiResponse<AppNotification>>`.
+  /// Handles logic operations related to `getNotificationDetail`.
   Future<ApiResponse<AppNotification>> getNotificationDetail(int id) async {
     final res = await _remote.getNotificationDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -48,6 +57,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `getNotificationBasic` returning `Future<ApiResponse<NotificationBasic>>`.
+  /// Handles logic operations related to `getNotificationBasic`.
   Future<ApiResponse<NotificationBasic>> getNotificationBasic(int id) async {
     final res = await _remote.getNotificationBasic(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -70,6 +81,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `createNotification` returning `Future<ApiResponse<AppNotification>>`.
+  /// Handles logic operations related to `createNotification`.
   Future<ApiResponse<AppNotification>> createNotification(
     CreateNotificationRequest request,
   ) async {
@@ -90,6 +103,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `updateNotification` returning `Future<ApiResponse<AppNotification>>`.
+  /// Handles logic operations related to `updateNotification`.
   Future<ApiResponse<AppNotification>> updateNotification(
     int id,
     UpdateNotificationRequest request,
@@ -111,6 +126,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `updateNotificationPut` returning `Future<ApiResponse<AppNotification>>`.
+  /// Handles logic operations related to `updateNotificationPut`.
   Future<ApiResponse<AppNotification>> updateNotificationPut(
     int id,
     CreateNotificationRequest request,
@@ -132,6 +149,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `readNotification` returning `Future<ApiResponse<AppNotification>>`.
+  /// Handles logic operations related to `readNotification`.
   Future<ApiResponse<AppNotification>> readNotification(
     int id,
     bool isRead,
@@ -153,6 +172,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
   }
 
   @override
+  /// Method `deleteNotification` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `deleteNotification`.
   Future<ApiResponse<int>> deleteNotification(int id) async {
     final res = await _remote.deleteNotification(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -172,6 +193,8 @@ class NotificationRepositoryImpl implements NotificationRepository {
 
   // ========= helpers =========
 
+  /// Method `_requireUserId` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<ApiResponse<int>> _requireUserId() async {
     final int? userId = await _session.readUserId();
     if (userId == null) {

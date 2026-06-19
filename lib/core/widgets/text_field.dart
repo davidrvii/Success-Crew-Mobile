@@ -1,8 +1,13 @@
+/// File: lib/core/widgets/text_field.dart
+/// Generated Documentation for text_field.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../theme/app_theme.dart';
 
+/// Class representing `AppTextField`.
+/// Auto-generated class documentation.
 class AppTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String? label;
@@ -50,6 +55,8 @@ class AppTextField extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final decoration = InputDecoration(
       hintText: hint,

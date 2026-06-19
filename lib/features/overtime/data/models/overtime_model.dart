@@ -1,3 +1,8 @@
+/// File: lib/features/overtime/data/models/overtime_model.dart
+/// Generated Documentation for overtime_model.dart
+
+/// Class representing `OvertimeDto`.
+/// Auto-generated class documentation.
 class OvertimeDto {
   final int id;
   final int userId;
@@ -50,6 +55,8 @@ class OvertimeDto {
 
 /// LIST RESPONSE
 
+/// Class representing `OvertimeListResponse`.
+/// Auto-generated class documentation.
 class OvertimeListResponse {
   final int statusCode;
   final String message;
@@ -94,6 +101,8 @@ class OvertimeListResponse {
 
 /// DETAIL RESPONSE
 
+/// Class representing `OvertimeDetailResponse`.
+/// Auto-generated class documentation.
 class OvertimeDetailResponse {
   final int statusCode;
   final String message;
@@ -123,6 +132,8 @@ class OvertimeDetailResponse {
 
 /// CREATE RESPONSE
 
+/// Class representing `CreateOvertimeResponse`.
+/// Auto-generated class documentation.
 class CreateOvertimeResponse {
   final int statusCode;
   final String message;
@@ -153,6 +164,8 @@ class CreateOvertimeResponse {
 
 /// UPDATE RESPONSE
 
+/// Class representing `UpdateOvertimeResponse`.
+/// Auto-generated class documentation.
 class UpdateOvertimeResponse {
   final int statusCode;
   final String message;
@@ -182,6 +195,8 @@ class UpdateOvertimeResponse {
 
 /// DELETE RESPONSE
 
+/// Class representing `DeleteOvertimeResponse`.
+/// Auto-generated class documentation.
 class DeleteOvertimeResponse {
   final int statusCode;
   final String message;
@@ -211,6 +226,8 @@ class DeleteOvertimeResponse {
 
 /// BASIC DTO AND RESPONSES
 
+/// Class representing `OvertimeBasicDto`.
+/// Auto-generated class documentation.
 class OvertimeBasicDto {
   final int id;
   final String status;
@@ -231,6 +248,8 @@ class OvertimeBasicDto {
   }
 }
 
+/// Class representing `OvertimeBasicListResponse`.
+/// Auto-generated class documentation.
 class OvertimeBasicListResponse {
   final int statusCode;
   final String message;
@@ -276,6 +295,8 @@ class OvertimeBasicListResponse {
   }
 }
 
+/// Class representing `OvertimeBasicDetailResponse`.
+/// Auto-generated class documentation.
 class OvertimeBasicDetailResponse {
   final int statusCode;
   final String message;

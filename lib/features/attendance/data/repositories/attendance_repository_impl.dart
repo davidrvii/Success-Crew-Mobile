@@ -1,3 +1,6 @@
+/// File: lib/features/attendance/data/repositories/attendance_repository_impl.dart
+/// Generated Documentation for attendance_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -12,6 +15,8 @@ import '../models/checkout_request.dart';
 import '../models/add_attendance_request.dart';
 import '../models/update_attendance_request.dart';
 
+/// Class representing `AttendanceRepositoryImpl`.
+/// Auto-generated class documentation.
 class AttendanceRepositoryImpl implements AttendanceRepository {
   final AttendanceRemoteDataSource _remote;
   final UserSession _session;
@@ -76,6 +81,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
 
   // ─────────────────── session helper ───────────────────
 
+  /// Method `_requireUserId` returning `Future<int?>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<int?> _requireUserId() async {
     final session = await _session.readSession();
     final userId = session?['user_id'];
@@ -91,6 +98,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   // ─────────────────── implementations ───────────────────
 
   @override
+  /// Method `getAllAttendance` returning `Future<ApiResponse<List<Attendance>>>`.
+  /// Handles logic operations related to `getAllAttendance`.
   Future<ApiResponse<List<Attendance>>> getAllAttendance() async {
     final res = await _remote.getAllAttendance();
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -100,6 +109,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `getAttendanceBasic` returning `Future<ApiResponse<AttendanceBasic>>`.
+  /// Handles logic operations related to `getAttendanceBasic`.
   Future<ApiResponse<AttendanceBasic>> getAttendanceBasic({
     String? date,
   }) async {
@@ -116,6 +127,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `getCrewAttendanceHistory` returning `Future<ApiResponse<CrewAttendanceHistory>>`.
+  /// Handles logic operations related to `getCrewAttendanceHistory`.
   Future<ApiResponse<CrewAttendanceHistory>> getCrewAttendanceHistory(
     int userId,
   ) async {
@@ -134,6 +147,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
 
   /// Legacy wrapper — used by existing AttendanceController
   @override
+  /// Method `getAttendanceHistory` returning `Future<ApiResponse<AttendanceHistoryData>>`.
+  /// Handles logic operations related to `getAttendanceHistory`.
   Future<ApiResponse<AttendanceHistoryData>> getAttendanceHistory() async {
     final userId = await _requireUserId();
     if (userId == null) {
@@ -217,6 +232,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `getAttendanceDetail` returning `Future<ApiResponse<Attendance>>`.
+  /// Handles logic operations related to `getAttendanceDetail`.
   Future<ApiResponse<Attendance>> getAttendanceDetail(int id) async {
     final res = await _remote.getAttendanceDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -232,6 +249,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `addAttendance` returning `Future<ApiResponse<Attendance>>`.
+  /// Handles logic operations related to `addAttendance`.
   Future<ApiResponse<Attendance>> addAttendance(
     AddAttendanceRequest request,
   ) async {
@@ -249,6 +268,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `checkIn` returning `Future<ApiResponse<Attendance>>`.
+  /// Handles logic operations related to `checkIn`.
   Future<ApiResponse<Attendance>> checkIn(CheckInRequest request) async {
     final res = await _remote.checkIn(request);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -269,6 +290,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `checkOut` returning `Future<ApiResponse<Attendance>>`.
+  /// Handles logic operations related to `checkOut`.
   Future<ApiResponse<Attendance>> checkOut(CheckOutRequest request) async {
     final res = await _remote.checkOut(request);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -284,6 +307,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `updateAttendance` returning `Future<ApiResponse<Attendance>>`.
+  /// Handles logic operations related to `updateAttendance`.
   Future<ApiResponse<Attendance>> updateAttendance(
     int attendanceId,
     UpdateAttendanceRequest request,
@@ -302,6 +327,8 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }
 
   @override
+  /// Method `deleteAttendance` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `deleteAttendance`.
   Future<ApiResponse<int>> deleteAttendance(int id) async {
     final res = await _remote.deleteAttendance(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);

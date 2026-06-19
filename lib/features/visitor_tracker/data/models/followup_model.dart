@@ -1,6 +1,11 @@
+/// File: lib/features/visitor_tracker/data/models/followup_model.dart
+/// Generated Documentation for followup_model.dart
+
 DateTime? _dt(dynamic v) => v is String ? DateTime.tryParse(v) : null;
 int? _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v');
 
+/// Class representing `FollowUpModel`.
+/// Auto-generated class documentation.
 class FollowUpModel {
   final int followUpId;
   final int? visitId;

@@ -1,3 +1,6 @@
+/// File: lib/core/di/attendance_di.dart
+/// Generated Documentation for attendance_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../network/dio_client.dart';
@@ -21,6 +24,8 @@ import '../../features/attendance/presentation/controllers/attendance_controller
 import '../../features/leave/domain/usecases/get_leave_list.dart';
 import '../../features/out_of_office/domain/usecases/get_out_of_office_list.dart';
 
+/// Method `registerAttendanceDi` returning `void`.
+/// Handles logic operations related to `registerAttendanceDi`.
 void registerAttendanceDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<AttendanceRemoteDataSource>(

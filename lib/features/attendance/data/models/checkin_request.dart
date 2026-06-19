@@ -1,5 +1,10 @@
+/// File: lib/features/attendance/data/models/checkin_request.dart
+/// Generated Documentation for checkin_request.dart
+
 /// Request for PATCH /attendance/checkin
 /// Body: { date: "YYYY-MM-DD", attendance_status: "Hadir" }
+/// Class representing `CheckInRequest`.
+/// Auto-generated class documentation.
 class CheckInRequest {
   /// Date string formatted as YYYY-MM-DD
   final String? date;

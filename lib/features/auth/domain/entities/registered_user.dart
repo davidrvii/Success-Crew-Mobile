@@ -1,3 +1,8 @@
+/// File: lib/features/auth/domain/entities/registered_user.dart
+/// Generated Documentation for registered_user.dart
+
+/// Class representing `RegisteredUser`.
+/// Auto-generated class documentation.
 class RegisteredUser {
   final int userId;
   final int officeId;

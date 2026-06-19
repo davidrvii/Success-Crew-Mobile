@@ -1,5 +1,10 @@
+/// File: lib/features/attendance/data/models/update_attendance_request.dart
+/// Generated Documentation for update_attendance_request.dart
+
 /// Request for PUT /attendance/update/:attendanceId
 /// Body: { attendance_status, attendance_in, attendance_out, attendance_date }
+/// Class representing `UpdateAttendanceRequest`.
+/// Auto-generated class documentation.
 class UpdateAttendanceRequest {
   final String? attendanceStatus;
   final String? attendanceIn; // ISO datetime string

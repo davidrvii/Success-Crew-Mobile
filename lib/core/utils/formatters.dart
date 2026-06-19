@@ -1,5 +1,10 @@
+/// File: lib/core/utils/formatters.dart
+/// Generated Documentation for formatters.dart
+
 import 'package:intl/intl.dart';
 
+/// Class representing `AppFormatters`.
+/// Auto-generated class documentation.
 class AppFormatters {
   AppFormatters._();
 

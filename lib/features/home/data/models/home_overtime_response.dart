@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_overtime_response.dart
+/// Generated Documentation for home_overtime_response.dart
+
+/// Class representing `HomeOvertimeResponse`.
+/// Auto-generated class documentation.
 class HomeOvertimeResponse {
   final int pendingCount;
 

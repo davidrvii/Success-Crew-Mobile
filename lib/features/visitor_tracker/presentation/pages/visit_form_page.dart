@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/presentation/pages/visit_form_page.dart
+/// Generated Documentation for visit_form_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -7,6 +10,8 @@ import '../../../../core/storage/user_session.dart';
 import '../controllers/visit_controller.dart';
 import '../../domain/entities/visitor.dart';
 
+/// Class representing `VisitFormPage`.
+/// Auto-generated class documentation.
 class VisitFormPage extends StatefulWidget {
   final VisitorController controller;
 
@@ -16,6 +21,8 @@ class VisitFormPage extends StatefulWidget {
   State<VisitFormPage> createState() => _VisitFormPageState();
 }
 
+/// Class representing `_VisitFormPageState`.
+/// Auto-generated class documentation.
 class _VisitFormPageState extends State<VisitFormPage> {
   final _formKey = GlobalKey<FormState>();
 
@@ -36,11 +43,15 @@ class _VisitFormPageState extends State<VisitFormPage> {
   int? _selectedVisitorId;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     _loadSalesSession();
   }
 
+  /// Method `_loadSalesSession` returning `Future<void>`.
+  /// Handles logic operations related to `_loadSalesSession`.
   Future<void> _loadSalesSession() async {
     final session = sl<UserSession>();
     final name = await session.readUserName();
@@ -53,6 +64,8 @@ class _VisitFormPageState extends State<VisitFormPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _nameController.dispose();
     _nameFocusNode.dispose();
@@ -64,6 +77,8 @@ class _VisitFormPageState extends State<VisitFormPage> {
     super.dispose();
   }
 
+  /// Method `_pickDate` returning `Future<void>`.
+  /// Handles logic operations related to `_pickDate`.
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -78,6 +93,8 @@ class _VisitFormPageState extends State<VisitFormPage> {
     }
   }
 
+  /// Method `_pickTime` returning `Future<void>`.
+  /// Handles logic operations related to `_pickTime`.
   Future<void> _pickTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -96,6 +113,8 @@ class _VisitFormPageState extends State<VisitFormPage> {
     }
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -131,6 +150,8 @@ class _VisitFormPageState extends State<VisitFormPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
@@ -432,6 +453,8 @@ class _VisitFormPageState extends State<VisitFormPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),

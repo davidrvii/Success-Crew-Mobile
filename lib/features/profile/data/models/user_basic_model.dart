@@ -1,3 +1,8 @@
+/// File: lib/features/profile/data/models/user_basic_model.dart
+/// Generated Documentation for user_basic_model.dart
+
+/// Class representing `UserBasicDto`.
+/// Auto-generated class documentation.
 class UserBasicDto {
   final int userId;
   final String userName;
@@ -21,6 +26,8 @@ class UserBasicDto {
   }
 }
 
+/// Class representing `UserBasicResponse`.
+/// Auto-generated class documentation.
 class UserBasicResponse {
   final int statusCode;
   final String message;

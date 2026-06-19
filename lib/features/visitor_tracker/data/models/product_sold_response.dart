@@ -1,7 +1,14 @@
+/// File: lib/features/visitor_tracker/data/models/product_sold_response.dart
+/// Generated Documentation for product_sold_response.dart
+
 import 'product_sold_model.dart';
 
+/// Method `_status` returning `int`.
+/// Handles logic operations related to `_status`.
 int _status(Map<String, dynamic> json) =>
     (json['statusCode'] as num?)?.toInt() ?? 0;
+/// Method `_msg` returning `String`.
+/// Handles logic operations related to `_msg`.
 String _msg(Map<String, dynamic> json) => (json['message'] as String?) ?? '';
 
 List<Map<String, dynamic>> _asListMap(dynamic raw) {
@@ -21,6 +28,8 @@ List<Map<String, dynamic>> _asListMap(dynamic raw) {
 Map<String, dynamic>? _asMap(dynamic raw) =>
     raw is Map<String, dynamic> ? raw : null;
 
+/// Class representing `ProductSoldListResponse`.
+/// Auto-generated class documentation.
 class ProductSoldListResponse {
   final int statusCode;
   final String message;
@@ -45,6 +54,8 @@ class ProductSoldListResponse {
   }
 }
 
+/// Class representing `ProductSoldMutationResponse`.
+/// Auto-generated class documentation.
 class ProductSoldMutationResponse {
   final int statusCode;
   final String message;
@@ -76,6 +87,8 @@ class ProductSoldMutationResponse {
   }
 }
 
+/// Class representing `ProductSoldDeleteResponse`.
+/// Auto-generated class documentation.
 class ProductSoldDeleteResponse {
   final int statusCode;
   final String message;

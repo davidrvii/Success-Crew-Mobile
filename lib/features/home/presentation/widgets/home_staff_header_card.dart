@@ -1,7 +1,12 @@
+/// File: lib/features/home/presentation/widgets/home_staff_header_card.dart
+/// Generated Documentation for home_staff_header_card.dart
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../domain/entities/home_attendance_summary.dart';
 
+/// Class representing `HomeStaffHeaderCard`.
+/// Auto-generated class documentation.
 class HomeStaffHeaderCard extends StatelessWidget {
   final String name;
   final String role;
@@ -23,12 +28,18 @@ class HomeStaffHeaderCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
+    // Retrieve today's attendance details passed from the parent widget
     final today = todayAbsence;
     final bool hasCheckedIn = today != null && today.hasCheckedIn;
     final bool hasCheckedOut = today is HomeTodayAbsenceCheckedIn && today.hasCheckedOut;
 
-    // Time display
+    // Determine the formatted time to display:
+    // - Displays check-out time if checked out.
+    // - Displays check-in time if checked in.
+    // - Defaults to '--.--' if not checked in yet.
     String timeStr = '--.--';
     if (today is HomeTodayAbsenceCheckedIn) {
       final checkInTime = today.checkInAt;
@@ -40,7 +51,10 @@ class HomeStaffHeaderCard extends StatelessWidget {
       }
     }
 
-    // Status / Button Text & Color
+    // Determine action text, button color, and clickability depending on status:
+    // 1. Not checked in: 'Check In', Red, Clickable.
+    // 2. Checked in: 'Check Out', Green, Clickable.
+    // 3. Checked out: 'Selesai', Grey, Clickable disabled (unclickable).
     String statusText = 'Check In';
     Color btnColor = const Color(0xFFEF4444); // Red initially
     bool isClickable = true;
@@ -67,10 +81,11 @@ class HomeStaffHeaderCard extends StatelessWidget {
           ),
         ],
       ),
-      clipBehavior: Clip.antiAlias,
+      clipBehavior: Clip.antiAlias, // Clips the child Containers' corners inside the rounded border
       child: Column(
         children: [
-          // Top portion (Dark blue)
+          // ─── Top Portion (Dark Blue Header) ───
+          // Displays user info and utility action chips (Notifications, Profile)
           Container(
             padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
             color: const Color(0xFF135CAE),
@@ -118,7 +133,8 @@ class HomeStaffHeaderCard extends StatelessWidget {
               ],
             ),
           ),
-          // Bottom portion (Medium/light blue)
+          // ─── Bottom Portion (Medium/Light Blue Status Bar) ───
+          // Displays check-in/out times, check-in status, and the fingerprint trigger button
           Material(
             color: const Color(0xFF4D88CD),
             child: InkWell(
@@ -127,6 +143,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 child: Row(
                   children: [
+                    // Attendance Action Time
                     Text(
                       timeStr,
                       style: const TextStyle(
@@ -135,12 +152,14 @@ class HomeStaffHeaderCard extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    // Divider Line
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       height: 36,
                       width: 1.2,
                       color: Colors.white.withOpacity(0.5),
                     ),
+                    // Action / Status Text
                     Expanded(
                       child: Text(
                         statusText,
@@ -151,6 +170,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
                         ),
                       ),
                     ),
+                    // Fingerprint Button
                     Container(
                       width: 52,
                       height: 52,
@@ -182,6 +202,8 @@ class HomeStaffHeaderCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_IconChip`.
+/// Auto-generated class documentation.
 class _IconChip extends StatelessWidget {
   final IconData icon;
   final int? badge;
@@ -190,6 +212,8 @@ class _IconChip extends StatelessWidget {
   const _IconChip({required this.icon, this.badge, this.onTap});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,

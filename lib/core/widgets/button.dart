@@ -1,9 +1,14 @@
+/// File: lib/core/widgets/button.dart
+/// Generated Documentation for button.dart
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 
 enum AppButtonVariant { primary, success, danger, outline, ghost }
 
+/// Class representing `AppButton`.
+/// Auto-generated class documentation.
 class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -27,6 +32,8 @@ class AppButton extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final enabled = onPressed != null && !isLoading;
 
@@ -142,6 +149,8 @@ class AppButton extends StatelessWidget {
   }
 }
 
+/// Class representing `AppIconButton`.
+/// Auto-generated class documentation.
 class AppIconButton extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onPressed;
@@ -161,6 +170,8 @@ class AppIconButton extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final bg = backgroundColor ?? AppTheme.primary.withValues(alpha: 0.12);
     final ic = iconColor ?? AppTheme.primary;

@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_user_basic_response.dart
+/// Generated Documentation for home_user_basic_response.dart
+
+/// Class representing `HomeUserBasicResponse`.
+/// Auto-generated class documentation.
 class HomeUserBasicResponse {
   final int userId;
   final String userName;

@@ -1,3 +1,6 @@
+/// File: lib/core/di/profile_di.dart
+/// Generated Documentation for profile_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../network/dio_client.dart';
@@ -12,6 +15,8 @@ import '../../features/profile/domain/usecases/update_profile.dart';
 import '../../features/profile/presentation/controllers/profile_controller.dart';
 import '../../features/auth/domain/usecases/logout_usecase.dart';
 
+/// Method `registerProfileDi` returning `void`.
+/// Handles logic operations related to `registerProfileDi`.
 void registerProfileDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<ProfileRemoteDataSource>(

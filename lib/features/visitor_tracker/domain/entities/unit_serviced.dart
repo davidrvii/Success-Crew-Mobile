@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/domain/entities/unit_serviced.dart
+/// Generated Documentation for unit_serviced.dart
+
+/// Class representing `UnitServiced`.
+/// Auto-generated class documentation.
 class UnitServiced {
   final int unitServicedId;
   final int visitId;

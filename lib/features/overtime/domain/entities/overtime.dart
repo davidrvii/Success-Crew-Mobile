@@ -1,3 +1,8 @@
+/// File: lib/features/overtime/domain/entities/overtime.dart
+/// Generated Documentation for overtime.dart
+
+/// Class representing `Overtime`.
+/// Auto-generated class documentation.
 class Overtime {
   final int id;
   final int userId;

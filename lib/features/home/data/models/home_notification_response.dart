@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_notification_response.dart
+/// Generated Documentation for home_notification_response.dart
+
+/// Class representing `HomeNotificationResponse`.
+/// Auto-generated class documentation.
 class HomeNotificationResponse {
   final int unreadCount;
 

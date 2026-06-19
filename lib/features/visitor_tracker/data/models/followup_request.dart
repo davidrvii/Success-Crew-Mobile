@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/data/models/followup_request.dart
+/// Generated Documentation for followup_request.dart
+
+/// Class representing `FollowUpRequest`.
+/// Auto-generated class documentation.
 class FollowUpRequest {
   /// `visit_id` — used for non-nested add endpoint `/follow-up/add`
   final int? visitId;

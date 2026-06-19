@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/data/models/unit_serviced_request.dart
+/// Generated Documentation for unit_serviced_request.dart
+
+/// Class representing `UnitServicedRequest`.
+/// Auto-generated class documentation.
 class UnitServicedRequest {
   final int? visitId;
   final String? unitName;

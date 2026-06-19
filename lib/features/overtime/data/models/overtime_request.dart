@@ -1,3 +1,8 @@
+/// File: lib/features/overtime/data/models/overtime_request.dart
+/// Generated Documentation for overtime_request.dart
+
+/// Class representing `OvertimeRequest`.
+/// Auto-generated class documentation.
 class OvertimeRequest {
   final int? userId;
   final int? attendanceId;

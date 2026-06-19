@@ -1,6 +1,11 @@
+/// File: lib/features/visitor_tracker/data/models/unit_serviced_model.dart
+/// Generated Documentation for unit_serviced_model.dart
+
 DateTime? _dt(dynamic v) => v is String ? DateTime.tryParse(v) : null;
 int? _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v');
 
+/// Class representing `UnitServicedModel`.
+/// Auto-generated class documentation.
 class UnitServicedModel {
   final int unitServicedId;
   final int? visitId;

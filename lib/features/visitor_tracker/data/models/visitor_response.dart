@@ -1,7 +1,14 @@
+/// File: lib/features/visitor_tracker/data/models/visitor_response.dart
+/// Generated Documentation for visitor_response.dart
+
 import 'visitor_model.dart';
 
+/// Method `_status` returning `int`.
+/// Handles logic operations related to `_status`.
 int _status(Map<String, dynamic> json) =>
     (json['statusCode'] as num?)?.toInt() ?? 0;
+/// Method `_msg` returning `String`.
+/// Handles logic operations related to `_msg`.
 String _msg(Map<String, dynamic> json) => (json['message'] as String?) ?? '';
 
 List<Map<String, dynamic>> _asListMap(dynamic raw) {
@@ -17,6 +24,8 @@ List<Map<String, dynamic>> _asListMap(dynamic raw) {
   return const <Map<String, dynamic>>[];
 }
 
+/// Class representing `VisitorListResponse`.
+/// Auto-generated class documentation.
 class VisitorListResponse {
   final int statusCode;
   final String message;
@@ -45,6 +54,8 @@ class VisitorListResponse {
   }
 }
 
+/// Class representing `VisitorDetailResponse`.
+/// Auto-generated class documentation.
 class VisitorDetailResponse {
   final int statusCode;
   final String message;
@@ -68,6 +79,8 @@ class VisitorDetailResponse {
   }
 }
 
+/// Class representing `VisitorMutationResponse`.
+/// Auto-generated class documentation.
 class VisitorMutationResponse {
   final int statusCode;
   final String message;
@@ -91,6 +104,8 @@ class VisitorMutationResponse {
   }
 }
 
+/// Class representing `VisitorDeleteResponse`.
+/// Auto-generated class documentation.
 class VisitorDeleteResponse {
   final int statusCode;
   final String message;

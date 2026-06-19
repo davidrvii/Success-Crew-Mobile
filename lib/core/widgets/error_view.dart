@@ -1,8 +1,13 @@
+/// File: lib/core/widgets/error_view.dart
+/// Generated Documentation for error_view.dart
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 import 'button.dart';
 
+/// Class representing `ErrorView`.
+/// Auto-generated class documentation.
 class ErrorView extends StatelessWidget {
   final String title;
   final String message;
@@ -18,6 +23,8 @@ class ErrorView extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final content = Padding(
       padding: const EdgeInsets.all(16),

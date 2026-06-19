@@ -1,5 +1,10 @@
+/// File: lib/features/home/presentation/widgets/home_owner_header_card.dart
+/// Generated Documentation for home_owner_header_card.dart
+
 import 'package:flutter/material.dart';
 
+/// Class representing `HomeOwnerHeaderCard`.
+/// Auto-generated class documentation.
 class HomeOwnerHeaderCard extends StatelessWidget {
   final String name;
   final String role;
@@ -17,6 +22,8 @@ class HomeOwnerHeaderCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     const blue = Color(0xFF1C5AA6);
 
@@ -52,6 +59,8 @@ class HomeOwnerHeaderCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_HeaderIdentity`.
+/// Auto-generated class documentation.
 class _HeaderIdentity extends StatelessWidget {
   final String name;
   final String role;
@@ -59,6 +68,8 @@ class _HeaderIdentity extends StatelessWidget {
   const _HeaderIdentity({required this.name, required this.role});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,6 +100,8 @@ class _HeaderIdentity extends StatelessWidget {
   }
 }
 
+/// Class representing `_IconChip`.
+/// Auto-generated class documentation.
 class _IconChip extends StatelessWidget {
   final IconData icon;
   final int? badge;
@@ -97,6 +110,8 @@ class _IconChip extends StatelessWidget {
   const _IconChip({required this.icon, this.badge, this.onTap});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Material(
       color: Colors.white,

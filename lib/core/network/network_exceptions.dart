@@ -1,3 +1,6 @@
+/// File: lib/core/network/network_exceptions.dart
+/// Generated Documentation for network_exceptions.dart
+
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -18,6 +21,8 @@ enum NetworkErrorType {
   unknown,
 }
 
+/// Class representing `NetworkException`.
+/// Auto-generated class documentation.
 class NetworkException implements Exception {
   final NetworkErrorType type;
   final String message;
@@ -31,6 +36,7 @@ class NetworkException implements Exception {
     this.data,
   });
 
+  /// Getter for `userMessage` returning `String`.
   String get userMessage => switch (type) {
     NetworkErrorType.timeout => 'Connection timed out. Please try again.',
     NetworkErrorType.noInternet =>
@@ -54,6 +60,8 @@ class NetworkException implements Exception {
   };
 
   @override
+  /// Method `toString` returning `String`.
+  /// Handles logic operations related to `toString`.
   String toString() =>
       'NetworkException(type: $type, statusCode: $statusCode, message: $message, data: $data)';
 

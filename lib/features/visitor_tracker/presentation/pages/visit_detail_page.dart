@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/presentation/pages/visit_detail_page.dart
+/// Generated Documentation for visit_detail_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -7,6 +10,8 @@ import '../../domain/entities/followup.dart';
 import '../../domain/entities/product_sold.dart';
 import '../../domain/entities/unit_serviced.dart';
 
+/// Class representing `VisitDetailPage`.
+/// Auto-generated class documentation.
 class VisitDetailPage extends StatefulWidget {
   final int visitId;
   const VisitDetailPage({super.key, required this.visitId});
@@ -15,10 +20,14 @@ class VisitDetailPage extends StatefulWidget {
   State<VisitDetailPage> createState() => _VisitDetailPageState();
 }
 
+/// Class representing `_VisitDetailPageState`.
+/// Auto-generated class documentation.
 class _VisitDetailPageState extends State<VisitDetailPage> {
   late final VisitDetailController c;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c = GetIt.instance<VisitDetailController>();
@@ -26,12 +35,16 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     c.dispose();
     super.dispose();
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: c,
@@ -55,6 +68,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     );
   }
 
+  /// Method `_buildBody` returning `Widget`.
+  /// Handles logic operations related to `_buildBody`.
   Widget _buildBody(BuildContext context) {
     if (c.isLoading && c.visit == null) {
       return const Center(child: CircularProgressIndicator());
@@ -238,6 +253,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
   }
 
 
+  /// Method `_showFollowUpForm` returning `void`.
+  /// Handles logic operations related to `_showFollowUpForm`.
   void _showFollowUpForm(BuildContext context, VisitDetailController c) {
     showModalBottomSheet(
       context: context,
@@ -249,6 +266,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     );
   }
 
+  /// Method `_showProductSoldForm` returning `void`.
+  /// Handles logic operations related to `_showProductSoldForm`.
   void _showProductSoldForm(BuildContext context, VisitDetailController c) {
     showModalBottomSheet(
       context: context,
@@ -260,6 +279,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
     );
   }
 
+  /// Method `_showUnitServicedForm` returning `void`.
+  /// Handles logic operations related to `_showUnitServicedForm`.
   void _showUnitServicedForm(BuildContext context, VisitDetailController c) {
     showModalBottomSheet(
       context: context,
@@ -272,6 +293,8 @@ class _VisitDetailPageState extends State<VisitDetailPage> {
   }
 }
 
+/// Class representing `_FollowUpForm`.
+/// Auto-generated class documentation.
 class _FollowUpForm extends StatefulWidget {
   final VisitDetailController controller;
   const _FollowUpForm({required this.controller});
@@ -279,17 +302,23 @@ class _FollowUpForm extends StatefulWidget {
   State<_FollowUpForm> createState() => _FollowUpFormState();
 }
 
+/// Class representing `_FollowUpFormState`.
+/// Auto-generated class documentation.
 class _FollowUpFormState extends State<_FollowUpForm> {
   final _notes = TextEditingController();
   String _selectedStatus = 'Proses';
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _notes.dispose();
     super.dispose();
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -331,6 +360,8 @@ class _FollowUpFormState extends State<_FollowUpForm> {
   }
 }
 
+/// Class representing `_ProductSoldForm`.
+/// Auto-generated class documentation.
 class _ProductSoldForm extends StatefulWidget {
   final VisitDetailController controller;
   const _ProductSoldForm({required this.controller});
@@ -338,6 +369,8 @@ class _ProductSoldForm extends StatefulWidget {
   State<_ProductSoldForm> createState() => _ProductSoldFormState();
 }
 
+/// Class representing `_ProductSoldFormState`.
+/// Auto-generated class documentation.
 class _ProductSoldFormState extends State<_ProductSoldForm> {
   final _name = TextEditingController();
   final _qty = TextEditingController();
@@ -345,6 +378,8 @@ class _ProductSoldFormState extends State<_ProductSoldForm> {
   final _notes = TextEditingController();
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -381,6 +416,8 @@ class _ProductSoldFormState extends State<_ProductSoldForm> {
   }
 }
 
+/// Class representing `_UnitServicedForm`.
+/// Auto-generated class documentation.
 class _UnitServicedForm extends StatefulWidget {
   final VisitDetailController controller;
   const _UnitServicedForm({required this.controller});
@@ -388,6 +425,8 @@ class _UnitServicedForm extends StatefulWidget {
   State<_UnitServicedForm> createState() => _UnitServicedFormState();
 }
 
+/// Class representing `_UnitServicedFormState`.
+/// Auto-generated class documentation.
 class _UnitServicedFormState extends State<_UnitServicedForm> {
   final _name = TextEditingController();
   final _issue = TextEditingController();
@@ -396,6 +435,8 @@ class _UnitServicedFormState extends State<_UnitServicedForm> {
   final _status = TextEditingController();
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -428,6 +469,8 @@ class _UnitServicedFormState extends State<_UnitServicedForm> {
   }
 }
 
+/// Class representing `_TopHeader`.
+/// Auto-generated class documentation.
 class _TopHeader extends StatelessWidget {
   final String titleTop;
   final String titleMain;
@@ -440,6 +483,8 @@ class _TopHeader extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -500,6 +545,8 @@ class _TopHeader extends StatelessWidget {
   }
 }
 
+/// Class representing `_Card`.
+/// Auto-generated class documentation.
 class _Card extends StatelessWidget {
   final String? title;
   final Widget child;
@@ -508,6 +555,8 @@ class _Card extends StatelessWidget {
   const _Card({this.title, required this.child, this.trailing});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -551,11 +600,15 @@ class _Card extends StatelessWidget {
   }
 }
 
+/// Class representing `_VisitSummaryCard`.
+/// Auto-generated class documentation.
 class _VisitSummaryCard extends StatelessWidget {
   final Visit? visit;
   const _VisitSummaryCard({required this.visit});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final v = visit;
 
@@ -590,11 +643,15 @@ class _VisitSummaryCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_VisitorInfoCard`.
+/// Auto-generated class documentation.
 class _VisitorInfoCard extends StatelessWidget {
   final Visit? visit;
   const _VisitorInfoCard({required this.visit});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final v = visit;
     return Column(
@@ -609,11 +666,15 @@ class _VisitorInfoCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_NeedCard`.
+/// Auto-generated class documentation.
 class _NeedCard extends StatelessWidget {
   final Visit? visit;
   const _NeedCard({required this.visit});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final v = visit;
     final interest = (v?.visitorInterest ?? '').trim();
@@ -635,12 +696,16 @@ class _NeedCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_RowText`.
+/// Auto-generated class documentation.
 class _RowText extends StatelessWidget {
   final String label;
   final String value;
   const _RowText({required this.label, required this.value});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
@@ -661,6 +726,8 @@ class _RowText extends StatelessWidget {
   }
 }
 
+/// Class representing `_SectionHeader`.
+/// Auto-generated class documentation.
 class _SectionHeader extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -673,6 +740,8 @@ class _SectionHeader extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -700,6 +769,8 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
+/// Class representing `_SimpleList`.
+/// Auto-generated class documentation.
 class _SimpleList extends StatelessWidget {
   final bool isLoading;
   final String? error;
@@ -714,6 +785,8 @@ class _SimpleList extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Center(
@@ -744,24 +817,36 @@ class _SimpleList extends StatelessWidget {
 }
 
 
+/// Method `_formatDate` returning `String`.
+/// Handles logic operations related to `_formatDate`.
 String _formatDate(DateTime? dt) {
   if (dt == null) return '-';
+  /// Method `two` returning `String`.
+  /// Handles logic operations related to `two`.
   String two(int v) => v.toString().padLeft(2, '0');
   return '${two(dt.day)}/${two(dt.month)}/${dt.year}';
 }
 
+/// Method `_formatTime` returning `String`.
+/// Handles logic operations related to `_formatTime`.
 String _formatTime(DateTime? dt) {
   if (dt == null) return '-';
+  /// Method `two` returning `String`.
+  /// Handles logic operations related to `two`.
   String two(int v) => v.toString().padLeft(2, '0');
   return '${two(dt.hour)}:${two(dt.minute)}';
 }
 
+/// Class representing `_FollowUpItem`.
+/// Auto-generated class documentation.
 class _FollowUpItem extends StatelessWidget {
   final FollowUp followUp;
 
   const _FollowUpItem({required this.followUp});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final title = followUp.status ?? 'Follow Up';
     final notes = followUp.notes ?? '-';
@@ -833,12 +918,16 @@ class _FollowUpItem extends StatelessWidget {
   }
 }
 
+/// Class representing `_ProductSoldItem`.
+/// Auto-generated class documentation.
 class _ProductSoldItem extends StatelessWidget {
   final ProductSold productSold;
 
   const _ProductSoldItem({required this.productSold});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final title = productSold.productName ?? 'Product';
     final details = [
@@ -915,12 +1004,16 @@ class _ProductSoldItem extends StatelessWidget {
   }
 }
 
+/// Class representing `_UnitServicedItem`.
+/// Auto-generated class documentation.
 class _UnitServicedItem extends StatelessWidget {
   final UnitServiced unitServiced;
 
   const _UnitServicedItem({required this.unitServiced});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final title = unitServiced.unitName ?? 'Unit';
     final details = [
@@ -998,6 +1091,8 @@ class _UnitServicedItem extends StatelessWidget {
   }
 }
 
+/// Method `_formatCurrency` returning `String`.
+/// Handles logic operations related to `_formatCurrency`.
 String _formatCurrency(double? val) {
   if (val == null) return '-';
   final clean = val.toInt();
@@ -1012,6 +1107,8 @@ String _formatCurrency(double? val) {
   return buffer.toString();
 }
 
+/// Method `_showConfirmDialog` returning `Future<bool?>`.
+/// Handles logic operations related to `_showConfirmDialog`.
 Future<bool?> _showConfirmDialog(BuildContext context, String title, String message) {
   return showDialog<bool>(
     context: context,

@@ -1,3 +1,6 @@
+/// File: lib/features/home/data/repositories/home_repository_impl.dart
+/// Generated Documentation for home_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -19,6 +22,8 @@ import '../models/home_overtime_response.dart';
 import '../models/home_user_basic_response.dart';
 import '../../../visitor_tracker/data/models/visit_response.dart';
 
+/// Class representing `HomeRepositoryImpl`.
+/// Auto-generated class documentation.
 class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSource _remote;
   final UserSession _session;
@@ -26,6 +31,8 @@ class HomeRepositoryImpl implements HomeRepository {
   HomeRepositoryImpl(this._remote, this._session);
 
   @override
+  /// Method `getHomeSummary` returning `Future<ApiResponse<HomeSummary>>`.
+  /// Handles logic operations related to `getHomeSummary`.
   Future<ApiResponse<HomeSummary>> getHomeSummary() async {
     final userIdRes = await _requireUserId();
     if (!userIdRes.isSuccess) return ApiResponse.failure(userIdRes.error!);
@@ -104,6 +111,8 @@ class HomeRepositoryImpl implements HomeRepository {
   // SESSION HELPERS
   // =========================
 
+  /// Method `_requireUserId` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<ApiResponse<int>> _requireUserId() async {
     final int? userId = await _session.readUserId();
     if (userId == null) {
@@ -117,6 +126,8 @@ class HomeRepositoryImpl implements HomeRepository {
     return ApiResponse.success(userId);
   }
 
+  /// Method `_isOwnerRole` returning `bool`.
+  /// Handles logic operations related to `_isOwnerRole`.
   bool _isOwnerRole(String roleName) =>
       roleName.trim().toLowerCase() == 'owner';
 
@@ -124,6 +135,8 @@ class HomeRepositoryImpl implements HomeRepository {
   // TODAY ABSENCE
   // =========================
 
+  /// Method `_resolveTodayAbsence` returning `Future<ApiResponse<HomeTodayAbsence>>`.
+  /// Handles logic operations related to `_resolveTodayAbsence`.
   Future<ApiResponse<HomeTodayAbsence>> _resolveTodayAbsence(
     int? attendanceId,
   ) async {
@@ -174,12 +187,16 @@ class HomeRepositoryImpl implements HomeRepository {
   // BUILD SUMMARY (DTO -> ENTITY)
   // =========================
 
+  /// Method `_isToday` returning `bool`.
+  /// Handles logic operations related to `_isToday`.
   bool _isToday(DateTime? dt) {
     if (dt == null) return false;
     final now = DateTime.now();
     return dt.year == now.year && dt.month == now.month && dt.day == now.day;
   }
 
+  /// Method `_isThisWeek` returning `bool`.
+  /// Handles logic operations related to `_isThisWeek`.
   bool _isThisWeek(DateTime? dt) {
     if (dt == null) return false;
     final now = DateTime.now();
@@ -282,6 +299,8 @@ class HomeRepositoryImpl implements HomeRepository {
     return res;
   }
 
+  /// Method `_isSameDay` returning `bool`.
+  /// Handles logic operations related to `_isSameDay`.
   bool _isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 }

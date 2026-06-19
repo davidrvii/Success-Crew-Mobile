@@ -1,3 +1,8 @@
+/// File: lib/core/utils/validators.dart
+/// Generated Documentation for validators.dart
+
+/// Class representing `Validators`.
+/// Auto-generated class documentation.
 class Validators {
   Validators._();
 

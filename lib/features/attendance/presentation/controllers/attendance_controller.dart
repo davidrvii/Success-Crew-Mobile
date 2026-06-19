@@ -1,3 +1,6 @@
+/// File: lib/features/attendance/presentation/controllers/attendance_controller.dart
+/// Generated Documentation for attendance_controller.dart
+
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
@@ -14,6 +17,8 @@ import '../../domain/usecases/checkout.dart';
 import '../../domain/usecases/get_attendance_detail.dart';
 import '../../domain/usecases/get_attendance_history.dart';
 
+/// Class representing `AttendanceController`.
+/// Auto-generated class documentation.
 class AttendanceController extends ChangeNotifier {
   final UserSession _session;
   final CheckInUseCase _checkInUseCase;
@@ -40,26 +45,35 @@ class AttendanceController extends ChangeNotifier {
        _getOutOfOfficeListUseCase = getOutOfOfficeListUseCase;
 
   bool _loading = false;
+  /// Getter for `isLoading` returning `bool`.
   bool get isLoading => _loading;
 
   String? _errorMessage;
+  /// Getter for `errorMessage` returning `String?`.
   String? get errorMessage => _errorMessage;
 
   int? _todayAttendanceId;
+  /// Getter for `todayAttendanceId` returning `int?`.
   int? get todayAttendanceId => _todayAttendanceId;
 
   Attendance? _attendance;
+  /// Getter for `attendance` returning `Attendance?`.
   Attendance? get attendance => _attendance;
 
+  /// Getter for `hasTodayRecord` returning `bool`.
   bool get hasTodayRecord => _todayAttendanceId != null;
 
   // Session user details
   String _userName = '-';
+  /// Getter for `userName` returning `String`.
   String get userName => _userName;
 
   String _roleName = '-';
+  /// Getter for `roleName` returning `String`.
   String get roleName => _roleName;
 
+  /// Method `_toTitleCase` returning `String`.
+  /// Handles logic operations related to `_toTitleCase`.
   String _toTitleCase(String? s) {
     if (s == null || s.trim().isEmpty) return '-';
     return s.trim().split(' ').map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join(' ');
@@ -67,40 +81,52 @@ class AttendanceController extends ChangeNotifier {
 
   // Attendance stats
   int _presentCount = 0;
+  /// Getter for `presentCount` returning `int`.
   int get presentCount => _presentCount;
 
   int _lateCount = 0;
+  /// Getter for `lateCount` returning `int`.
   int get lateCount => _lateCount;
 
   int _leaveCount = 0;
+  /// Getter for `leaveCount` returning `int`.
   int get leaveCount => _leaveCount;
 
   int _overtimeCount = 0;
+  /// Getter for `overtimeCount` returning `int`.
   int get overtimeCount => _overtimeCount;
 
   int _outOfOfficeCount = 0;
+  /// Getter for `outOfOfficeCount` returning `int`.
   int get outOfOfficeCount => _outOfOfficeCount;
 
   // Pagination fields
   List<Attendance> _allHistory = [];
   List<Attendance> _displayedHistory = [];
+  /// Getter for `history` returning `List<Attendance>`.
   List<Attendance> get history => _displayedHistory;
 
   int _currentPage = 1;
   final int _pageSize = 5;
 
   bool _hasMore = false;
+  /// Getter for `hasMore` returning `bool`.
   bool get hasMore => _hasMore;
 
   bool _isLoadingMore = false;
+  /// Getter for `isLoadingMore` returning `bool`.
   bool get isLoadingMore => _isLoadingMore;
 
+  /// Method `init` returning `Future<void>`.
+  /// Handles logic operations related to `init`.
   Future<void> init() async {
     await refresh();
     _checkAutoCheckout();
     startAutoCheckoutTimer();
   }
 
+  /// Method `refresh` returning `Future<void>`.
+  /// Handles logic operations related to `refresh`.
   Future<void> refresh() async {
     _setLoading(true);
     _errorMessage = null;
@@ -196,6 +222,8 @@ class AttendanceController extends ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Method `loadMore` returning `Future<void>`.
+  /// Handles logic operations related to `loadMore`.
   Future<void> loadMore() async {
     if (_isLoadingMore || !_hasMore) return;
 
@@ -215,10 +243,20 @@ class AttendanceController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Performs the employee check-in operation.
+  /// 
+  /// Performs key safety and range checks before submitting:
+  /// 1. GPS geofence check (must be within 150m of shop coordinates).
+  /// 2. Verifies there are no approved/pending leave requests on this date.
+  /// 3. Verifies there are no approved/pending out-of-office (dinas) assignments on this date.
+  /// 4. Verifies the employee has not already checked in today.
+  /// Method `checkIn` returning `Future<void>`.
+  /// Handles logic operations related to `checkIn`.
   Future<void> checkIn() async {
     _setLoading(true);
     _errorMessage = null;
 
+    // 1. Geofencing check
     final inRange = await LocationHelper.isWithinRange();
     if (!inRange) {
       _errorMessage = 'Diluar jangkauan lokasi toko';
@@ -228,7 +266,7 @@ class AttendanceController extends ChangeNotifier {
 
     final now = DateTime.now();
 
-    // Check Leave overlaps
+    // 2. Cross-verify today's date with leave records to prevent duplicates
     final leaveRes = await _getLeaveListUseCase();
     if (leaveRes.isSuccess && leaveRes.data != null) {
       for (final l in leaveRes.data!) {
@@ -244,7 +282,7 @@ class AttendanceController extends ChangeNotifier {
       }
     }
 
-    // Check Out of Office overlaps
+    // 3. Cross-verify today's date with out-of-office assignments
     final oooRes = await _getOutOfOfficeListUseCase();
     if (oooRes.isSuccess && oooRes.data != null) {
       for (final o in oooRes.data!) {
@@ -260,7 +298,7 @@ class AttendanceController extends ChangeNotifier {
       }
     }
 
-    // Check existing attendance on this day
+    // 4. Ensure no existing check-in has already been registered for today
     if (_allHistory.isNotEmpty) {
       final normalizedToday = DateOverlapHelper.normalize(now);
       for (final h in _allHistory) {
@@ -275,14 +313,16 @@ class AttendanceController extends ChangeNotifier {
       }
     }
 
+    // Format local date representation for API payload
     final dateStr =
         '${now.year.toString().padLeft(4, '0')}-'
         '${now.month.toString().padLeft(2, '0')}-'
         '${now.day.toString().padLeft(2, '0')}';
 
-    // Determine status based on 09:00 limit
+    // Assign status depending on whether check-in is before or after 09:00 limit
     final attendanceStatus = now.hour < 9 ? 'Tepat Waktu' : 'Telat';
 
+    // Execute check-in API call
     final res = await _checkInUseCase(
       date: dateStr,
       attendanceStatus: attendanceStatus,
@@ -302,10 +342,16 @@ class AttendanceController extends ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Performs the employee check-out operation.
+  /// 
+  /// Validates the GPS geofence before calling the check-out endpoint.
+  /// Method `checkOut` returning `Future<void>`.
+  /// Handles logic operations related to `checkOut`.
   Future<void> checkOut({String? date}) async {
     _setLoading(true);
     _errorMessage = null;
 
+    // Verify GPS coordinates are within 150m range of the shop
     final inRange = await LocationHelper.isWithinRange();
     if (!inRange) {
       _errorMessage = 'Diluar jangkauan lokasi toko';
@@ -313,6 +359,7 @@ class AttendanceController extends ChangeNotifier {
       return;
     }
 
+    // Fallback to today's date string if not explicitly specified
     final targetDate = date ?? () {
       final now = DateTime.now();
       return '${now.year.toString().padLeft(4, '0')}-'
@@ -320,6 +367,7 @@ class AttendanceController extends ChangeNotifier {
              '${now.day.toString().padLeft(2, '0')}';
     }();
 
+    // Execute check-out API call
     final res = await _checkOutUseCase(date: targetDate);
 
     if (res.isSuccess && res.data != null) {
@@ -334,6 +382,8 @@ class AttendanceController extends ChangeNotifier {
 
   Timer? _autoCheckoutTimer;
 
+  /// Method `startAutoCheckoutTimer` returning `void`.
+  /// Handles logic operations related to `startAutoCheckoutTimer`.
   void startAutoCheckoutTimer() {
     _autoCheckoutTimer?.cancel();
     _autoCheckoutTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
@@ -341,6 +391,8 @@ class AttendanceController extends ChangeNotifier {
     });
   }
 
+  /// Method `_checkAutoCheckout` returning `void`.
+  /// Handles logic operations related to `_checkAutoCheckout`.
   void _checkAutoCheckout() {
     final att = _attendance;
     if (att != null && att.checkInAt != null && att.checkOutAt == null) {
@@ -361,11 +413,15 @@ class AttendanceController extends ChangeNotifier {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _autoCheckoutTimer?.cancel();
     super.dispose();
   }
 
+  /// Method `_setLoading` returning `void`.
+  /// Handles logic operations related to `_setLoading`.
   void _setLoading(bool v) {
     if (_loading == v) return;
     _loading = v;

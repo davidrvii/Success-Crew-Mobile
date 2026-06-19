@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/presentation/pages/visit_page.dart
+/// Generated Documentation for visit_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
@@ -5,6 +8,8 @@ import 'package:get_it/get_it.dart';
 import '../../presentation/controllers/visit_controller.dart';
 import '../../../../core/widgets/list_shimmer_view.dart';
 
+/// Class representing `VisitorPage`.
+/// Auto-generated class documentation.
 class VisitorPage extends StatefulWidget {
   const VisitorPage({super.key});
 
@@ -12,10 +17,14 @@ class VisitorPage extends StatefulWidget {
   State<VisitorPage> createState() => _VisitorPageState();
 }
 
+/// Class representing `_VisitorPageState`.
+/// Auto-generated class documentation.
 class _VisitorPageState extends State<VisitorPage> {
   late final VisitorController c;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c = GetIt.instance<VisitorController>();
@@ -23,12 +32,16 @@ class _VisitorPageState extends State<VisitorPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     c.dispose();
     super.dispose();
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: c,
@@ -74,6 +87,8 @@ class _VisitorPageState extends State<VisitorPage> {
     );
   }
 
+  /// Method `_buildContent` returning `Widget`.
+  /// Handles logic operations related to `_buildContent`.
   Widget _buildContent(BuildContext context) {
     if (c.isLoading && c.visible.isEmpty) {
       return const ListShimmerView();
@@ -152,6 +167,8 @@ class _VisitorPageState extends State<VisitorPage> {
     );
   }
 
+  /// Method `_openFilter` returning `Future<void>`.
+  /// Handles logic operations related to `_openFilter`.
   Future<void> _openFilter(BuildContext context) async {
     final selected = await showModalBottomSheet<String?>(
       context: context,
@@ -174,6 +191,8 @@ class _VisitorPageState extends State<VisitorPage> {
 /// UI Widgets
 /// ------------------------------
 
+/// Class representing `_HeaderRow`.
+/// Auto-generated class documentation.
 class _HeaderRow extends StatelessWidget {
   final VoidCallback onFilterTap;
   final String? activeFilter;
@@ -181,6 +200,8 @@ class _HeaderRow extends StatelessWidget {
   const _HeaderRow({required this.onFilterTap, required this.activeFilter});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final hasFilter = (activeFilter ?? '').trim().isNotEmpty;
 
@@ -218,11 +239,15 @@ class _HeaderRow extends StatelessWidget {
   }
 }
 
+/// Class representing `_SearchPill`.
+/// Auto-generated class documentation.
 class _SearchPill extends StatelessWidget {
   final ValueChanged<String> onChanged;
   const _SearchPill({required this.onChanged});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -249,6 +274,8 @@ class _SearchPill extends StatelessWidget {
   }
 }
 
+/// Class representing `_SortRow`.
+/// Auto-generated class documentation.
 class _SortRow extends StatelessWidget {
   final int total;
   final VisitorSortMode sortMode;
@@ -261,6 +288,8 @@ class _SortRow extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final isAz = sortMode == VisitorSortMode.az;
 
@@ -283,6 +312,8 @@ class _SortRow extends StatelessWidget {
   }
 }
 
+/// Class representing `_VisitorCard`.
+/// Auto-generated class documentation.
 class _VisitorCard extends StatelessWidget {
   final String title;
   final String interest;
@@ -307,6 +338,8 @@ class _VisitorCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
@@ -391,6 +424,8 @@ class _VisitorCard extends StatelessWidget {
     );
   }
 
+  /// Method `_kv` returning `Widget`.
+  /// Handles logic operations related to `_kv`.
   Widget _kv(String k, String v) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -404,6 +439,8 @@ class _VisitorCard extends StatelessWidget {
     );
   }
 
+  /// Method `_metaPill` returning `Widget`.
+  /// Handles logic operations related to `_metaPill`.
   Widget _metaPill(IconData icon, String text) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
@@ -422,6 +459,8 @@ class _VisitorCard extends StatelessWidget {
     );
   }
 
+  /// Method `_miniChip` returning `Widget`.
+  /// Handles logic operations related to `_miniChip`.
   Widget _miniChip(String text) {
     final t = text.trim().toLowerCase();
 
@@ -462,11 +501,15 @@ class _VisitorCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_FilterSheet`.
+/// Auto-generated class documentation.
 class _FilterSheet extends StatelessWidget {
   final String? selected;
   const _FilterSheet({required this.selected});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final options = <String>['Selesai', 'Proses', 'Batal'];
 
@@ -532,6 +575,8 @@ class _FilterSheet extends StatelessWidget {
   }
 }
 
+/// Class representing `_ErrorState`.
+/// Auto-generated class documentation.
 class _ErrorState extends StatelessWidget {
   final String message;
   final VoidCallback onRetry;
@@ -539,6 +584,8 @@ class _ErrorState extends StatelessWidget {
   const _ErrorState({required this.message, required this.onRetry});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
@@ -558,12 +605,16 @@ class _ErrorState extends StatelessWidget {
   }
 }
 
+/// Class representing `_EmptyState`.
+/// Auto-generated class documentation.
 class _EmptyState extends StatelessWidget {
   final Future<void> Function() onRefresh;
 
   const _EmptyState({required this.onRefresh});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
@@ -600,23 +651,35 @@ class _EmptyState extends StatelessWidget {
 /// Helpers
 /// ------------------------------
 
+/// Method `_nonEmpty` returning `String`.
+/// Handles logic operations related to `_nonEmpty`.
 String _nonEmpty(String? s) {
   final v = (s ?? '').trim();
   return v.isEmpty ? '-' : v;
 }
 
+/// Method `_formatDate` returning `String`.
+/// Handles logic operations related to `_formatDate`.
 String _formatDate(DateTime? dt) {
   if (dt == null) return '-';
+  /// Method `two` returning `String`.
+  /// Handles logic operations related to `two`.
   String two(int v) => v.toString().padLeft(2, '0');
   return '${two(dt.day)}/${two(dt.month)}/${dt.year}';
 }
 
+/// Method `_formatTime` returning `String`.
+/// Handles logic operations related to `_formatTime`.
 String _formatTime(DateTime? dt) {
   if (dt == null) return '-';
+  /// Method `two` returning `String`.
+  /// Handles logic operations related to `two`.
   String two(int v) => v.toString().padLeft(2, '0');
   return '${two(dt.hour)}:${two(dt.minute)}';
 }
 
+/// Method `_showConfirmDialog` returning `Future<bool?>`.
+/// Handles logic operations related to `_showConfirmDialog`.
 Future<bool?> _showConfirmDialog(BuildContext context, String title, String message) {
   return showDialog<bool>(
     context: context,

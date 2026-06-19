@@ -1,3 +1,6 @@
+/// File: lib/navigation/go_router_config.dart
+/// Generated Documentation for go_router_config.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,6 +62,8 @@ import '../features/crew/presentation/controllers/crew_detail_controller.dart';
 
 import 'main_shell.dart';
 
+/// Class representing `AppGoRouter`.
+/// Auto-generated class documentation.
 class AppGoRouter {
   AppGoRouter._();
 
@@ -330,11 +335,15 @@ class AppGoRouter {
 }
 
 // PLACEHOLDER PAGE
+/// Class representing `PlaceholderScaffold`.
+/// Auto-generated class documentation.
 class PlaceholderScaffold extends StatelessWidget {
   final String title;
   const PlaceholderScaffold({super.key, required this.title});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -345,11 +354,15 @@ class PlaceholderScaffold extends StatelessWidget {
 }
 
 // ROUTER ERROR PAGE
+/// Class representing `RouterErrorPage`.
+/// Auto-generated class documentation.
 class RouterErrorPage extends StatelessWidget {
   final Object? error;
   const RouterErrorPage({super.key, this.error});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Routing Error')),

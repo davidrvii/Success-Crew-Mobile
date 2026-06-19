@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/domain/entities/visit_stats.dart
+/// Generated Documentation for visit_stats.dart
+
+/// Class representing `VisitStats`.
+/// Auto-generated class documentation.
 class VisitStats {
   final VisitDailyCount? dailyCount;
   final List<VisitWeeklyCount>? weeklyCount;
@@ -14,6 +19,8 @@ class VisitStats {
   });
 }
 
+/// Class representing `ProductSoldWeekly`.
+/// Auto-generated class documentation.
 class ProductSoldWeekly {
   final String date;
   final int totalProductSold;
@@ -24,6 +31,8 @@ class ProductSoldWeekly {
   });
 }
 
+/// Class representing `UnitServiceWeekly`.
+/// Auto-generated class documentation.
 class UnitServiceWeekly {
   final String date;
   final int totalUnitService;
@@ -34,6 +43,8 @@ class UnitServiceWeekly {
   });
 }
 
+/// Class representing `VisitDailyCount`.
+/// Auto-generated class documentation.
 class VisitDailyCount {
   final int totalVisit;
   final int callIn;
@@ -52,6 +63,8 @@ class VisitDailyCount {
   });
 }
 
+/// Class representing `VisitWeeklyCount`.
+/// Auto-generated class documentation.
 class VisitWeeklyCount {
   final String date;
   final int totalVisit;
@@ -62,6 +75,8 @@ class VisitWeeklyCount {
   });
 }
 
+/// Class representing `VisitRushHour`.
+/// Auto-generated class documentation.
 class VisitRushHour {
   final String hour;
   final int totalVisit;

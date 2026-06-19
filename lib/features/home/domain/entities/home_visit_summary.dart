@@ -1,3 +1,8 @@
+/// File: lib/features/home/domain/entities/home_visit_summary.dart
+/// Generated Documentation for home_visit_summary.dart
+
+/// Class representing `HomeVisitSummary`.
+/// Auto-generated class documentation.
 class HomeVisitSummary {
   final int visitorsToday;
   final int walkInToday;

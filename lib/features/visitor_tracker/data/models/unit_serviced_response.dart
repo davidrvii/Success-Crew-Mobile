@@ -1,7 +1,14 @@
+/// File: lib/features/visitor_tracker/data/models/unit_serviced_response.dart
+/// Generated Documentation for unit_serviced_response.dart
+
 import 'unit_serviced_model.dart';
 
+/// Method `_status` returning `int`.
+/// Handles logic operations related to `_status`.
 int _status(Map<String, dynamic> json) =>
     (json['statusCode'] as num?)?.toInt() ?? 0;
+/// Method `_msg` returning `String`.
+/// Handles logic operations related to `_msg`.
 String _msg(Map<String, dynamic> json) => (json['message'] as String?) ?? '';
 
 List<Map<String, dynamic>> _asListMap(dynamic raw) {
@@ -21,6 +28,8 @@ List<Map<String, dynamic>> _asListMap(dynamic raw) {
 Map<String, dynamic>? _asMap(dynamic raw) =>
     raw is Map<String, dynamic> ? raw : null;
 
+/// Class representing `UnitServicedListResponse`.
+/// Auto-generated class documentation.
 class UnitServicedListResponse {
   final int statusCode;
   final String message;
@@ -49,6 +58,8 @@ class UnitServicedListResponse {
   }
 }
 
+/// Class representing `UnitServicedMutationResponse`.
+/// Auto-generated class documentation.
 class UnitServicedMutationResponse {
   final int statusCode;
   final String message;
@@ -80,6 +91,8 @@ class UnitServicedMutationResponse {
   }
 }
 
+/// Class representing `UnitServicedDeleteResponse`.
+/// Auto-generated class documentation.
 class UnitServicedDeleteResponse {
   final int statusCode;
   final String message;

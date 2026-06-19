@@ -1,3 +1,6 @@
+/// File: lib/core/di/leave_di.dart
+/// Generated Documentation for leave_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../network/dio_client.dart';
@@ -16,6 +19,8 @@ import '../../features/leave/presentation/controllers/leave_controller.dart';
 import '../../features/attendance/domain/usecases/get_attendance_history.dart';
 import '../../features/out_of_office/domain/usecases/get_out_of_office_list.dart';
 
+/// Method `registerLeaveDi` returning `void`.
+/// Handles logic operations related to `registerLeaveDi`.
 void registerLeaveDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<LeaveRemoteDataSource>(

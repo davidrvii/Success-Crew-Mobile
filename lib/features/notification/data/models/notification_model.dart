@@ -1,3 +1,8 @@
+/// File: lib/features/notification/data/models/notification_model.dart
+/// Generated Documentation for notification_model.dart
+
+/// Class representing `NotificationDto`.
+/// Auto-generated class documentation.
 class NotificationDto {
   final int id;
   final int userId;
@@ -36,6 +41,8 @@ class NotificationDto {
 
 /// LIST RESPONSE
 
+/// Class representing `NotificationListResponse`.
+/// Auto-generated class documentation.
 class NotificationListResponse {
   final int statusCode;
   final String message;
@@ -78,6 +85,8 @@ class NotificationListResponse {
 
 /// DETAIL RESPONSE
 
+/// Class representing `NotificationDetailResponse`.
+/// Auto-generated class documentation.
 class NotificationDetailResponse {
   final int statusCode;
   final String message;
@@ -107,6 +116,8 @@ class NotificationDetailResponse {
 
 /// CREATE REQUEST/RESPONSE
 
+/// Class representing `CreateNotificationRequest`.
+/// Auto-generated class documentation.
 class CreateNotificationRequest {
   final int userId;
   final String title;
@@ -131,6 +142,8 @@ class CreateNotificationRequest {
   }
 }
 
+/// Class representing `CreateNotificationResponse`.
+/// Auto-generated class documentation.
 class CreateNotificationResponse {
   final int statusCode;
   final String message;
@@ -161,6 +174,8 @@ class CreateNotificationResponse {
 
 /// UPDATE REQUEST/RESPONSE
 
+/// Class representing `UpdateNotificationRequest`.
+/// Auto-generated class documentation.
 class UpdateNotificationRequest {
   final String? title;
   final String? description;
@@ -181,6 +196,8 @@ class UpdateNotificationRequest {
   }
 }
 
+/// Class representing `UpdateNotificationResponse`.
+/// Auto-generated class documentation.
 class UpdateNotificationResponse {
   final int statusCode;
   final String message;
@@ -211,6 +228,8 @@ class UpdateNotificationResponse {
 
 /// DELETE RESPONSE
 
+/// Class representing `DeleteNotificationResponse`.
+/// Auto-generated class documentation.
 class DeleteNotificationResponse {
   final int statusCode;
   final String message;
@@ -240,6 +259,8 @@ class DeleteNotificationResponse {
 
 /// BASIC DTO AND RESPONSES
 
+/// Class representing `NotificationBasicDto`.
+/// Auto-generated class documentation.
 class NotificationBasicDto {
   final int id;
   final bool isRead;
@@ -260,6 +281,8 @@ class NotificationBasicDto {
   }
 }
 
+/// Class representing `NotificationBasicDetailResponse`.
+/// Auto-generated class documentation.
 class NotificationBasicDetailResponse {
   final int statusCode;
   final String message;
@@ -333,6 +356,8 @@ DateTime? _readDate(Map<String, dynamic> json, List<String> keys) {
   return null;
 }
 
+/// Method `_readBool` returning `bool`.
+/// Handles logic operations related to `_readBool`.
 bool _readBool(Map<String, dynamic> json, List<String> keys) {
   for (final k in keys) {
     final v = json[k];

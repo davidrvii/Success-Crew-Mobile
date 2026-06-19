@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/presentation/controllers/visit_controller.dart
+/// Generated Documentation for visit_controller.dart
+
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 
@@ -12,6 +15,8 @@ import '../../domain/usecases/delete_visit.dart';
 
 enum VisitorSortMode { newest, az }
 
+/// Class representing `VisitorController`.
+/// Auto-generated class documentation.
 class VisitorController extends ChangeNotifier {
   final GetVisitsUseCase _getVisits;
   final CreateVisitUseCase _createVisit;
@@ -34,12 +39,17 @@ class VisitorController extends ChangeNotifier {
 
   Timer? _debounce;
 
+  /// Getter for `totalCount` returning `int`.
   int get totalCount => _all.length;
 
+  /// Method `init` returning `Future<void>`.
+  /// Handles logic operations related to `init`.
   Future<void> init() async {
     await refresh();
   }
 
+  /// Method `refresh` returning `Future<void>`.
+  /// Handles logic operations related to `refresh`.
   Future<void> refresh() async {
     isLoading = true;
     errorMessage = null;
@@ -70,6 +80,8 @@ class VisitorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Method `submitVisit` returning `Future<bool>`.
+  /// Handles logic operations related to `submitVisit`.
   Future<bool> submitVisit({
     required String visitorName,
     required String visitorPhone,
@@ -116,6 +128,8 @@ class VisitorController extends ChangeNotifier {
     }
   }
 
+  /// Method `deleteVisit` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteVisit`.
   Future<bool> deleteVisit(int visitId) async {
     isLoading = true;
     errorMessage = null;
@@ -134,6 +148,8 @@ class VisitorController extends ChangeNotifier {
     }
   }
 
+  /// Method `setQuery` returning `void`.
+  /// Handles logic operations related to `setQuery`.
   void setQuery(String value) {
     query = value;
     _debounce?.cancel();
@@ -143,6 +159,8 @@ class VisitorController extends ChangeNotifier {
     });
   }
 
+  /// Method `toggleSort` returning `void`.
+  /// Handles logic operations related to `toggleSort`.
   void toggleSort() {
     sortMode = sortMode == VisitorSortMode.newest
         ? VisitorSortMode.az
@@ -151,18 +169,24 @@ class VisitorController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Method `setStatusFilter` returning `void`.
+  /// Handles logic operations related to `setStatusFilter`.
   void setStatusFilter(String? value) {
     statusFilter = value;
     _apply();
     notifyListeners();
   }
 
+  /// Method `clearFilter` returning `void`.
+  /// Handles logic operations related to `clearFilter`.
   void clearFilter() {
     statusFilter = null;
     _apply();
     notifyListeners();
   }
 
+  /// Method `_apply` returning `void`.
+  /// Handles logic operations related to `_apply`.
   void _apply() {
     Iterable<Visit> data = _all;
 
@@ -210,6 +234,8 @@ class VisitorController extends ChangeNotifier {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _debounce?.cancel();
     super.dispose();

@@ -1,3 +1,6 @@
+/// File: lib/core/di/out_of_office_di.dart
+/// Generated Documentation for out_of_office_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../network/dio_client.dart';
@@ -19,6 +22,8 @@ import '../../features/out_of_office/presentation/controllers/out_of_office_cont
 import '../../features/attendance/domain/usecases/get_attendance_history.dart';
 import '../../features/leave/domain/usecases/get_leave_list.dart';
 
+/// Method `registerOutOfOfficeDi` returning `void`.
+/// Handles logic operations related to `registerOutOfOfficeDi`.
 void registerOutOfOfficeDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<OutOfOfficeRemoteDataSource>(

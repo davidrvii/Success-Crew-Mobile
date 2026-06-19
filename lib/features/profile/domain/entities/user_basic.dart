@@ -1,3 +1,8 @@
+/// File: lib/features/profile/domain/entities/user_basic.dart
+/// Generated Documentation for user_basic.dart
+
+/// Class representing `UserBasic`.
+/// Auto-generated class documentation.
 class UserBasic {
   final int userId;
   final String userName;

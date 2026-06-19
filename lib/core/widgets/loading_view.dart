@@ -1,7 +1,12 @@
+/// File: lib/core/widgets/loading_view.dart
+/// Generated Documentation for loading_view.dart
+
 import 'package:flutter/material.dart';
 
 import '../theme/app_theme.dart';
 
+/// Class representing `LoadingView`.
+/// Auto-generated class documentation.
 class LoadingView extends StatelessWidget {
   final String? message;
   final bool fill;
@@ -9,6 +14,8 @@ class LoadingView extends StatelessWidget {
   const LoadingView({super.key, this.message, this.fill = true});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final content = Column(
       mainAxisSize: MainAxisSize.min,

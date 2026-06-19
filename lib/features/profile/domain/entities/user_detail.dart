@@ -1,3 +1,8 @@
+/// File: lib/features/profile/domain/entities/user_detail.dart
+/// Generated Documentation for user_detail.dart
+
+/// Class representing `UserDetail`.
+/// Auto-generated class documentation.
 class UserDetail {
   final int userId;
   final int? officeId;
@@ -57,6 +62,8 @@ class UserDetail {
   });
 }
 
+/// Class representing `CrewHistory`.
+/// Auto-generated class documentation.
 class CrewHistory {
   final int id;
   final String type;

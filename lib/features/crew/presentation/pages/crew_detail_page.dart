@@ -1,3 +1,6 @@
+/// File: lib/features/crew/presentation/pages/crew_detail_page.dart
+/// Generated Documentation for crew_detail_page.dart
+
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -7,6 +10,8 @@ import '../../domain/entities/crew_member.dart';
 import '../../../attendance/domain/entities/attendance.dart';
 import '../controllers/crew_detail_controller.dart';
 
+/// Class representing `CrewDetailPage`.
+/// Auto-generated class documentation.
 class CrewDetailPage extends StatefulWidget {
   final CrewMember member;
   final CrewDetailController controller;
@@ -21,11 +26,15 @@ class CrewDetailPage extends StatefulWidget {
   State<CrewDetailPage> createState() => _CrewDetailPageState();
 }
 
+/// Class representing `_CrewDetailPageState`.
+/// Auto-generated class documentation.
 class _CrewDetailPageState extends State<CrewDetailPage> {
   late final ScrollController _scrollController;
   late final CrewDetailController c;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c = widget.controller;
@@ -36,11 +45,15 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
+  /// Method `_onScroll` returning `void`.
+  /// Handles logic operations related to `_onScroll`.
   void _onScroll() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - 200) {
@@ -49,6 +62,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: c,
@@ -194,6 +209,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     );
   }
 
+  /// Method `_buildErrorView` returning `Widget`.
+  /// Handles logic operations related to `_buildErrorView`.
   Widget _buildErrorView() {
     return Center(
       child: Padding(
@@ -235,6 +252,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     );
   }
 
+  /// Method `_kv` returning `Widget`.
+  /// Handles logic operations related to `_kv`.
   Widget _kv(String k, String v) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 6),
@@ -262,6 +281,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     );
   }
 
+  /// Method `_buildStatCard` returning `Widget`.
+  /// Handles logic operations related to `_buildStatCard`.
   Widget _buildStatCard(String title, int count) {
     final isAlertLeave = title == 'Cuti' && count >= 16;
     final valueColor = isAlertLeave ? const Color(0xFFEF4444) : const Color(0xFF0F172A);
@@ -310,6 +331,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     );
   }
 
+  /// Method `_buildHistoryCard` returning `Widget`.
+  /// Handles logic operations related to `_buildHistoryCard`.
   Widget _buildHistoryCard(Attendance h) {
     final statusLower = (h.status ?? '').toLowerCase().trim();
     Color statusColor;
@@ -418,6 +441,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     );
   }
 
+  /// Method `_getOvertimeHours` returning `int`.
+  /// Handles logic operations related to `_getOvertimeHours`.
   int _getOvertimeHours(Attendance a) {
     if (a.overtime != null) return a.overtime!;
     if (a.checkInAt == null || a.checkOutAt == null) return 0;
@@ -466,6 +491,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     return null;
   }
 
+  /// Method `_formatDateIndonesian` returning `String`.
+  /// Handles logic operations related to `_formatDateIndonesian`.
   String _formatDateIndonesian(DateTime? dt) {
     if (dt == null) return '-';
     final wibDt = dt.toUtc().add(const Duration(hours: 7));
@@ -483,6 +510,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     return '$dayName, ${wibDt.day} $monthName ${wibDt.year}';
   }
 
+  /// Method `_formatTimeOnly` returning `String`.
+  /// Handles logic operations related to `_formatTimeOnly`.
   String _formatTimeOnly(DateTime? dt) {
     if (dt == null) return '--:--';
     final wibDt = dt.toUtc().add(const Duration(hours: 7));
@@ -490,6 +519,8 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
   }
 }
 
+/// Class representing `_TopProfileCard`.
+/// Auto-generated class documentation.
 class _TopProfileCard extends StatelessWidget {
   final VoidCallback onBack;
   final VoidCallback? onEdit;
@@ -508,6 +539,8 @@ class _TopProfileCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 12, 14, 16),
@@ -578,11 +611,15 @@ class _TopProfileCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_BackButton`.
+/// Auto-generated class documentation.
 class _BackButton extends StatelessWidget {
   final VoidCallback onPressed;
   const _BackButton({required this.onPressed});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
@@ -600,6 +637,8 @@ class _BackButton extends StatelessWidget {
   }
 }
 
+/// Class representing `_SectionCard`.
+/// Auto-generated class documentation.
 class _SectionCard extends StatelessWidget {
   final String title;
   final List<Widget> children;
@@ -607,6 +646,8 @@ class _SectionCard extends StatelessWidget {
   const _SectionCard({required this.title, required this.children});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,

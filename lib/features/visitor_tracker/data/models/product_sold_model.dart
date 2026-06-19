@@ -1,7 +1,12 @@
+/// File: lib/features/visitor_tracker/data/models/product_sold_model.dart
+/// Generated Documentation for product_sold_model.dart
+
 DateTime? _dt(dynamic v) => v is String ? DateTime.tryParse(v) : null;
 int? _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v');
 double? _dbl(dynamic v) => (v is num) ? v.toDouble() : double.tryParse('$v');
 
+/// Class representing `ProductSoldModel`.
+/// Auto-generated class documentation.
 class ProductSoldModel {
   final int productSoldId;
   final int? visitId;

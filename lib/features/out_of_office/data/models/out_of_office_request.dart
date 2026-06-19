@@ -1,3 +1,8 @@
+/// File: lib/features/out_of_office/data/models/out_of_office_request.dart
+/// Generated Documentation for out_of_office_request.dart
+
+/// Class representing `OutOfOfficeRequest`.
+/// Auto-generated class documentation.
 class OutOfOfficeRequest {
   final int? userId;
   final String? description;

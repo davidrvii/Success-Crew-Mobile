@@ -1,3 +1,6 @@
+/// File: lib/features/overtime/presentation/controllers/overtime_controller.dart
+/// Generated Documentation for overtime_controller.dart
+
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/overtime.dart';
@@ -8,6 +11,8 @@ import '../../domain/usecases/delete_overtime.dart';
 import '../../data/models/overtime_request.dart';
 import '../../../../core/storage/user_session.dart';
 
+/// Class representing `OvertimeController`.
+/// Auto-generated class documentation.
 class OvertimeController extends ChangeNotifier {
   final GetOvertimeListUseCase _getOvertimeList;
   final CreateOvertimeUseCase _createOvertime;
@@ -28,17 +33,23 @@ class OvertimeController extends ChangeNotifier {
        _session = userSession;
 
   bool _loading = false;
+  /// Getter for `isLoading` returning `bool`.
   bool get isLoading => _loading;
 
   String? _errorMessage;
+  /// Getter for `errorMessage` returning `String?`.
   String? get errorMessage => _errorMessage;
 
   List<Overtime> _overtimes = [];
+  /// Getter for `overtimes` returning `List<Overtime>`.
   List<Overtime> get overtimes => _overtimes;
 
   bool _isOwner = false;
+  /// Getter for `isOwner` returning `bool`.
   bool get isOwner => _isOwner;
 
+  /// Method `init` returning `Future<void>`.
+  /// Handles logic operations related to `init`.
   Future<void> init() async {
     final session = await _session.readSession();
     final role = (session?['role_name'] as String?)?.trim().toLowerCase();
@@ -47,6 +58,8 @@ class OvertimeController extends ChangeNotifier {
     await fetchOvertimes();
   }
 
+  /// Method `fetchOvertimes` returning `Future<void>`.
+  /// Handles logic operations related to `fetchOvertimes`.
   Future<void> fetchOvertimes() async {
     _setLoading(true);
     _errorMessage = null;
@@ -62,6 +75,8 @@ class OvertimeController extends ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Method `submitOvertime` returning `Future<bool>`.
+  /// Handles logic operations related to `submitOvertime`.
   Future<bool> submitOvertime({
     required String date,
     required String startTime,
@@ -93,6 +108,8 @@ class OvertimeController extends ChangeNotifier {
     }
   }
 
+  /// Method `updateStatus` returning `Future<bool>`.
+  /// Handles logic operations related to `updateStatus`.
   Future<bool> updateStatus(int id, String status) async {
     _setLoading(true);
     _errorMessage = null;
@@ -112,6 +129,8 @@ class OvertimeController extends ChangeNotifier {
     }
   }
 
+  /// Method `deleteOvertime` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteOvertime`.
   Future<bool> deleteOvertime(int id) async {
     _setLoading(true);
     _errorMessage = null;
@@ -130,6 +149,8 @@ class OvertimeController extends ChangeNotifier {
     }
   }
 
+  /// Method `_setLoading` returning `void`.
+  /// Handles logic operations related to `_setLoading`.
   void _setLoading(bool v) {
     if (_loading == v) return;
     _loading = v;

@@ -1,5 +1,10 @@
+/// File: lib/core/widgets/skeleton_shimmer.dart
+/// Generated Documentation for skeleton_shimmer.dart
+
 import 'package:flutter/material.dart';
 
+/// Class representing `SkeletonShimmer`.
+/// Auto-generated class documentation.
 class SkeletonShimmer extends StatefulWidget {
   final Widget child;
 
@@ -9,11 +14,15 @@ class SkeletonShimmer extends StatefulWidget {
   State<SkeletonShimmer> createState() => _SkeletonShimmerState();
 }
 
+/// Class representing `_SkeletonShimmerState`.
+/// Auto-generated class documentation.
 class _SkeletonShimmerState extends State<SkeletonShimmer>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     _controller = AnimationController(
@@ -23,12 +32,16 @@ class _SkeletonShimmerState extends State<SkeletonShimmer>
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _controller,
@@ -60,6 +73,8 @@ class _SkeletonShimmerState extends State<SkeletonShimmer>
   }
 }
 
+/// Class representing `_SlidingGradientTransform`.
+/// Auto-generated class documentation.
 class _SlidingGradientTransform extends GradientTransform {
   const _SlidingGradientTransform({required this.slidePercent});
 
@@ -71,6 +86,8 @@ class _SlidingGradientTransform extends GradientTransform {
   }
 }
 
+/// Class representing `SkeletonBox`.
+/// Auto-generated class documentation.
 class SkeletonBox extends StatelessWidget {
   final double width;
   final double height;
@@ -84,6 +101,8 @@ class SkeletonBox extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       width: width,

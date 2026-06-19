@@ -1,12 +1,19 @@
+/// File: lib/core/widgets/list_shimmer_view.dart
+/// Generated Documentation for list_shimmer_view.dart
+
 import 'package:flutter/material.dart';
 import 'skeleton_shimmer.dart';
 
+/// Class representing `ListShimmerView`.
+/// Auto-generated class documentation.
 class ListShimmerView extends StatelessWidget {
   final int count;
 
   const ListShimmerView({super.key, this.count = 5});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return SkeletonShimmer(
       child: ListView.builder(

@@ -1,3 +1,6 @@
+/// File: lib/features/out_of_office/presentation/controllers/out_of_office_controller.dart
+/// Generated Documentation for out_of_office_controller.dart
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/utils/date_overlap_helper.dart';
@@ -12,6 +15,8 @@ import '../../domain/usecases/delete_out_of_office.dart';
 import '../../data/models/out_of_office_request.dart';
 import '../../../../core/storage/user_session.dart';
 
+/// Class representing `OutOfOfficeController`.
+/// Auto-generated class documentation.
 class OutOfOfficeController extends ChangeNotifier {
   final GetOutOfOfficeListUseCase _getOutOfOfficeList;
   final CreateOutOfOfficeUseCase _createOutOfOffice;
@@ -38,17 +43,23 @@ class OutOfOfficeController extends ChangeNotifier {
        _getLeaveListUseCase = getLeaveListUseCase;
 
   bool _loading = false;
+  /// Getter for `isLoading` returning `bool`.
   bool get isLoading => _loading;
 
   String? _errorMessage;
+  /// Getter for `errorMessage` returning `String?`.
   String? get errorMessage => _errorMessage;
 
   List<OutOfOffice> _outOfOffices = [];
+  /// Getter for `outOfOffices` returning `List<OutOfOffice>`.
   List<OutOfOffice> get outOfOffices => _outOfOffices;
 
   bool _isOwner = false;
+  /// Getter for `isOwner` returning `bool`.
   bool get isOwner => _isOwner;
 
+  /// Method `init` returning `Future<void>`.
+  /// Handles logic operations related to `init`.
   Future<void> init() async {
     final session = await _session.readSession();
     final role = (session?['role_name'] as String?)?.trim().toLowerCase();
@@ -57,6 +68,8 @@ class OutOfOfficeController extends ChangeNotifier {
     await fetchOutOfOffices();
   }
 
+  /// Method `fetchOutOfOffices` returning `Future<void>`.
+  /// Handles logic operations related to `fetchOutOfOffices`.
   Future<void> fetchOutOfOffices() async {
     _setLoading(true);
     _errorMessage = null;
@@ -72,6 +85,8 @@ class OutOfOfficeController extends ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Method `submitOutOfOffice` returning `Future<bool>`.
+  /// Handles logic operations related to `submitOutOfOffice`.
   Future<bool> submitOutOfOffice({
     required String startDate,
     required String endDate,
@@ -150,6 +165,8 @@ class OutOfOfficeController extends ChangeNotifier {
     }
   }
 
+  /// Method `updateStatus` returning `Future<bool>`.
+  /// Handles logic operations related to `updateStatus`.
   Future<bool> updateStatus(int id, String status) async {
     _setLoading(true);
     _errorMessage = null;
@@ -169,6 +186,8 @@ class OutOfOfficeController extends ChangeNotifier {
     }
   }
 
+  /// Method `deleteOutOfOffice` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteOutOfOffice`.
   Future<bool> deleteOutOfOffice(int id) async {
     _setLoading(true);
     _errorMessage = null;
@@ -187,6 +206,8 @@ class OutOfOfficeController extends ChangeNotifier {
     }
   }
 
+  /// Method `_setLoading` returning `void`.
+  /// Handles logic operations related to `_setLoading`.
   void _setLoading(bool v) {
     if (_loading == v) return;
     _loading = v;

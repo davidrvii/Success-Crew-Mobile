@@ -1,3 +1,6 @@
+/// File: lib/core/di/overtime_di.dart
+/// Generated Documentation for overtime_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../network/dio_client.dart';
@@ -16,6 +19,8 @@ import '../../features/overtime/domain/usecases/get_overtime_basic_detail.dart';
 import '../../features/overtime/domain/usecases/update_overtime_status.dart';
 import '../../features/overtime/presentation/controllers/overtime_controller.dart';
 
+/// Method `registerOvertimeDi` returning `void`.
+/// Handles logic operations related to `registerOvertimeDi`.
 void registerOvertimeDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<OvertimeRemoteDataSource>(

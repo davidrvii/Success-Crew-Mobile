@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/domain/entities/followup.dart
+/// Generated Documentation for followup.dart
+
+/// Class representing `FollowUp`.
+/// Auto-generated class documentation.
 class FollowUp {
   final int followUpId;
   final int? visitId;
@@ -20,8 +25,10 @@ class FollowUp {
   });
 
   /// Backward-compatible alias for followUpStatus
+  /// Getter for `status` returning `String?`.
   String? get status => followUpStatus;
 
   /// Backward-compatible alias for followUpAction
+  /// Getter for `notes` returning `String?`.
   String? get notes => followUpAction;
 }

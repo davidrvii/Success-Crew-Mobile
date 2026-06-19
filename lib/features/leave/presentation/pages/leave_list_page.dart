@@ -1,3 +1,6 @@
+/// File: lib/features/leave/presentation/pages/leave_list_page.dart
+/// Generated Documentation for leave_list_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -6,6 +9,8 @@ import '../controllers/leave_controller.dart';
 import '../../domain/entities/leave.dart';
 import '../../../../core/widgets/list_shimmer_view.dart';
 
+/// Class representing `LeaveListPage`.
+/// Auto-generated class documentation.
 class LeaveListPage extends StatefulWidget {
   final LeaveController controller;
 
@@ -15,8 +20,12 @@ class LeaveListPage extends StatefulWidget {
   State<LeaveListPage> createState() => _LeaveListPageState();
 }
 
+/// Class representing `_LeaveListPageState`.
+/// Auto-generated class documentation.
 class _LeaveListPageState extends State<LeaveListPage> {
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -25,6 +34,8 @@ class _LeaveListPageState extends State<LeaveListPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: widget.controller,
@@ -129,6 +140,8 @@ class _LeaveListPageState extends State<LeaveListPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -180,6 +193,8 @@ class _LeaveListPageState extends State<LeaveListPage> {
   }
 }
 
+/// Class representing `_LeaveCard`.
+/// Auto-generated class documentation.
 class _LeaveCard extends StatelessWidget {
   final Leave leave;
   final LeaveController controller;
@@ -187,6 +202,8 @@ class _LeaveCard extends StatelessWidget {
   const _LeaveCard({required this.leave, required this.controller});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
@@ -270,6 +287,8 @@ class _LeaveCard extends StatelessWidget {
     );
   }
 
+  /// Method `_showConfirmDialog` returning `void`.
+  /// Handles logic operations related to `_showConfirmDialog`.
   void _showConfirmDialog(BuildContext context, bool approve) {
     showDialog(
       context: context,
@@ -327,6 +346,8 @@ class _LeaveCard extends StatelessWidget {
   }
 }
 
+/// Method `_showDeleteConfirmDialog` returning `Future<bool?>`.
+/// Handles logic operations related to `_showDeleteConfirmDialog`.
 Future<bool?> _showDeleteConfirmDialog(BuildContext context, String title, String message) {
   return showDialog<bool>(
     context: context,

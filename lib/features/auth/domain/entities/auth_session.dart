@@ -1,3 +1,8 @@
+/// File: lib/features/auth/domain/entities/auth_session.dart
+/// Generated Documentation for auth_session.dart
+
+/// Class representing `AuthSession`.
+/// Auto-generated class documentation.
 class AuthSession {
   final int userId;
   final String userName;

@@ -1,6 +1,11 @@
+/// File: lib/core/widgets/hold_to_action_button.dart
+/// Generated Documentation for hold_to_action_button.dart
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 
+/// Class representing `HoldToActionButton`.
+/// Auto-generated class documentation.
 class HoldToActionButton extends StatefulWidget {
   final Widget child;
   final VoidCallback onTap;
@@ -19,11 +24,15 @@ class HoldToActionButton extends StatefulWidget {
   State<HoldToActionButton> createState() => _HoldToActionButtonState();
 }
 
+/// Class representing `_HoldToActionButtonState`.
+/// Auto-generated class documentation.
 class _HoldToActionButtonState extends State<HoldToActionButton> {
   Timer? _timer;
   DateTime? _pressStartTime;
   bool _actionTriggered = false;
 
+  /// Method `_startTimer` returning `void`.
+  /// Handles logic operations related to `_startTimer`.
   void _startTimer() {
     _pressStartTime = DateTime.now();
     _actionTriggered = false;
@@ -39,6 +48,8 @@ class _HoldToActionButtonState extends State<HoldToActionButton> {
     });
   }
 
+  /// Method `_cancelTimer` returning `void`.
+  /// Handles logic operations related to `_cancelTimer`.
   void _cancelTimer() {
     if (_pressStartTime == null) return;
 
@@ -61,12 +72,16 @@ class _HoldToActionButtonState extends State<HoldToActionButton> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _timer?.cancel();
     super.dispose();
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Listener(
       onPointerDown: (_) => _startTimer(),

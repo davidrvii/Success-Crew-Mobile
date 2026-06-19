@@ -1,3 +1,8 @@
+/// File: lib/features/leave/data/models/leave_model.dart
+/// Generated Documentation for leave_model.dart
+
+/// Class representing `LeaveDto`.
+/// Auto-generated class documentation.
 class LeaveDto {
   final int id;
   final int userId;
@@ -48,6 +53,8 @@ class LeaveDto {
 
 /// LIST RESPONSE
 
+/// Class representing `LeaveListResponse`.
+/// Auto-generated class documentation.
 class LeaveListResponse {
   final int statusCode;
   final String message;
@@ -91,6 +98,8 @@ class LeaveListResponse {
 
 /// DETAIL RESPONSE
 
+/// Class representing `LeaveDetailResponse`.
+/// Auto-generated class documentation.
 class LeaveDetailResponse {
   final int statusCode;
   final String message;
@@ -115,6 +124,8 @@ class LeaveDetailResponse {
 
 /// CREATE RESPONSE
 
+/// Class representing `CreateLeaveResponse`.
+/// Auto-generated class documentation.
 class CreateLeaveResponse {
   final int statusCode;
   final String message;
@@ -145,6 +156,8 @@ class CreateLeaveResponse {
 
 /// UPDATE RESPONSE
 
+/// Class representing `UpdateLeaveResponse`.
+/// Auto-generated class documentation.
 class UpdateLeaveResponse {
   final int statusCode;
   final String message;
@@ -169,6 +182,8 @@ class UpdateLeaveResponse {
 
 /// DELETE RESPONSE
 
+/// Class representing `DeleteLeaveResponse`.
+/// Auto-generated class documentation.
 class DeleteLeaveResponse {
   final int statusCode;
   final String message;

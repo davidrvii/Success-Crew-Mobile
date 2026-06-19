@@ -1,3 +1,8 @@
+/// File: lib/features/auth/data/models/register_response.dart
+/// Generated Documentation for register_response.dart
+
+/// Class representing `RegisterResponse`.
+/// Auto-generated class documentation.
 class RegisterResponse {
   final int statusCode;
   final String message;
@@ -22,6 +27,8 @@ class RegisterResponse {
   }
 }
 
+/// Class representing `UserRegistered`.
+/// Auto-generated class documentation.
 class UserRegistered {
   final int userId;
   final int officeId;

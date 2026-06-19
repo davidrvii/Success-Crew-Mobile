@@ -1,3 +1,6 @@
+/// File: lib/features/attendance/data/models/attendance_model.dart
+/// Generated Documentation for attendance_model.dart
+
 // ─────────────────────────────────────────────
 // Helpers
 // ─────────────────────────────────────────────
@@ -49,6 +52,8 @@ List<Map<String, dynamic>> _readListMap(
   return const [];
 }
 
+/// Method `_calculateOvertimesHours` returning `int`.
+/// Handles logic operations related to `_calculateOvertimesHours`.
 int _calculateOvertimesHours(dynamic overtimes) {
   if (overtimes is! List) return 0;
   int totalHours = 0;
@@ -73,6 +78,8 @@ int _calculateOvertimesHours(dynamic overtimes) {
 // Maps from both /attendance/all and /attendance/crew/:userId `attendance[]`
 // ─────────────────────────────────────────────
 
+/// Class representing `AttendanceDto`.
+/// Auto-generated class documentation.
 class AttendanceDto {
   final int id;
   final int? userId;
@@ -135,6 +142,8 @@ class AttendanceDto {
 // Covers type: attendance | overtime | leave | out_of_office
 // ─────────────────────────────────────────────
 
+/// Class representing `CrewHistoryItemDto`.
+/// Auto-generated class documentation.
 class CrewHistoryItemDto {
   final int id;
   final String type; // "attendance", "overtime", "leave", "out_of_office"
@@ -167,17 +176,21 @@ class CrewHistoryItemDto {
   }
 
   // Convenience getters for attendance type
+  /// Getter for `attendanceIn` returning `DateTime?`.
   DateTime? get attendanceIn => details['attendance_in'] is String
       ? DateTime.tryParse(details['attendance_in'] as String)
       : null;
+  /// Getter for `attendanceOut` returning `DateTime?`.
   DateTime? get attendanceOut => details['attendance_out'] is String
       ? DateTime.tryParse(details['attendance_out'] as String)
       : null;
 
   // Convenience getters for overtime type
+  /// Getter for `overtimeStart` returning `DateTime?`.
   DateTime? get overtimeStart => details['overtime_start'] is String
       ? DateTime.tryParse(details['overtime_start'] as String)
       : null;
+  /// Getter for `overtimeEnd` returning `DateTime?`.
   DateTime? get overtimeEnd => details['overtime_end'] is String
       ? DateTime.tryParse(details['overtime_end'] as String)
       : null;
@@ -208,6 +221,8 @@ class CrewHistoryItemDto {
 // from GET /attendance/crew/:userId → crewAttendanceHistory
 // ─────────────────────────────────────────────
 
+/// Class representing `CrewAttendanceHistoryDto`.
+/// Auto-generated class documentation.
 class CrewAttendanceHistoryDto {
   final int totalAttendance;
   final int totalLate;
@@ -251,6 +266,8 @@ class CrewAttendanceHistoryDto {
 // from GET /attendance/basic → attendanceBasic
 // ─────────────────────────────────────────────
 
+/// Class representing `AttendanceBasicDto`.
+/// Auto-generated class documentation.
 class AttendanceBasicDto {
   final DateTime? attendanceIn;
   final DateTime? attendanceOut;
@@ -270,6 +287,8 @@ class AttendanceBasicDto {
 // ─────────────────────────────────────────────
 
 /// GET /attendance/all
+/// Class representing `AttendanceListResponse`.
+/// Auto-generated class documentation.
 class AttendanceListResponse {
   final int statusCode;
   final String message;
@@ -298,6 +317,8 @@ class AttendanceListResponse {
 }
 
 /// GET /attendance/crew/:userId
+/// Class representing `CrewAttendanceResponse`.
+/// Auto-generated class documentation.
 class CrewAttendanceResponse {
   final int statusCode;
   final String message;
@@ -320,6 +341,8 @@ class CrewAttendanceResponse {
 }
 
 /// GET /attendance/basic
+/// Class representing `AttendanceBasicResponse`.
+/// Auto-generated class documentation.
 class AttendanceBasicResponse {
   final int statusCode;
   final String message;
@@ -342,6 +365,8 @@ class AttendanceBasicResponse {
 }
 
 /// GET /attendance/detail/:id
+/// Class representing `AttendanceDetailResponse`.
+/// Auto-generated class documentation.
 class AttendanceDetailResponse {
   final int statusCode;
   final String message;
@@ -370,6 +395,8 @@ class AttendanceDetailResponse {
 }
 
 /// POST /attendance/add
+/// Class representing `AddAttendanceResponse`.
+/// Auto-generated class documentation.
 class AddAttendanceResponse {
   final int statusCode;
   final String message;
@@ -398,6 +425,8 @@ class AddAttendanceResponse {
 }
 
 /// PATCH /attendance/checkin → response key: `checkin`
+/// Class representing `CheckInResponse`.
+/// Auto-generated class documentation.
 class CheckInResponse {
   final int statusCode;
   final String message;
@@ -428,6 +457,8 @@ class CheckInResponse {
 }
 
 /// PATCH /attendance/checkout → response key: `checkout`
+/// Class representing `CheckOutResponse`.
+/// Auto-generated class documentation.
 class CheckOutResponse {
   final int statusCode;
   final String message;
@@ -458,6 +489,8 @@ class CheckOutResponse {
 }
 
 /// PUT /attendance/update/:attendanceId
+/// Class representing `UpdateAttendanceResponse`.
+/// Auto-generated class documentation.
 class UpdateAttendanceResponse {
   final int statusCode;
   final String message;
@@ -486,6 +519,8 @@ class UpdateAttendanceResponse {
 }
 
 /// DELETE /attendance/delete/:attendanceId
+/// Class representing `DeleteAttendanceResponse`.
+/// Auto-generated class documentation.
 class DeleteAttendanceResponse {
   final int statusCode;
   final String message;

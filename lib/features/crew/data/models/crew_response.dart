@@ -1,5 +1,10 @@
+/// File: lib/features/crew/data/models/crew_response.dart
+/// Generated Documentation for crew_response.dart
+
 import '../../../profile/data/models/user_detail_model.dart';
 
+/// Class representing `CrewMutationResponse`.
+/// Auto-generated class documentation.
 class CrewMutationResponse {
   final int statusCode;
   final String message;
@@ -23,6 +28,8 @@ class CrewMutationResponse {
   }
 }
 
+/// Class representing `UserDeleteResponse`.
+/// Auto-generated class documentation.
 class UserDeleteResponse {
   final int statusCode;
   final String message;

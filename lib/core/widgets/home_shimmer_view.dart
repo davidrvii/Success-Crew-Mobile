@@ -1,10 +1,17 @@
+/// File: lib/core/widgets/home_shimmer_view.dart
+/// Generated Documentation for home_shimmer_view.dart
+
 import 'package:flutter/material.dart';
 import 'skeleton_shimmer.dart';
 
+/// Class representing `HomeShimmerView`.
+/// Auto-generated class documentation.
 class HomeShimmerView extends StatelessWidget {
   const HomeShimmerView({super.key});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return SkeletonShimmer(
       child: SingleChildScrollView(

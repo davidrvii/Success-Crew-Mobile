@@ -1,3 +1,6 @@
+/// File: lib/features/crew/presentation/pages/crew_edit_page.dart
+/// Generated Documentation for crew_edit_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +8,8 @@ import '../controllers/crew_detail_controller.dart';
 import '../../../profile/domain/entities/user_detail.dart';
 import '../../data/models/crew_request.dart';
 
+/// Class representing `CrewEditPage`.
+/// Auto-generated class documentation.
 class CrewEditPage extends StatefulWidget {
   final UserDetail detail;
   final CrewDetailController controller;
@@ -15,6 +20,8 @@ class CrewEditPage extends StatefulWidget {
   State<CrewEditPage> createState() => _CrewEditPageState();
 }
 
+/// Class representing `_CrewEditPageState`.
+/// Auto-generated class documentation.
 class _CrewEditPageState extends State<CrewEditPage> {
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +39,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
   late String _selectedLocation;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     final d = widget.detail;
@@ -49,12 +58,16 @@ class _CrewEditPageState extends State<CrewEditPage> {
     _selectedLocation = _normalizeLocation(d.officeName);
   }
 
+  /// Method `_normalizeLocation` returning `String`.
+  /// Handles logic operations related to `_normalizeLocation`.
   String _normalizeLocation(String? raw) {
     final s = (raw ?? '').trim().toLowerCase();
     if (s.contains('bogor')) return 'Success Comp Bogor';
     return 'Success Comp Cibubur';
   }
 
+  /// Method `_normalizeRole` returning `String`.
+  /// Handles logic operations related to `_normalizeRole`.
   String _normalizeRole(String? raw) {
     final s = (raw ?? '').trim().toLowerCase();
     const roles = ['owner', 'manager', 'sales', 'teknisi', 'admin service', 'kurir', 'kasir'];
@@ -63,6 +76,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
     return 'teknisi';
   }
 
+  /// Method `_normalizeContractStatus` returning `String`.
+  /// Handles logic operations related to `_normalizeContractStatus`.
   String _normalizeContractStatus(String? raw) {
     final s = (raw ?? '').trim().toLowerCase();
     if (s == 'magang') return 'Magang';
@@ -71,6 +86,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
     return 'Crew Tetap';
   }
 
+  /// Method `_normalizeCrewStatus` returning `String`.
+  /// Handles logic operations related to `_normalizeCrewStatus`.
   String _normalizeCrewStatus(String? raw) {
     final s = (raw ?? '').trim().toLowerCase();
     if (s == 'tidak aktif' || s == 'nonaktif' || s == 'non-aktif') {
@@ -80,6 +97,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
@@ -87,6 +106,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
     super.dispose();
   }
 
+  /// Method `_pickDate` returning `Future<void>`.
+  /// Handles logic operations related to `_pickDate`.
   Future<void> _pickDate(BuildContext context, String type) async {
     final now = DateTime.now();
     DateTime initialDate;
@@ -123,6 +144,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
     }
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -160,6 +183,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
@@ -447,6 +472,8 @@ class _CrewEditPageState extends State<CrewEditPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),

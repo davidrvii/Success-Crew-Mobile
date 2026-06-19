@@ -1,3 +1,6 @@
+/// File: lib/features/home/presentation/pages/home_page.dart
+/// Generated Documentation for home_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,6 +11,8 @@ import '../controllers/home_controller.dart';
 import '../widgets/home_owner_header_card.dart';
 import '../widgets/home_staff_header_card.dart';
 
+/// Class representing `HomePage`.
+/// Auto-generated class documentation.
 class HomePage extends StatefulWidget {
   final HomeController controller;
 
@@ -37,10 +42,15 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
+/// Class representing `_HomePageState`.
+/// Auto-generated class documentation.
 class _HomePageState extends State<HomePage> {
+  /// Getter for `c` returning `HomeController`.
   HomeController get c => widget.controller;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c.addListener(_onControllerChanged);
@@ -49,6 +59,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     c.removeListener(_onControllerChanged);
     if (widget.disposeController) {
@@ -57,11 +69,15 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  /// Method `_onControllerChanged` returning `void`.
+  /// Handles logic operations related to `_onControllerChanged`.
   void _onControllerChanged() {
     if (!mounted) return;
     setState(() {});
   }
 
+  /// Method `_buildHeaderCard` returning `Widget`.
+  /// Handles logic operations related to `_buildHeaderCard`.
   Widget _buildHeaderCard(bool isOwner) {
     if (isOwner) {
       return HomeOwnerHeaderCard(
@@ -84,6 +100,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Method `_buildVisitorCharts` returning `List<Widget>`.
+  /// Handles logic operations related to `_buildVisitorCharts`.
   List<Widget> _buildVisitorCharts() {
     final weeklyCount = c.visitStats?.weeklyCount ?? [];
     final xLabelsWeekly = weeklyCount.map((e) => _formatDateAbbr(e.date)).toList();
@@ -151,6 +169,8 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  /// Method `_buildOwnerContent` returning `List<Widget>`.
+  /// Handles logic operations related to `_buildOwnerContent`.
   List<Widget> _buildOwnerContent() {
     return [
       const _SectionTitle('Kinerja Minggu Ini'),
@@ -203,6 +223,8 @@ class _HomePageState extends State<HomePage> {
     ];
   }
 
+  /// Method `_buildStaffContent` returning `List<Widget>`.
+  /// Handles logic operations related to `_buildStaffContent`.
   List<Widget> _buildStaffContent() {
     return [
       const _SectionTitle('Kinerja Minggu Ini'),
@@ -267,6 +289,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     const bg = Color(0xFFF6F7FB);
 
@@ -338,11 +362,15 @@ class _HomePageState extends State<HomePage> {
 
 
 
+/// Class representing `_SectionTitle`.
+/// Auto-generated class documentation.
 class _SectionTitle extends StatelessWidget {
   final String text;
   const _SectionTitle(this.text);
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Text(
       text,
@@ -359,6 +387,8 @@ class _SectionTitle extends StatelessWidget {
 // OWNER WIDGETS
 // ============================================================================
 
+/// Class representing `_OwnerSummaryGrid`.
+/// Auto-generated class documentation.
 class _OwnerSummaryGrid extends StatelessWidget {
   final int visitorsToday;
   final int walkIn;
@@ -377,6 +407,8 @@ class _OwnerSummaryGrid extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -459,6 +491,8 @@ class _OwnerSummaryGrid extends StatelessWidget {
   }
 }
 
+/// Class representing `_OwnerGridCard`.
+/// Auto-generated class documentation.
 class _OwnerGridCard extends StatelessWidget {
   final String title;
   final String value;
@@ -473,6 +507,8 @@ class _OwnerGridCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(14, 14, 14, 16),
@@ -530,6 +566,8 @@ class _OwnerGridCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_OwnerAttendanceCard`.
+/// Auto-generated class documentation.
 class _OwnerAttendanceCard extends StatelessWidget {
   final int present;
   final int late;
@@ -546,9 +584,12 @@ class _OwnerAttendanceCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Row 1: Displays core presence counters (Hadir, Telat, Lembur)
         Row(
           children: [
             _buildStatCard('Hadir', present),
@@ -559,19 +600,22 @@ class _OwnerAttendanceCard extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 8),
+        // Row 2: Displays auxiliary attendance types (Dinas, Cuti) with alignment spacer
         Row(
           children: [
             _buildStatCard('Dinas', outOfOffice),
             const SizedBox(width: 8),
             _buildStatCard('Cuti', leave),
             const SizedBox(width: 8),
-            const Expanded(child: SizedBox()),
+            const Expanded(child: SizedBox()), // Empty spacer to balance layout grid
           ],
         ),
       ],
     );
   }
 
+  /// Method `_buildStatCard` returning `Widget`.
+  /// Handles logic operations related to `_buildStatCard`.
   Widget _buildStatCard(String title, int count) {
     final isAlertLeave = title == 'Cuti' && count >= 16;
     final valueColor = isAlertLeave ? const Color(0xFFEF4444) : const Color(0xFF0F172A);
@@ -621,6 +665,8 @@ class _OwnerAttendanceCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_RequestPill`.
+/// Auto-generated class documentation.
 class _RequestPill extends StatelessWidget {
   final String title;
   final int count;
@@ -635,6 +681,8 @@ class _RequestPill extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Material(
       color: background,
@@ -671,6 +719,8 @@ class _RequestPill extends StatelessWidget {
   }
 }
 
+/// Method `_formatDateAbbr` returning `String`.
+/// Handles logic operations related to `_formatDateAbbr`.
 String _formatDateAbbr(String dateStr) {
   try {
     final parts = dateStr.split('-');
@@ -689,6 +739,8 @@ String _formatDateAbbr(String dateStr) {
   return dateStr;
 }
 
+/// Class representing `_ChartCard`.
+/// Auto-generated class documentation.
 class _ChartCard extends StatelessWidget {
   final String title;
   final List<String> xLabels;
@@ -705,6 +757,8 @@ class _ChartCard extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
@@ -754,6 +808,8 @@ class _ChartCard extends StatelessWidget {
   }
 }
 
+/// Class representing `_LineChartPainter`.
+/// Auto-generated class documentation.
 class _LineChartPainter extends CustomPainter {
   final List<String> xLabels;
   final List<double> yValues;
@@ -768,6 +824,8 @@ class _LineChartPainter extends CustomPainter {
   });
 
   @override
+  /// Method `paint` returning `void`.
+  /// Handles logic operations related to `paint`.
   void paint(Canvas canvas, Size size) {
     const double leftMargin = 32;
     const double bottomMargin = 24;
@@ -913,6 +971,8 @@ class _LineChartPainter extends CustomPainter {
   }
 
   @override
+  /// Method `shouldRepaint` returning `bool`.
+  /// Handles logic operations related to `shouldRepaint`.
   bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
 
@@ -922,11 +982,15 @@ class _LineChartPainter extends CustomPainter {
 
 
 
+/// Class representing `_InlineWarning`.
+/// Auto-generated class documentation.
 class _InlineWarning extends StatelessWidget {
   final String text;
   const _InlineWarning({required this.text});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),

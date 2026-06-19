@@ -1,3 +1,6 @@
+/// File: lib/core/di/notification_di.dart
+/// Generated Documentation for notification_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../network/dio_client.dart';
@@ -15,6 +18,8 @@ import '../../features/notification/domain/usecases/delete_notification.dart';
 import '../../features/notification/domain/usecases/get_notification_basic.dart';
 import '../../features/notification/presentation/controllers/notification_controller.dart';
 
+/// Method `registerNotificationDi` returning `void`.
+/// Handles logic operations related to `registerNotificationDi`.
 void registerNotificationDi(GetIt sl) {
   // Data Sources
   sl.registerLazySingleton<NotificationRemoteDataSource>(

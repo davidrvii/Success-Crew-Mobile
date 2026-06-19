@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_visit_summary_response.dart
+/// Generated Documentation for home_visit_summary_response.dart
+
+/// Class representing `HomeVisitSummaryResponse`.
+/// Auto-generated class documentation.
 class HomeVisitSummaryResponse {
   final int visitorsToday;
 

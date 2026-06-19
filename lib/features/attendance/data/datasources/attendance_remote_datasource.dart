@@ -1,3 +1,6 @@
+/// File: lib/features/attendance/data/datasources/attendance_remote_datasource.dart
+/// Generated Documentation for attendance_remote_datasource.dart
+
 import '../../../../core/config/api_paths.dart';
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/dio_client.dart';
@@ -10,45 +13,67 @@ import '../models/update_attendance_request.dart';
 
 abstract class AttendanceRemoteDataSource {
   /// GET /attendance/all — all records (admin/owner)
+  /// Method `getAllAttendance` returning `Future<ApiResponse<AttendanceListResponse>>`.
+  /// Handles logic operations related to `getAllAttendance`.
   Future<ApiResponse<AttendanceListResponse>> getAllAttendance();
 
   /// GET /attendance/basic?date=YYYY-MM-DD — today's check-in/out state
+  /// Method `getAttendanceBasic` returning `Future<ApiResponse<AttendanceBasicResponse>>`.
+  /// Handles logic operations related to `getAttendanceBasic`.
   Future<ApiResponse<AttendanceBasicResponse>> getAttendanceBasic({
     String? date,
   });
 
   /// GET /attendance/crew/:userId — full crew history with stats
+  /// Method `getAttendanceHistory` returning `Future<ApiResponse<CrewAttendanceResponse>>`.
+  /// Handles logic operations related to `getAttendanceHistory`.
   Future<ApiResponse<CrewAttendanceResponse>> getAttendanceHistory(int userId);
 
   /// GET /attendance/detail/:id
+  /// Method `getAttendanceDetail` returning `Future<ApiResponse<AttendanceDetailResponse>>`.
+  /// Handles logic operations related to `getAttendanceDetail`.
   Future<ApiResponse<AttendanceDetailResponse>> getAttendanceDetail(int id);
 
   /// POST /attendance/add — admin creates attendance for a user
+  /// Method `addAttendance` returning `Future<ApiResponse<AddAttendanceResponse>>`.
+  /// Handles logic operations related to `addAttendance`.
   Future<ApiResponse<AddAttendanceResponse>> addAttendance(
     AddAttendanceRequest request,
   );
 
   /// PATCH /attendance/checkin — user checks in (date-based, no ID)
+  /// Method `checkIn` returning `Future<ApiResponse<CheckInResponse>>`.
+  /// Handles logic operations related to `checkIn`.
   Future<ApiResponse<CheckInResponse>> checkIn(CheckInRequest request);
 
   /// PATCH /attendance/checkout — user checks out (date-based, no ID)
+  /// Method `checkOut` returning `Future<ApiResponse<CheckOutResponse>>`.
+  /// Handles logic operations related to `checkOut`.
   Future<ApiResponse<CheckOutResponse>> checkOut(CheckOutRequest request);
 
   /// PUT /attendance/update/:attendanceId — admin updates full record
+  /// Method `updateAttendance` returning `Future<ApiResponse<UpdateAttendanceResponse>>`.
+  /// Handles logic operations related to `updateAttendance`.
   Future<ApiResponse<UpdateAttendanceResponse>> updateAttendance(
     int attendanceId,
     UpdateAttendanceRequest request,
   );
 
   /// DELETE /attendance/delete/:attendanceId
+  /// Method `deleteAttendance` returning `Future<ApiResponse<DeleteAttendanceResponse>>`.
+  /// Handles logic operations related to `deleteAttendance`.
   Future<ApiResponse<DeleteAttendanceResponse>> deleteAttendance(int id);
 }
 
+/// Class representing `AttendanceRemoteDataSourceImpl`.
+/// Auto-generated class documentation.
 class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   final DioClient _client;
   AttendanceRemoteDataSourceImpl(this._client);
 
   @override
+  /// Method `getAllAttendance` returning `Future<ApiResponse<AttendanceListResponse>>`.
+  /// Handles logic operations related to `getAllAttendance`.
   Future<ApiResponse<AttendanceListResponse>> getAllAttendance() {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.attendanceAll),
@@ -58,6 +83,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `getAttendanceBasic` returning `Future<ApiResponse<AttendanceBasicResponse>>`.
+  /// Handles logic operations related to `getAttendanceBasic`.
   Future<ApiResponse<AttendanceBasicResponse>> getAttendanceBasic({
     String? date,
   }) {
@@ -73,6 +100,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `getAttendanceHistory` returning `Future<ApiResponse<CrewAttendanceResponse>>`.
+  /// Handles logic operations related to `getAttendanceHistory`.
   Future<ApiResponse<CrewAttendanceResponse>> getAttendanceHistory(int userId) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.attendanceCrew(userId)),
@@ -82,6 +111,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `getAttendanceDetail` returning `Future<ApiResponse<AttendanceDetailResponse>>`.
+  /// Handles logic operations related to `getAttendanceDetail`.
   Future<ApiResponse<AttendanceDetailResponse>> getAttendanceDetail(int id) {
     return ApiResponse.guard(
       request: () => _client.get(ApiPaths.attendanceDetail(id)),
@@ -91,6 +122,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `addAttendance` returning `Future<ApiResponse<AddAttendanceResponse>>`.
+  /// Handles logic operations related to `addAttendance`.
   Future<ApiResponse<AddAttendanceResponse>> addAttendance(
     AddAttendanceRequest request,
   ) {
@@ -105,6 +138,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `checkIn` returning `Future<ApiResponse<CheckInResponse>>`.
+  /// Handles logic operations related to `checkIn`.
   Future<ApiResponse<CheckInResponse>> checkIn(CheckInRequest request) {
     return ApiResponse.guard(
       request: () => _client.patch(
@@ -116,6 +151,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `checkOut` returning `Future<ApiResponse<CheckOutResponse>>`.
+  /// Handles logic operations related to `checkOut`.
   Future<ApiResponse<CheckOutResponse>> checkOut(CheckOutRequest request) {
     return ApiResponse.guard(
       request: () => _client.patch(
@@ -128,6 +165,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `updateAttendance` returning `Future<ApiResponse<UpdateAttendanceResponse>>`.
+  /// Handles logic operations related to `updateAttendance`.
   Future<ApiResponse<UpdateAttendanceResponse>> updateAttendance(
     int attendanceId,
     UpdateAttendanceRequest request,
@@ -143,6 +182,8 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
   }
 
   @override
+  /// Method `deleteAttendance` returning `Future<ApiResponse<DeleteAttendanceResponse>>`.
+  /// Handles logic operations related to `deleteAttendance`.
   Future<ApiResponse<DeleteAttendanceResponse>> deleteAttendance(int id) {
     return ApiResponse.guard(
       request: () => _client.delete(ApiPaths.attendanceDelete(id)),

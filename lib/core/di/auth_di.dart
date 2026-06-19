@@ -1,3 +1,6 @@
+/// File: lib/core/di/auth_di.dart
+/// Generated Documentation for auth_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../../../features/auth/data/datasources/auth_remote_datasource.dart';
@@ -13,6 +16,8 @@ import '../../core/network/dio_client.dart';
 import '../../core/storage/token_storage.dart';
 import '../../core/storage/user_session.dart';
 
+/// Method `registerAuthDi` returning `void`.
+/// Handles logic operations related to `registerAuthDi`.
 void registerAuthDi(GetIt sl) {
   // DataSource
   sl.registerLazySingleton<AuthRemoteDataSource>(

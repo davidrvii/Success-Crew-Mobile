@@ -1,9 +1,16 @@
+/// File: lib/core/config/api_paths.dart
+/// Generated Documentation for api_paths.dart
+
+/// Class defining the routing endpoints for the backend server API.
+/// Organizes endpoint constants and dynamic route paths.
+/// Class representing `ApiPaths`.
+/// Auto-generated class documentation.
 class ApiPaths {
-  ApiPaths._();
+  ApiPaths._(); // Private constructor to prevent instantiation
 
   static const String root = '/';
 
-  // USER (/user)
+  // ─── USER ROUTES (/user) ───
   static const String userAll = '/user/all';
   static const String userRegister = '/user/register';
   static const String userLogin = '/user/login';
@@ -17,7 +24,7 @@ class ApiPaths {
   static String userCrewDetail(int id) => '/user/crew/$id';
   static String userCrewUpdate(int id) => '/user/crew/update/$id';
 
-  // NOTIFICATION (/notification)
+  // ─── NOTIFICATION ROUTES (/notification) ───
   static const String notificationAll = '/notification/all';
   static const String notificationAdd = '/notification/add';
 
@@ -29,7 +36,7 @@ class ApiPaths {
   static String notificationUpdate(int id) => '/notification/update/$id';
   static String notificationDelete(int id) => '/notification/delete/$id';
 
-  // ATTENDANCE (/attendance)
+  // ─── ATTENDANCE ROUTES (/attendance) ───
   static const String attendanceAll = '/attendance/all';
   static const String attendanceBasic = '/attendance/basic';
   static const String attendanceAdd = '/attendance/add';
@@ -41,7 +48,7 @@ class ApiPaths {
   static String attendanceUpdate(int id) => '/attendance/update/$id';
   static String attendanceDelete(int id) => '/attendance/delete/$id';
 
-  // LEAVE (/leave)
+  // ─── LEAVE ROUTES (/leave) ───
   static const String leaveAll = '/leave/all';
   static const String leaveAdd = '/leave/add';
 
@@ -50,7 +57,7 @@ class ApiPaths {
   static String leaveUpdate(int id) => '/leave/update/$id';
   static String leaveDelete(int id) => '/leave/delete/$id';
 
-  // OVERTIME (/overtime)
+  // ─── OVERTIME ROUTES (/overtime) ───
   static const String overtimeAll = '/overtime/all';
   static const String overtimeAdd = '/overtime/add';
   static const String overtimeBasicAll = '/overtime/basic/all';
@@ -61,7 +68,7 @@ class ApiPaths {
   static String overtimeUpdate(int id) => '/overtime/update/$id';
   static String overtimeDelete(int id) => '/overtime/delete/$id';
 
-  // OUT OF OFFICE (/outofoffice & /out-of-office)
+  // ─── OUT OF OFFICE ROUTES (/outofoffice & /out-of-office) ───
   static const String outOfOfficeAll = '/out-of-office/all';
   static const String outOfOfficeBasicAll = '/outofoffice/basic/all';
   static String outOfOfficeBasicDetail(int id) => '/outofoffice/basic/$id';
@@ -72,13 +79,13 @@ class ApiPaths {
   static String outOfOfficeUpdatePut(int id) => '/out-of-office/update/$id';
   static String outOfOfficeDelete(int id) => '/out-of-office/delete/$id';
 
-  // VISIT / TRACKER (/visit)
+  // ─── VISIT / TRACKER ROUTES (/visit) ───
   static const String visitAll = '/visit/all';
   static const String visitList = '/visit/list';
   static const String visitStats = '/visit/stats';
   static const String visitAdd = '/visit/add';
 
-  // VISITOR (/visitor)
+  // ─── VISITOR ROUTES (/visitor) ───
   static const String visitorAll = '/visitor/all';
   static const String visitorAdd = '/visitor/add';
   static String visitorDetail(int id) => '/visitor/detail/$id';
@@ -89,7 +96,7 @@ class ApiPaths {
   static String visitUpdate(int id) => '/visit/update/$id';
   static String visitDelete(int id) => '/visit/delete/$id';
 
-  // FOLLOW UP (/follow-up)
+  // ─── FOLLOW UP ROUTES (/follow-up) ───
   static const String followUpAll = '/follow-up/all';
   static const String followUpAdd = '/follow-up/add';
   static String followUpUpdate(int followUpId) => '/follow-up/update/$followUpId';
@@ -100,7 +107,7 @@ class ApiPaths {
   static String visitFollowUpById(int visitId, int followUpId) =>
       '/follow-up/visit/$visitId/$followUpId';
 
-  // Products sold
+  // Products sold nested under visit
   static String visitProductsSold(int visitId) =>
       '/product-sold/visit/$visitId';
   static String visitProductSoldById(int visitId, int productSoldId) =>
@@ -111,7 +118,7 @@ class ApiPaths {
   static String productSoldUpdate(int id) => '/product-sold/update/$id';
   static String productSoldDelete(int id) => '/product-sold/delete/$id';
 
-  // Units serviced
+  // Units serviced nested under visit
   static String visitUnitsServiced(int visitId) =>
       '/unit-serviced/visit/$visitId';
   static String visitUnitServicedById(int visitId, int unitServicedId) =>

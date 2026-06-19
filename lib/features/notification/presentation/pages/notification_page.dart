@@ -1,9 +1,14 @@
+/// File: lib/features/notification/presentation/pages/notification_page.dart
+/// Generated Documentation for notification_page.dart
+
 import 'package:flutter/material.dart';
 
 import '../controllers/notification_controller.dart';
 import '../../domain/entities/notification.dart';
 import '../../../../core/widgets/list_shimmer_view.dart';
 
+/// Class representing `NotificationPage`.
+/// Auto-generated class documentation.
 class NotificationPage extends StatefulWidget {
   final NotificationController controller;
 
@@ -13,8 +18,12 @@ class NotificationPage extends StatefulWidget {
   State<NotificationPage> createState() => _NotificationPageState();
 }
 
+/// Class representing `_NotificationPageState`.
+/// Auto-generated class documentation.
 class _NotificationPageState extends State<NotificationPage> {
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -23,6 +32,8 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
@@ -82,6 +93,8 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),
@@ -133,12 +146,16 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 }
 
+/// Class representing `_NotificationCard`.
+/// Auto-generated class documentation.
 class _NotificationCard extends StatelessWidget {
   final AppNotification notification;
 
   const _NotificationCard({required this.notification});
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     final isRead = notification.isRead;
     

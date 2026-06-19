@@ -1,3 +1,8 @@
+/// File: lib/features/notification/domain/entities/notification.dart
+/// Generated Documentation for notification.dart
+
+/// Class representing `AppNotification`.
+/// Auto-generated class documentation.
 class AppNotification {
   final int id;
   final int userId;
@@ -20,5 +25,6 @@ class AppNotification {
     required this.updatedAt,
   });
 
+  /// Getter for `isUnread` returning `bool`.
   bool get isUnread => !isRead;
 }

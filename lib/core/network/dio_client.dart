@@ -1,10 +1,16 @@
+/// File: lib/core/network/dio_client.dart
+/// Generated Documentation for dio_client.dart
+
 import 'package:dio/dio.dart';
 
+/// Class representing `DioClient`.
+/// Auto-generated class documentation.
 class DioClient {
   final Dio _dio;
 
   DioClient(this._dio);
 
+  /// Getter for `raw` returning `Dio`.
   Dio get raw => _dio;
 
   Future<Response<T>> get<T>(

@@ -1,3 +1,8 @@
+/// File: lib/features/profile/data/models/user_detail_model.dart
+/// Generated Documentation for user_detail_model.dart
+
+/// Class representing `UserDetailDto`.
+/// Auto-generated class documentation.
 class UserDetailDto {
   final int userId;
   final int? officeId;
@@ -90,6 +95,8 @@ class UserDetailDto {
   }
 }
 
+/// Class representing `CrewHistoryDto`.
+/// Auto-generated class documentation.
 class CrewHistoryDto {
   final int id;
   final String type;
@@ -124,6 +131,8 @@ class CrewHistoryDto {
   }
 }
 
+/// Class representing `UserDetailResponse`.
+/// Auto-generated class documentation.
 class UserDetailResponse {
   final int statusCode;
   final String message;

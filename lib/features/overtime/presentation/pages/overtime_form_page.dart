@@ -1,8 +1,13 @@
+/// File: lib/features/overtime/presentation/pages/overtime_form_page.dart
+/// Generated Documentation for overtime_form_page.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../controllers/overtime_controller.dart';
 
+/// Class representing `OvertimeFormPage`.
+/// Auto-generated class documentation.
 class OvertimeFormPage extends StatefulWidget {
   final OvertimeController controller;
 
@@ -12,6 +17,8 @@ class OvertimeFormPage extends StatefulWidget {
   State<OvertimeFormPage> createState() => _OvertimeFormPageState();
 }
 
+/// Class representing `_OvertimeFormPageState`.
+/// Auto-generated class documentation.
 class _OvertimeFormPageState extends State<OvertimeFormPage> {
   final _formKey = GlobalKey<FormState>();
   final _reasonController = TextEditingController();
@@ -21,11 +28,15 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
   TimeOfDay? _endTime;
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _reasonController.dispose();
     super.dispose();
   }
 
+  /// Method `_pickDate` returning `Future<void>`.
+  /// Handles logic operations related to `_pickDate`.
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -40,6 +51,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
     }
   }
 
+  /// Method `_pickStartTime` returning `Future<void>`.
+  /// Handles logic operations related to `_pickStartTime`.
   Future<void> _pickStartTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -66,6 +79,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
     }
   }
 
+  /// Method `_pickEndTime` returning `Future<void>`.
+  /// Handles logic operations related to `_pickEndTime`.
   Future<void> _pickEndTime() async {
     if (_startTime == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -106,6 +121,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
     }
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     
@@ -129,6 +146,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
     final dateFormat = DateFormat('yyyy-MM-dd');
     final dateStr = dateFormat.format(_date!);
 
+    /// Method `formatTime` returning `String`.
+    /// Handles logic operations related to `formatTime`.
     String formatTime(TimeOfDay t) {
       final h = t.hour.toString().padLeft(2, '0');
       final m = t.minute.toString().padLeft(2, '0');
@@ -151,6 +170,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F8),
@@ -316,6 +337,8 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),

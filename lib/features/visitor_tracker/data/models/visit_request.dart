@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/data/models/visit_request.dart
+/// Generated Documentation for visit_request.dart
+
+/// Class representing `VisitRequest`.
+/// Auto-generated class documentation.
 class VisitRequest {
   final int? userId;
   final int? visitorId;

@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_leave_response.dart
+/// Generated Documentation for home_leave_response.dart
+
+/// Class representing `HomeLeaveResponse`.
+/// Auto-generated class documentation.
 class HomeLeaveResponse {
   final int pendingCount;
 

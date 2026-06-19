@@ -1,6 +1,11 @@
+/// File: lib/features/profile/data/models/update_profile_request.dart
+/// Generated Documentation for update_profile_request.dart
+
 import 'dart:io';
 import 'package:dio/dio.dart';
 
+/// Class representing `UpdateProfileRequest`.
+/// Auto-generated class documentation.
 class UpdateProfileRequest {
   final int? officeId;
   final int? roleId;
@@ -47,6 +52,8 @@ class UpdateProfileRequest {
     return map;
   }
 
+  /// Method `toFormData` returning `Future<FormData>`.
+  /// Handles logic operations related to `toFormData`.
   Future<FormData> toFormData() async {
     final map = toJson();
 

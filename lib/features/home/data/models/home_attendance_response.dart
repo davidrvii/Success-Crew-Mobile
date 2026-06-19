@@ -1,3 +1,8 @@
+/// File: lib/features/home/data/models/home_attendance_response.dart
+/// Generated Documentation for home_attendance_response.dart
+
+/// Class representing `HomeAttendanceResponse`.
+/// Auto-generated class documentation.
 class HomeAttendanceResponse {
   final int present;
   final int late;

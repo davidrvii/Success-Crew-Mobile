@@ -1,3 +1,8 @@
+/// File: lib/features/home/domain/entities/home_attendance_summary.dart
+/// Generated Documentation for home_attendance_summary.dart
+
+/// Class representing `HomeAttendanceSummary`.
+/// Auto-generated class documentation.
 class HomeAttendanceSummary {
   final HomeTodayAbsence today;
   final int presentCount;
@@ -39,13 +44,18 @@ abstract class HomeTodayAbsence {
   }
 }
 
+/// Class representing `HomeTodayAbsenceNotCheckedIn`.
+/// Auto-generated class documentation.
 class HomeTodayAbsenceNotCheckedIn extends HomeTodayAbsence {
   const HomeTodayAbsenceNotCheckedIn();
 
   @override
+  /// Getter for `hasCheckedIn` returning `bool`.
   bool get hasCheckedIn => false;
 }
 
+/// Class representing `HomeTodayAbsenceCheckedIn`.
+/// Auto-generated class documentation.
 class HomeTodayAbsenceCheckedIn extends HomeTodayAbsence {
   final int attendanceId;
   final DateTime? checkInAt;
@@ -60,7 +70,9 @@ class HomeTodayAbsenceCheckedIn extends HomeTodayAbsence {
   });
 
   @override
+  /// Getter for `hasCheckedIn` returning `bool`.
   bool get hasCheckedIn => true;
 
+  /// Getter for `hasCheckedOut` returning `bool`.
   bool get hasCheckedOut => checkOutAt != null;
 }

@@ -1,3 +1,8 @@
+/// File: lib/features/auth/data/models/register_request.dart
+/// Generated Documentation for register_request.dart
+
+/// Class representing `RegisterRequest`.
+/// Auto-generated class documentation.
 class RegisterRequest {
   final int officeId;
   final int roleId;

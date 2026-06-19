@@ -1,3 +1,6 @@
+/// File: lib/features/visitor_tracker/presentation/controllers/visit_detail_controller.dart
+/// Generated Documentation for visit_detail_controller.dart
+
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/network/api_response.dart';
@@ -24,6 +27,8 @@ import '../../domain/usecases/delete_product_sold.dart';
 import '../../domain/usecases/delete_unit_serviced.dart';
 import '../../domain/usecases/delete_visit.dart';
 
+/// Class representing `VisitDetailController`.
+/// Auto-generated class documentation.
 class VisitDetailController extends ChangeNotifier {
   final GetVisitDetailUseCase _getVisitDetail;
   final GetFollowUpsUseCase _getFollowUp;
@@ -71,11 +76,15 @@ class VisitDetailController extends ChangeNotifier {
   String? unitsError;
   List<UnitServiced> units = const [];
 
+  /// Method `init` returning `Future<void>`.
+  /// Handles logic operations related to `init`.
   Future<void> init(int id) async {
     visitId = id;
     await refreshAll();
   }
 
+  /// Method `refreshAll` returning `Future<void>`.
+  /// Handles logic operations related to `refreshAll`.
   Future<void> refreshAll() async {
     if (visitId == null) return;
     await Future.wait([
@@ -86,6 +95,8 @@ class VisitDetailController extends ChangeNotifier {
     ]);
   }
 
+  /// Method `loadDetail` returning `Future<void>`.
+  /// Handles logic operations related to `loadDetail`.
   Future<void> loadDetail() async {
     if (visitId == null) return;
 
@@ -112,6 +123,8 @@ class VisitDetailController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Method `loadFollowUps` returning `Future<void>`.
+  /// Handles logic operations related to `loadFollowUps`.
   Future<void> loadFollowUps() async {
     if (visitId == null) return;
 
@@ -133,6 +146,8 @@ class VisitDetailController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Method `loadProducts` returning `Future<void>`.
+  /// Handles logic operations related to `loadProducts`.
   Future<void> loadProducts() async {
     if (visitId == null) return;
 
@@ -154,6 +169,8 @@ class VisitDetailController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Method `loadUnits` returning `Future<void>`.
+  /// Handles logic operations related to `loadUnits`.
   Future<void> loadUnits() async {
     if (visitId == null) return;
 
@@ -181,6 +198,8 @@ class VisitDetailController extends ChangeNotifier {
   // Create actions
   // ---------------------------
 
+  /// Method `submitFollowUp` returning `Future<bool>`.
+  /// Handles logic operations related to `submitFollowUp`.
   Future<bool> submitFollowUp(String notes, String status) async {
     if (visitId == null) return false;
     isLoadingFollowUps = true;
@@ -200,6 +219,8 @@ class VisitDetailController extends ChangeNotifier {
     return true;
   }
 
+  /// Method `submitProductSold` returning `Future<bool>`.
+  /// Handles logic operations related to `submitProductSold`.
   Future<bool> submitProductSold(String name, int qty, double price, String notes) async {
     if (visitId == null) return false;
     isLoadingProducts = true;
@@ -224,6 +245,8 @@ class VisitDetailController extends ChangeNotifier {
     return true;
   }
 
+  /// Method `submitUnitServiced` returning `Future<bool>`.
+  /// Handles logic operations related to `submitUnitServiced`.
   Future<bool> submitUnitServiced(String name, String issue, String action, String notes, String status) async {
     if (visitId == null) return false;
     isLoadingUnits = true;
@@ -253,6 +276,8 @@ class VisitDetailController extends ChangeNotifier {
   // Delete actions
   // ---------------------------
 
+  /// Method `deleteVisit` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteVisit`.
   Future<bool> deleteVisit() async {
     if (visitId == null) return false;
 
@@ -261,6 +286,8 @@ class VisitDetailController extends ChangeNotifier {
     return true;
   }
 
+  /// Method `deleteFollowUpItem` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteFollowUpItem`.
   Future<bool> deleteFollowUpItem(int followUpId) async {
     if (visitId == null) return false;
 
@@ -271,6 +298,8 @@ class VisitDetailController extends ChangeNotifier {
     return true;
   }
 
+  /// Method `deleteProductItem` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteProductItem`.
   Future<bool> deleteProductItem(int productSoldId) async {
     if (visitId == null) return false;
 
@@ -281,6 +310,8 @@ class VisitDetailController extends ChangeNotifier {
     return true;
   }
 
+  /// Method `deleteUnitItem` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteUnitItem`.
   Future<bool> deleteUnitItem(int unitServicedId) async {
     if (visitId == null) return false;
 

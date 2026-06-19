@@ -1,3 +1,6 @@
+/// File: lib/core/di/home_di.dart
+/// Generated Documentation for home_di.dart
+
 import 'package:get_it/get_it.dart';
 
 import '../../../features/home/data/datasources/home_remote_datasource.dart';
@@ -11,6 +14,8 @@ import '../../../../core/storage/user_session.dart';
 
 import '../network/dio_client.dart';
 
+/// Method `registerHomeDi` returning `void`.
+/// Handles logic operations related to `registerHomeDi`.
 void registerHomeDi(GetIt sl) {
   // DataSource
   sl.registerLazySingleton<HomeRemoteDataSource>(

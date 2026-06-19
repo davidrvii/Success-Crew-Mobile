@@ -1,3 +1,6 @@
+/// File: lib/features/leave/presentation/controllers/leave_controller.dart
+/// Generated Documentation for leave_controller.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,6 +17,8 @@ import '../../domain/usecases/delete_leave.dart';
 import '../../data/models/leave_request.dart';
 import '../../../../core/storage/user_session.dart';
 
+/// Class representing `LeaveController`.
+/// Auto-generated class documentation.
 class LeaveController extends ChangeNotifier {
   final GetLeaveListUseCase _getLeaveList;
   final GetLeaveDetailUseCase _getLeaveDetail;
@@ -43,20 +48,27 @@ class LeaveController extends ChangeNotifier {
        _getOutOfOfficeListUseCase = getOutOfOfficeListUseCase;
 
   bool _loading = false;
+  /// Getter for `isLoading` returning `bool`.
   bool get isLoading => _loading;
 
   String? _errorMessage;
+  /// Getter for `errorMessage` returning `String?`.
   String? get errorMessage => _errorMessage;
 
   List<Leave> _leaves = [];
+  /// Getter for `leaves` returning `List<Leave>`.
   List<Leave> get leaves => _leaves;
 
   Leave? _selectedLeave;
+  /// Getter for `selectedLeave` returning `Leave?`.
   Leave? get selectedLeave => _selectedLeave;
 
   bool _isOwner = false;
+  /// Getter for `isOwner` returning `bool`.
   bool get isOwner => _isOwner;
 
+  /// Method `init` returning `Future<void>`.
+  /// Handles logic operations related to `init`.
   Future<void> init() async {
     final session = await _session.readSession();
     final role = (session?['role_name'] as String?)?.trim().toLowerCase();
@@ -65,6 +77,8 @@ class LeaveController extends ChangeNotifier {
     await fetchLeaves();
   }
 
+  /// Method `fetchLeaves` returning `Future<void>`.
+  /// Handles logic operations related to `fetchLeaves`.
   Future<void> fetchLeaves() async {
     _setLoading(true);
     _errorMessage = null;
@@ -81,6 +95,8 @@ class LeaveController extends ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Method `fetchLeaveDetail` returning `Future<void>`.
+  /// Handles logic operations related to `fetchLeaveDetail`.
   Future<void> fetchLeaveDetail(int id) async {
     _setLoading(true);
     _errorMessage = null;
@@ -96,6 +112,8 @@ class LeaveController extends ChangeNotifier {
     _setLoading(false);
   }
 
+  /// Method `submitLeave` returning `Future<bool>`.
+  /// Handles logic operations related to `submitLeave`.
   Future<bool> submitLeave({
     required String type,
     required String startDate,
@@ -176,6 +194,8 @@ class LeaveController extends ChangeNotifier {
     }
   }
 
+  /// Method `updateStatus` returning `Future<bool>`.
+  /// Handles logic operations related to `updateStatus`.
   Future<bool> updateStatus(int id, String status) async {
     _setLoading(true);
     _errorMessage = null;
@@ -195,6 +215,8 @@ class LeaveController extends ChangeNotifier {
     }
   }
 
+  /// Method `deleteLeave` returning `Future<bool>`.
+  /// Handles logic operations related to `deleteLeave`.
   Future<bool> deleteLeave(int id) async {
     _setLoading(true);
     _errorMessage = null;
@@ -213,6 +235,8 @@ class LeaveController extends ChangeNotifier {
     }
   }
 
+  /// Method `_setLoading` returning `void`.
+  /// Handles logic operations related to `_setLoading`.
   void _setLoading(bool v) {
     if (_loading == v) return;
     _loading = v;

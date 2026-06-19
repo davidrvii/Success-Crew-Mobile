@@ -1,3 +1,8 @@
+/// File: lib/features/attendance/domain/entities/attendance.dart
+/// Generated Documentation for attendance.dart
+
+/// Class representing `Attendance`.
+/// Auto-generated class documentation.
 class Attendance {
   final int id;
   final int? userId;
@@ -25,7 +30,9 @@ class Attendance {
     this.overtime,
   });
 
+  /// Getter for `hasCheckedIn` returning `bool`.
   bool get hasCheckedIn => checkInAt != null;
+  /// Getter for `hasCheckedOut` returning `bool`.
   bool get hasCheckedOut => checkOutAt != null;
 
   String get displayStatus {
@@ -35,18 +42,24 @@ class Attendance {
 }
 
 /// Basic today's attendance state — from GET /attendance/basic
+/// Class representing `AttendanceBasic`.
+/// Auto-generated class documentation.
 class AttendanceBasic {
   final DateTime? attendanceIn;
   final DateTime? attendanceOut;
 
   const AttendanceBasic({this.attendanceIn, this.attendanceOut});
 
+  /// Getter for `hasCheckedIn` returning `bool`.
   bool get hasCheckedIn => attendanceIn != null;
+  /// Getter for `hasCheckedOut` returning `bool`.
   bool get hasCheckedOut => attendanceOut != null;
 }
 
 /// A single entry in the crew history list (mixed type)
 /// type: "attendance" | "overtime" | "leave" | "out_of_office"
+/// Class representing `CrewHistoryItem`.
+/// Auto-generated class documentation.
 class CrewHistoryItem {
   final int id;
   final String type;
@@ -86,13 +99,19 @@ class CrewHistoryItem {
     this.outOfOfficeEnd,
   });
 
+  /// Getter for `isAttendance` returning `bool`.
   bool get isAttendance => type == 'attendance';
+  /// Getter for `isOvertime` returning `bool`.
   bool get isOvertime => type == 'overtime';
+  /// Getter for `isLeave` returning `bool`.
   bool get isLeave => type == 'leave';
+  /// Getter for `isOutOfOffice` returning `bool`.
   bool get isOutOfOffice => type == 'out_of_office';
 }
 
 /// Full crew attendance history — from GET /attendance/crew/:userId
+/// Class representing `CrewAttendanceHistory`.
+/// Auto-generated class documentation.
 class CrewAttendanceHistory {
   final int totalAttendance;
   final int totalLate;
@@ -118,6 +137,8 @@ class CrewAttendanceHistory {
 }
 
 /// Legacy: kept for backward compatibility with controllers expecting this shape
+/// Class representing `AttendanceHistoryData`.
+/// Auto-generated class documentation.
 class AttendanceHistoryData {
   final List<Attendance> history;
   final int presentCount;

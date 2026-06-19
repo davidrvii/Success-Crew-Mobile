@@ -1,5 +1,10 @@
+/// File: lib/features/home/presentation/widgets/app_empty_view.dart
+/// Generated Documentation for app_empty_view.dart
+
 import 'package:flutter/material.dart';
 
+/// Class representing `AppEmptyView`.
+/// Auto-generated class documentation.
 class AppEmptyView extends StatelessWidget {
   final String title;
   final String message;
@@ -18,6 +23,8 @@ class AppEmptyView extends StatelessWidget {
   });
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Center(
       child: Padding(

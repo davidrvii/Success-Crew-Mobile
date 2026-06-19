@@ -1,3 +1,6 @@
+/// File: lib/features/crew/presentation/pages/crew_page.dart
+/// Generated Documentation for crew_page.dart
+
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -5,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import '../controllers/crew_controller.dart';
 import '../../domain/entities/crew_member.dart';
 
+/// Class representing `CrewPage`.
+/// Auto-generated class documentation.
 class CrewPage extends StatefulWidget {
   final CrewController controller;
 
@@ -14,11 +19,16 @@ class CrewPage extends StatefulWidget {
   State<CrewPage> createState() => _CrewPageState();
 }
 
+/// Class representing `_CrewPageState`.
+/// Auto-generated class documentation.
 class _CrewPageState extends State<CrewPage> {
+  /// Getter for `c` returning `CrewController`.
   CrewController get c => widget.controller;
   String _searchQuery = '';
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -27,6 +37,8 @@ class _CrewPageState extends State<CrewPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFAFBFF),
@@ -152,6 +164,8 @@ class _CrewPageState extends State<CrewPage> {
     );
   }
 
+  /// Method `_buildCrewCard` returning `Widget`.
+  /// Handles logic operations related to `_buildCrewCard`.
   Widget _buildCrewCard(CrewMember m) {
     final avatar = _resolveAvatar(m.userPhoto);
     final String initials = m.userName.trim().isNotEmpty
@@ -325,6 +339,8 @@ class _CrewPageState extends State<CrewPage> {
     return null;
   }
 
+  /// Method `_buildShimmerGrid` returning `Widget`.
+  /// Handles logic operations related to `_buildShimmerGrid`.
   Widget _buildShimmerGrid() {
     return SingleChildScrollView(
       physics: const NeverScrollableScrollPhysics(),
@@ -390,6 +406,8 @@ class _CrewPageState extends State<CrewPage> {
     );
   }
 
+  /// Method `_buildErrorView` returning `Widget`.
+  /// Handles logic operations related to `_buildErrorView`.
   Widget _buildErrorView() {
     return Center(
       child: Padding(

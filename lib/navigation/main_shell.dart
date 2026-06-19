@@ -1,13 +1,20 @@
+/// File: lib/navigation/main_shell.dart
+/// Generated Documentation for main_shell.dart
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../core/di/service_locator.dart';
 import '../core/storage/user_session.dart';
 
+/// Class representing `MainShell`.
+/// Auto-generated class documentation.
 class MainShell extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   const MainShell({super.key, required this.navigationShell});
 
+  /// Method `_onTap` returning `void`.
+  /// Handles logic operations related to `_onTap`.
   void _onTap(BuildContext context, int index, bool isOwner) {
     int targetBranch = index;
     if (isOwner && index == 2) {
@@ -20,6 +27,8 @@ class MainShell extends StatelessWidget {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>?>(
       future: sl<UserSession>().readSession(),

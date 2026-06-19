@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/domain/entities/product_sold.dart
+/// Generated Documentation for product_sold.dart
+
+/// Class representing `ProductSold`.
+/// Auto-generated class documentation.
 class ProductSold {
   final int productSoldId;
   final int visitId;

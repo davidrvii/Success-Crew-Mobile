@@ -1,3 +1,6 @@
+/// File: lib/features/auth/data/repositories/auth_repository_impl.dart
+/// Generated Documentation for auth_repository_impl.dart
+
 import 'package:success_crew/features/auth/domain/entities/auth_session.dart';
 import 'package:success_crew/features/auth/domain/entities/registered_user.dart';
 
@@ -11,6 +14,8 @@ import '../datasources/auth_remote_datasource.dart';
 import '../models/login_request.dart';
 import '../models/register_request.dart';
 
+/// Class representing `AuthRepositoryImpl`.
+/// Auto-generated class documentation.
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remote;
   final TokenStorage _tokenStorage;
@@ -19,6 +24,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._remote, this._tokenStorage, this._userSession);
 
   @override
+  /// Method `login` returning `Future<ApiResponse<AuthSession>>`.
+  /// Handles logic operations related to `login`.
   Future<ApiResponse<AuthSession>> login({
     required String email,
     required String password,
@@ -69,6 +76,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  /// Method `register` returning `Future<ApiResponse<RegisteredUser>>`.
+  /// Handles logic operations related to `register`.
   Future<ApiResponse<RegisteredUser>> register({
     required int officeId,
     required int roleId,
@@ -112,6 +121,8 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  /// Method `logout` returning `Future<void>`.
+  /// Handles logic operations related to `logout`.
   Future<void> logout() async {
     await _tokenStorage.clear();
     await _userSession.clear();

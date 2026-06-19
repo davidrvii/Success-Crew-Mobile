@@ -1,7 +1,14 @@
+/// File: lib/features/visitor_tracker/data/models/visit_stats_model.dart
+/// Generated Documentation for visit_stats_model.dart
+
 import '../../domain/entities/visit_stats.dart';
 
+/// Method `_int` returning `int`.
+/// Handles logic operations related to `_int`.
 int _int(dynamic v) => (v is num) ? v.toInt() : int.tryParse('$v') ?? 0;
 
+/// Class representing `VisitStatsModel`.
+/// Auto-generated class documentation.
 class VisitStatsModel extends VisitStats {
   const VisitStatsModel({
     super.dailyCount,
@@ -32,6 +39,8 @@ class VisitStatsModel extends VisitStats {
   }
 }
 
+/// Class representing `VisitDailyCountModel`.
+/// Auto-generated class documentation.
 class VisitDailyCountModel extends VisitDailyCount {
   const VisitDailyCountModel({
     required super.totalVisit,
@@ -54,6 +63,8 @@ class VisitDailyCountModel extends VisitDailyCount {
   }
 }
 
+/// Class representing `VisitWeeklyCountModel`.
+/// Auto-generated class documentation.
 class VisitWeeklyCountModel extends VisitWeeklyCount {
   const VisitWeeklyCountModel({
     required super.date,
@@ -68,6 +79,8 @@ class VisitWeeklyCountModel extends VisitWeeklyCount {
   }
 }
 
+/// Class representing `VisitRushHourModel`.
+/// Auto-generated class documentation.
 class VisitRushHourModel extends VisitRushHour {
   const VisitRushHourModel({
     required super.hour,
@@ -82,6 +95,8 @@ class VisitRushHourModel extends VisitRushHour {
   }
 }
 
+/// Class representing `ProductSoldWeeklyModel`.
+/// Auto-generated class documentation.
 class ProductSoldWeeklyModel extends ProductSoldWeekly {
   const ProductSoldWeeklyModel({
     required super.date,
@@ -96,6 +111,8 @@ class ProductSoldWeeklyModel extends ProductSoldWeekly {
   }
 }
 
+/// Class representing `UnitServiceWeeklyModel`.
+/// Auto-generated class documentation.
 class UnitServiceWeeklyModel extends UnitServiceWeekly {
   const UnitServiceWeeklyModel({
     required super.date,

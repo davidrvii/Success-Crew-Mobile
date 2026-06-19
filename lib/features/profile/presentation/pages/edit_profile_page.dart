@@ -1,3 +1,6 @@
+/// File: lib/features/profile/presentation/pages/edit_profile_page.dart
+/// Generated Documentation for edit_profile_page.dart
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -10,6 +13,8 @@ import 'package:intl/intl.dart';
 import '../../domain/entities/user_detail.dart';
 import '../controllers/profile_controller.dart';
 
+/// Class representing `EditProfilePage`.
+/// Auto-generated class documentation.
 class EditProfilePage extends StatefulWidget {
   final UserDetail detail;
   final ProfileController controller;
@@ -24,6 +29,8 @@ class EditProfilePage extends StatefulWidget {
   State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
+/// Class representing `_EditProfilePageState`.
+/// Auto-generated class documentation.
 class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
@@ -34,6 +41,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   DateTime? _selectedBirthDate;
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     final d = widget.detail;
@@ -44,6 +53,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
@@ -51,6 +62,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     super.dispose();
   }
 
+  /// Method `_pickImage` returning `Future<void>`.
+  /// Handles logic operations related to `_pickImage`.
   Future<void> _pickImage(BuildContext context, ProfileController c) async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
@@ -108,6 +121,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
@@ -309,6 +324,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  /// Method `_buildCustomHeader` returning `Widget`.
+  /// Handles logic operations related to `_buildCustomHeader`.
   Widget _buildCustomHeader(BuildContext context, String title) {
     return Container(
       margin: const EdgeInsets.fromLTRB(16, 10, 16, 10),

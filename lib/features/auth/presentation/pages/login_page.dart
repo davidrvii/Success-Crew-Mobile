@@ -1,7 +1,12 @@
+/// File: lib/features/auth/presentation/pages/login_page.dart
+/// Generated Documentation for login_page.dart
+
 import 'package:flutter/material.dart';
 
 import '../controllers/login_controller.dart';
 
+/// Class representing `LoginPage`.
+/// Auto-generated class documentation.
 class LoginPage extends StatefulWidget {
   final LoginController controller;
 
@@ -20,13 +25,18 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+/// Class representing `_LoginPageState`.
+/// Auto-generated class documentation.
 class _LoginPageState extends State<LoginPage> {
+  /// Getter for `c` returning `LoginController`.
   LoginController get c => widget.controller;
 
   final _emailC = TextEditingController();
   final _passC = TextEditingController();
 
   @override
+  /// Method `initState` returning `void`.
+  /// Handles logic operations related to `initState`.
   void initState() {
     super.initState();
     c.addListener(_onChanged);
@@ -36,6 +46,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  /// Method `dispose` returning `void`.
+  /// Handles logic operations related to `dispose`.
   void dispose() {
     _emailC.dispose();
     _passC.dispose();
@@ -45,11 +57,15 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
+  /// Method `_onChanged` returning `void`.
+  /// Handles logic operations related to `_onChanged`.
   void _onChanged() {
     if (!mounted) return;
     setState(() {});
   }
 
+  /// Method `_submit` returning `Future<void>`.
+  /// Handles logic operations related to `_submit`.
   Future<void> _submit() async {
     final ok = await c.login(email: _emailC.text, password: _passC.text);
 
@@ -65,6 +81,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     const bg = Color(0xFFF6F7FB);
     const blue = Color(0xFF1C5AA6);
@@ -196,11 +214,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
+/// Class representing `_Label`.
+/// Auto-generated class documentation.
 class _Label extends StatelessWidget {
   final String text;
   const _Label(this.text);
 
   @override
+  /// Method `build` returning `Widget`.
+  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,

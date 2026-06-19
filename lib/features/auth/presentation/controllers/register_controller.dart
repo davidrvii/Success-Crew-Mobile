@@ -1,9 +1,14 @@
+/// File: lib/features/auth/presentation/controllers/register_controller.dart
+/// Generated Documentation for register_controller.dart
+
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/network/api_response.dart';
 import '../../domain/entities/registered_user.dart';
 import '../../domain/usecases/register_usecase.dart';
 
+/// Class representing `RegisterController`.
+/// Auto-generated class documentation.
 class RegisterController extends ChangeNotifier {
   final RegisterUseCase _registerUseCase;
 
@@ -11,28 +16,38 @@ class RegisterController extends ChangeNotifier {
     : _registerUseCase = registerUseCase;
 
   bool _isLoading = false;
+  /// Getter for `isLoading` returning `bool`.
   bool get isLoading => _isLoading;
 
   String? _errorMessage;
+  /// Getter for `errorMessage` returning `String?`.
   String? get errorMessage => _errorMessage;
 
   RegisteredUser? _registered;
+  /// Getter for `registered` returning `RegisteredUser?`.
   RegisteredUser? get registered => _registered;
 
   bool _obscurePassword = true;
+  /// Getter for `obscurePassword` returning `bool`.
   bool get obscurePassword => _obscurePassword;
 
+  /// Method `toggleObscure` returning `void`.
+  /// Handles logic operations related to `toggleObscure`.
   void toggleObscure() {
     _obscurePassword = !_obscurePassword;
     notifyListeners();
   }
 
+  /// Method `clearError` returning `void`.
+  /// Handles logic operations related to `clearError`.
   void clearError() {
     if (_errorMessage == null) return;
     _errorMessage = null;
     notifyListeners();
   }
 
+  /// Method `register` returning `Future<bool>`.
+  /// Handles logic operations related to `register`.
   Future<bool> register({
     required String name,
     required String email,
@@ -84,6 +99,8 @@ class RegisterController extends ChangeNotifier {
     return false;
   }
 
+  /// Method `_setLoading` returning `void`.
+  /// Handles logic operations related to `_setLoading`.
   void _setLoading(bool v) {
     if (_isLoading == v) return;
     _isLoading = v;

@@ -1,3 +1,6 @@
+/// File: lib/features/out_of_office/data/repositories/out_of_office_repository_impl.dart
+/// Generated Documentation for out_of_office_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -11,6 +14,8 @@ import '../datasources/out_of_office_remote_datasource.dart';
 import '../models/out_of_office_model.dart';
 import '../models/out_of_office_request.dart';
 
+/// Class representing `OutOfOfficeRepositoryImpl`.
+/// Auto-generated class documentation.
 class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   final OutOfOfficeRemoteDataSource _remote;
   final UserSession _session;
@@ -18,6 +23,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   OutOfOfficeRepositoryImpl(this._remote, this._session);
 
   @override
+  /// Method `getOutOfOfficeList` returning `Future<ApiResponse<List<OutOfOffice>>>`.
+  /// Handles logic operations related to `getOutOfOfficeList`.
   Future<ApiResponse<List<OutOfOffice>>> getOutOfOfficeList() async {
     final session = await _session.readSession();
     final roleName = (session?['role_name'] as String?)?.trim().toLowerCase();
@@ -40,6 +47,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `getOutOfOfficeDetail` returning `Future<ApiResponse<OutOfOffice>>`.
+  /// Handles logic operations related to `getOutOfOfficeDetail`.
   Future<ApiResponse<OutOfOffice>> getOutOfOfficeDetail(int id) async {
     final res = await _remote.getOutOfOfficeDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -58,6 +67,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `createOutOfOffice` returning `Future<ApiResponse<OutOfOffice>>`.
+  /// Handles logic operations related to `createOutOfOffice`.
   Future<ApiResponse<OutOfOffice>> createOutOfOffice(OutOfOfficeRequest request) async {
     final ensured = await _ensureUserIdInRequest(request);
 
@@ -78,6 +89,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `updateOutOfOffice` returning `Future<ApiResponse<OutOfOffice>>`.
+  /// Handles logic operations related to `updateOutOfOffice`.
   Future<ApiResponse<OutOfOffice>> updateOutOfOffice(
     int id,
     OutOfOfficeRequest request,
@@ -101,6 +114,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `updateOutOfOfficeStatus` returning `Future<ApiResponse<OutOfOffice>>`.
+  /// Handles logic operations related to `updateOutOfOfficeStatus`.
   Future<ApiResponse<OutOfOffice>> updateOutOfOfficeStatus(
     int id,
     String status,
@@ -122,6 +137,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `deleteOutOfOffice` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `deleteOutOfOffice`.
   Future<ApiResponse<int>> deleteOutOfOffice(int id) async {
     final res = await _remote.deleteOutOfOffice(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -140,6 +157,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `getOutOfOfficeBasicAll` returning `Future<ApiResponse<OutOfOfficeBasicList>>`.
+  /// Handles logic operations related to `getOutOfOfficeBasicAll`.
   Future<ApiResponse<OutOfOfficeBasicList>> getOutOfOfficeBasicAll() async {
     final res = await _remote.getOutOfOfficeBasicAll();
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -154,6 +173,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
   }
 
   @override
+  /// Method `getOutOfOfficeBasicDetail` returning `Future<ApiResponse<OutOfOfficeBasic>>`.
+  /// Handles logic operations related to `getOutOfOfficeBasicDetail`.
   Future<ApiResponse<OutOfOfficeBasic>> getOutOfOfficeBasicDetail(int id) async {
     final res = await _remote.getOutOfOfficeBasicDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -178,6 +199,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
 
   // ========= helpers =========
 
+  /// Method `_requireUserId` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<ApiResponse<int>> _requireUserId() async {
     final int? userId = await _session.readUserId();
     if (userId == null) {
@@ -191,6 +214,8 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
     return ApiResponse.success(userId);
   }
 
+  /// Method `_ensureUserIdInRequest` returning `Future<OutOfOfficeRequest>`.
+  /// Handles logic operations related to `_ensureUserIdInRequest`.
   Future<OutOfOfficeRequest> _ensureUserIdInRequest(OutOfOfficeRequest req) async {
     if (req.userId != null) return req;
 

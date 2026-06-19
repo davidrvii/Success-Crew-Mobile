@@ -1,14 +1,21 @@
+/// File: lib/core/network/api_response.dart
+/// Generated Documentation for api_response.dart
+
 import 'package:dio/dio.dart';
 
 import 'network_exceptions.dart';
 
+/// Class representing `ApiResponse`.
+/// Auto-generated class documentation.
 class ApiResponse<T> {
   final T? data;
   final NetworkException? error;
 
   const ApiResponse._({this.data, this.error});
 
+  /// Getter for `isSuccess` returning `bool`.
   bool get isSuccess => error == null;
+  /// Getter for `isFailure` returning `bool`.
   bool get isFailure => error != null;
 
   factory ApiResponse.success(T data) => ApiResponse._(data: data);

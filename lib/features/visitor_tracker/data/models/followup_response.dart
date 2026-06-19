@@ -1,7 +1,14 @@
+/// File: lib/features/visitor_tracker/data/models/followup_response.dart
+/// Generated Documentation for followup_response.dart
+
 import 'followup_model.dart';
 
+/// Method `_status` returning `int`.
+/// Handles logic operations related to `_status`.
 int _status(Map<String, dynamic> json) =>
     (json['statusCode'] as num?)?.toInt() ?? 0;
+/// Method `_msg` returning `String`.
+/// Handles logic operations related to `_msg`.
 String _msg(Map<String, dynamic> json) => (json['message'] as String?) ?? '';
 
 List<Map<String, dynamic>> _asListMap(dynamic raw) {
@@ -18,6 +25,8 @@ Map<String, dynamic>? _asMap(dynamic raw) =>
     raw is Map<String, dynamic> ? raw : null;
 
 /// Response for GET /follow-up/all AND GET /follow-up/visit/:visitId
+/// Class representing `FollowUpListResponse`.
+/// Auto-generated class documentation.
 class FollowUpListResponse {
   final int statusCode;
   final String message;
@@ -48,6 +57,8 @@ class FollowUpListResponse {
 
 /// Response for POST /follow-up/add, POST /follow-up/visit/:visitId,
 /// PUT /follow-up/update/:followUpId, PATCH /follow-up/visit/:visitId/:followUpId
+/// Class representing `FollowUpMutationResponse`.
+/// Auto-generated class documentation.
 class FollowUpMutationResponse {
   final int statusCode;
   final String message;
@@ -83,6 +94,8 @@ class FollowUpMutationResponse {
 
 /// Response for DELETE /follow-up/delete/:followUpId
 /// and DELETE /follow-up/visit/:visitId/:followUpId
+/// Class representing `FollowUpDeleteResponse`.
+/// Auto-generated class documentation.
 class FollowUpDeleteResponse {
   final int statusCode;
   final String message;

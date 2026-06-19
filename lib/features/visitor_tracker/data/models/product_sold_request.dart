@@ -1,3 +1,8 @@
+/// File: lib/features/visitor_tracker/data/models/product_sold_request.dart
+/// Generated Documentation for product_sold_request.dart
+
+/// Class representing `ProductSoldRequest`.
+/// Auto-generated class documentation.
 class ProductSoldRequest {
   final int? visitId;
   final String? productName;

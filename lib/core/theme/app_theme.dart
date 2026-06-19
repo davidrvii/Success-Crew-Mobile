@@ -1,5 +1,10 @@
+/// File: lib/core/theme/app_theme.dart
+/// Generated Documentation for app_theme.dart
+
 import 'package:flutter/material.dart';
 
+/// Class representing `AppTheme`.
+/// Auto-generated class documentation.
 class AppTheme {
   AppTheme._();
 

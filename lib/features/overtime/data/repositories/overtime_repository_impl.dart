@@ -1,3 +1,6 @@
+/// File: lib/features/overtime/data/repositories/overtime_repository_impl.dart
+/// Generated Documentation for overtime_repository_impl.dart
+
 import '../../../../core/network/api_response.dart';
 import '../../../../core/network/network_exceptions.dart';
 import '../../../../core/storage/user_session.dart';
@@ -11,6 +14,8 @@ import '../datasources/overtime_remote_datasource.dart';
 import '../models/overtime_model.dart';
 import '../models/overtime_request.dart';
 
+/// Class representing `OvertimeRepositoryImpl`.
+/// Auto-generated class documentation.
 class OvertimeRepositoryImpl implements OvertimeRepository {
   final OvertimeRemoteDataSource _remote;
   final UserSession _session;
@@ -18,6 +23,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   OvertimeRepositoryImpl(this._remote, this._session);
 
   @override
+  /// Method `getOvertimeList` returning `Future<ApiResponse<List<Overtime>>>`.
+  /// Handles logic operations related to `getOvertimeList`.
   Future<ApiResponse<List<Overtime>>> getOvertimeList() async {
     final session = await _session.readSession();
     final roleName = (session?['role_name'] as String?)?.trim().toLowerCase();
@@ -40,6 +47,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `getOvertimeDetail` returning `Future<ApiResponse<Overtime>>`.
+  /// Handles logic operations related to `getOvertimeDetail`.
   Future<ApiResponse<Overtime>> getOvertimeDetail(int id) async {
     final res = await _remote.getOvertimeDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -58,6 +67,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `createOvertime` returning `Future<ApiResponse<Overtime>>`.
+  /// Handles logic operations related to `createOvertime`.
   Future<ApiResponse<Overtime>> createOvertime(OvertimeRequest request) async {
     final ensured = await _ensureUserIdInRequest(request);
 
@@ -78,6 +89,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `updateOvertime` returning `Future<ApiResponse<Overtime>>`.
+  /// Handles logic operations related to `updateOvertime`.
   Future<ApiResponse<Overtime>> updateOvertime(
     int id,
     OvertimeRequest request,
@@ -101,6 +114,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `updateOvertimeStatus` returning `Future<ApiResponse<Overtime>>`.
+  /// Handles logic operations related to `updateOvertimeStatus`.
   Future<ApiResponse<Overtime>> updateOvertimeStatus(
     int id,
     String status,
@@ -122,6 +137,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `deleteOvertime` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `deleteOvertime`.
   Future<ApiResponse<int>> deleteOvertime(int id) async {
     final res = await _remote.deleteOvertime(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -140,6 +157,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `getOvertimeBasicAll` returning `Future<ApiResponse<OvertimeBasicList>>`.
+  /// Handles logic operations related to `getOvertimeBasicAll`.
   Future<ApiResponse<OvertimeBasicList>> getOvertimeBasicAll() async {
     final res = await _remote.getOvertimeBasicAll();
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -154,6 +173,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
   }
 
   @override
+  /// Method `getOvertimeBasicDetail` returning `Future<ApiResponse<OvertimeBasic>>`.
+  /// Handles logic operations related to `getOvertimeBasicDetail`.
   Future<ApiResponse<OvertimeBasic>> getOvertimeBasicDetail(int id) async {
     final res = await _remote.getOvertimeBasicDetail(id);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
@@ -178,6 +199,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
 
   // ========= helpers =========
 
+  /// Method `_requireUserId` returning `Future<ApiResponse<int>>`.
+  /// Handles logic operations related to `_requireUserId`.
   Future<ApiResponse<int>> _requireUserId() async {
     final int? userId = await _session.readUserId();
     if (userId == null) {
@@ -191,6 +214,8 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
     return ApiResponse.success(userId);
   }
 
+  /// Method `_ensureUserIdInRequest` returning `Future<OvertimeRequest>`.
+  /// Handles logic operations related to `_ensureUserIdInRequest`.
   Future<OvertimeRequest> _ensureUserIdInRequest(OvertimeRequest req) async {
     if (req.userId != null) return req;
 

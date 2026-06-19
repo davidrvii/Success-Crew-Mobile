@@ -1,5 +1,10 @@
+/// File: lib/features/visitor_tracker/domain/entities/visitor.dart
+/// Generated Documentation for visitor.dart
+
 import 'visit.dart';
 
+/// Class representing `Visitor`.
+/// Auto-generated class documentation.
 class Visitor {
   final int visitorId;
   final String? visitorName;
