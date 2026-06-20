@@ -60,9 +60,7 @@ class _LeaveListPageState extends State<LeaveListPage> {
             ),
           );
         } else {
-          final displayLeaves = c.isOwner
-              ? c.leaves.where((l) => l.isPending).toList()
-              : c.leaves;
+          final displayLeaves = c.leaves;
 
           if (displayLeaves.isEmpty) {
             body = Center(

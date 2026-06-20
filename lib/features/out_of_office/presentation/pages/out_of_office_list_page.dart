@@ -60,9 +60,7 @@ class _OutOfOfficeListPageState extends State<OutOfOfficeListPage> {
             ),
           );
         } else {
-          final displayList = c.isOwner
-              ? c.outOfOffices.where((o) => o.isPending).toList()
-              : c.outOfOffices;
+          final displayList = c.outOfOffices;
 
           if (displayList.isEmpty) {
             body = Center(

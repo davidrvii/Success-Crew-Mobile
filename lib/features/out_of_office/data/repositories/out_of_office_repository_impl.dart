@@ -76,7 +76,7 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.outOfOffice;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,
@@ -101,7 +101,7 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.outOfOffice;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,
@@ -124,7 +124,7 @@ class OutOfOfficeRepositoryImpl implements OutOfOfficeRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.outOfOffice;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,

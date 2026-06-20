@@ -39,10 +39,10 @@ class LeaveDto {
     return LeaveDto(
       id: _readInt(json, ['leave_id', 'id', 'leaveId']) ?? 0,
       userId: _readInt(json, ['user_id', 'userId']) ?? 0,
-      leaveType: _readString(json, ['leave_type', 'leaveType', 'type']),
-      startDate: _readDate(json, ['start_date', 'startDate']),
-      endDate: _readDate(json, ['end_date', 'endDate']),
-      reason: _readString(json, ['reason', 'leave_reason']),
+      leaveType: _readString(json, ['leave_type', 'leaveType', 'type', 'leave_desc']),
+      startDate: _readDate(json, ['leave_start', 'start_date', 'startDate']),
+      endDate: _readDate(json, ['leave_end', 'end_date', 'endDate']),
+      reason: _readString(json, ['reason', 'leave_reason', 'leave_desc']),
       status: _readString(json, ['status', 'leave_status']),
       createdAt: _readDate(json, ['created_at', 'createdAt']),
       updatedAt: _readDate(json, ['updated_at', 'updatedAt']),
@@ -73,6 +73,7 @@ class LeaveListResponse {
       'leaveList',
       'leaveHistory',
       'crewLeave',
+      'crewLeaves',
       'items',
       'data',
     ]);
@@ -81,7 +82,7 @@ class LeaveListResponse {
     if (raw is List) {
       extracted.addAll(raw);
     } else if (raw is Map<String, dynamic>) {
-      final nested = _readAny(raw, ['leave', 'items', 'data']);
+      final nested = _readAny(raw, ['leave', 'leaves', 'crewLeave', 'crewLeaves', 'items', 'data']);
       if (nested is List) extracted.addAll(nested);
     }
 
@@ -170,7 +171,7 @@ class UpdateLeaveResponse {
   });
 
   factory UpdateLeaveResponse.fromJson(Map<String, dynamic> json) {
-    final obj = _readMap(json, ['updatedLeave', 'leave', 'data']);
+    final obj = _readMap(json, ['updatedLeave', 'leaveUpdated', 'leave', 'data']);
 
     return UpdateLeaveResponse(
       statusCode: (json['statusCode'] as num?)?.toInt() ?? 0,

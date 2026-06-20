@@ -60,9 +60,7 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
             ),
           );
         } else {
-          final displayOvertimes = c.isOwner
-              ? c.overtimes.where((o) => o.isPending).toList()
-              : c.overtimes;
+          final displayOvertimes = c.overtimes;
 
           if (displayOvertimes.isEmpty) {
             body = Center(

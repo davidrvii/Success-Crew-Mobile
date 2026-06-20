@@ -76,7 +76,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.overtime;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,
@@ -101,7 +101,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.overtime;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,
@@ -124,7 +124,7 @@ class OvertimeRepositoryImpl implements OvertimeRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.overtime;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,

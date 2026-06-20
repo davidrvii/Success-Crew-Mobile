@@ -365,6 +365,13 @@ DateTime? _readDate(Map<String, dynamic> json, List<String> keys) {
     if (v is String) {
       final dt = DateTime.tryParse(v);
       if (dt != null) return dt;
+      // Try parsing as time only (e.g. "08:00" or "08:00:00")
+      if (RegExp(r'^\d{2}:\d{2}(:\d{2})?$').hasMatch(v)) {
+        final dummyDt = DateTime.tryParse('1970-01-01T$v');
+        if (dummyDt != null) return dummyDt;
+        final dummyDt2 = DateTime.tryParse('1970-01-01 $v');
+        if (dummyDt2 != null) return dummyDt2;
+      }
     }
   }
   return null;

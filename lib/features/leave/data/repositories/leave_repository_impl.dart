@@ -74,7 +74,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.leave;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,
@@ -96,7 +96,7 @@ class LeaveRepositoryImpl implements LeaveRepository {
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final dto = res.data?.leave;
-    if (dto == null || dto.id == 0) {
+    if (dto == null) {
       return ApiResponse.failure(
         NetworkException(
           type: NetworkErrorType.unknown,

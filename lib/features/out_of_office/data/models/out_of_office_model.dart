@@ -142,6 +142,7 @@ class CreateOutOfOfficeResponse {
   factory CreateOutOfOfficeResponse.fromJson(Map<String, dynamic> json) {
     final obj = _readMap(json, [
       'outOfOfficeCreated',
+      'outofofficeCreated',
       'newOutOfOffice',
       'createdOutOfOffice',
       'outofoffice',
@@ -174,6 +175,7 @@ class UpdateOutOfOfficeResponse {
   factory UpdateOutOfOfficeResponse.fromJson(Map<String, dynamic> json) {
     final obj = _readMap(json, [
       'outOfOfficeUpdated',
+      'outofofficeUpdated',
       'updatedOutOfOffice',
       'outofoffice',
       'data',
