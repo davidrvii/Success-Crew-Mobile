@@ -253,7 +253,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   Text(
                                     'Check In',
                                     style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.85),
+                                      color: Colors.white.withValues(alpha: a?.checkInAt == null ? 0.50 : 0.85),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -274,7 +274,7 @@ class _AttendancePageState extends State<AttendancePage> {
                                   Text(
                                     'Check Out',
                                     style: TextStyle(
-                                      color: Colors.white.withValues(alpha: 0.85),
+                                      color: Colors.white.withValues(alpha: a?.checkOutAt == null ? 0.50 : 0.85),
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),

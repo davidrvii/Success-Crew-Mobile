@@ -62,7 +62,7 @@ void registerOutOfOfficeDi(GetIt sl) {
   );
 
   // Controllers
-  sl.registerFactory<OutOfOfficeController>(
+  sl.registerLazySingleton<OutOfOfficeController>(
     () => OutOfOfficeController(
       getOutOfOfficeList: sl<GetOutOfOfficeListUseCase>(),
       createOutOfOffice: sl<CreateOutOfOfficeUseCase>(),

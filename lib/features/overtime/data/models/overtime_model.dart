@@ -35,7 +35,7 @@ class OvertimeDto {
 
   factory OvertimeDto.fromJson(Map<String, dynamic> json) {
     final userMap = json['user'] is Map<String, dynamic> ? json['user'] as Map<String, dynamic> : null;
-    final uName = userMap?['user_name'] as String? ?? json['user_name'] as String? ?? json['userName'] as String?;
+    final uName = userMap?['user_name'] as String? ?? json['user_name'] as String? ?? json['userName'] as String? ?? json['Crew'] as String?;
 
     return OvertimeDto(
       id: _readInt(json, ['overtime_id', 'id', 'overtimeId']) ?? 0,

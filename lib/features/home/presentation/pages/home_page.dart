@@ -2,7 +2,7 @@
 /// Generated Documentation for home_page.dart
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import '../../domain/entities/home_attendance_summary.dart';
 
 import '../../../../features/home/presentation/widgets/app_error_view.dart';
 import '../../../../core/widgets/home_shimmer_view.dart';
@@ -10,6 +10,8 @@ import '../../../../core/widgets/home_shimmer_view.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/home_owner_header_card.dart';
 import '../widgets/home_staff_header_card.dart';
+import '../../../../core/di/service_locator.dart';
+import '../../../attendance/presentation/controllers/attendance_controller.dart';
 
 /// Class representing `HomePage`.
 /// Auto-generated class documentation.
@@ -47,6 +49,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   /// Getter for `c` returning `HomeController`.
   HomeController get c => widget.controller;
+  bool _isLoadingAttendance = false;
 
   @override
   /// Method `initState` returning `void`.
@@ -76,6 +79,95 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  Future<void> _handleDirectAttendance() async {
+    final today = c.todayAbsence;
+    final bool hasCheckedIn = today != null && today.hasCheckedIn;
+    final bool hasCheckedOut = today is HomeTodayAbsenceCheckedIn && today.hasCheckedOut;
+
+    final canCheckIn = !hasCheckedIn;
+    final canCheckOut = hasCheckedIn && !hasCheckedOut;
+
+    if (!canCheckIn && !canCheckOut) {
+      return;
+    }
+
+    if (canCheckOut && DateTime.now().hour < 17) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Tidak dapat check out sebelum jam pulang"),
+          backgroundColor: Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoadingAttendance = true;
+    });
+
+    final messenger = ScaffoldMessenger.of(context);
+    final attController = sl<AttendanceController>();
+
+    try {
+      if (canCheckIn) {
+        await attController.checkIn();
+        if (attController.errorMessage != null) {
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(attController.errorMessage!),
+              backgroundColor: const Color(0xFFEF4444),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else {
+          messenger.showSnackBar(
+            const SnackBar(
+              content: Text("Berhasil melakukan check in"),
+              backgroundColor: Color(0xFF22C55E),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+          await c.refresh();
+        }
+      } else if (canCheckOut) {
+        await attController.checkOut();
+        if (attController.errorMessage != null) {
+          messenger.showSnackBar(
+            SnackBar(
+              content: Text(attController.errorMessage!),
+              backgroundColor: const Color(0xFFEF4444),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+        } else {
+          messenger.showSnackBar(
+            const SnackBar(
+              content: Text("Berhasil melakukan check out"),
+              backgroundColor: Color(0xFF22C55E),
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+          await c.refresh();
+        }
+      }
+    } catch (e) {
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text("Terjadi kesalahan: $e"),
+          backgroundColor: const Color(0xFFEF4444),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingAttendance = false;
+        });
+      }
+    }
+  }
+
   /// Method `_buildHeaderCard` returning `Widget`.
   /// Handles logic operations related to `_buildHeaderCard`.
   Widget _buildHeaderCard(bool isOwner) {
@@ -95,8 +187,9 @@ class _HomePageState extends State<HomePage> {
       unreadCount: c.unreadNotif,
       todayAbsence: c.todayAbsence,
       onTapNotifications: widget.onTapNotifications,
-      onTapCheckIn: widget.onTapCheckIn ?? () => context.go('/absence'),
+      onTapCheckIn: _handleDirectAttendance,
       onTapProfile: widget.onTapProfile,
+      isLoading: _isLoadingAttendance,
     );
   }
 

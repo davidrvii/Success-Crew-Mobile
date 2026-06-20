@@ -50,7 +50,7 @@ void registerLeaveDi(GetIt sl) {
   );
 
   // Controllers
-  sl.registerFactory<LeaveController>(
+  sl.registerLazySingleton<LeaveController>(
     () => LeaveController(
       getLeaveList: sl<GetLeaveListUseCase>(),
       getLeaveDetail: sl<GetLeaveDetailUseCase>(),

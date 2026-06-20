@@ -30,7 +30,7 @@ class OutOfOfficeDto {
 
   factory OutOfOfficeDto.fromJson(Map<String, dynamic> json) {
     final userMap = json['user'] is Map<String, dynamic> ? json['user'] as Map<String, dynamic> : null;
-    final uName = userMap?['user_name'] as String? ?? json['user_name'] as String? ?? json['userName'] as String?;
+    final uName = userMap?['user_name'] as String? ?? json['user_name'] as String? ?? json['userName'] as String? ?? json['Crew'] as String?;
 
     final startVal = _readDate(json, ['outofoffice_start', 'out_of_office_start', 'outofoffice_date', 'out_of_office_date', 'date']);
     final endVal = _readDate(json, ['outofoffice_end', 'out_of_office_end', 'outofoffice_date', 'out_of_office_date', 'date']);

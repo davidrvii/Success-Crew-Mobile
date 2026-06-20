@@ -224,22 +224,26 @@ class _OutOfOfficeFormPageState extends State<OutOfOfficeFormPage> {
                                   ),
                                   validator: (v) => v == null || v.isEmpty ? 'Wajib diisi' : null,
                                 ),
+                                const SizedBox(height: 24),
+                                ElevatedButton(
+                                  onPressed: c.isLoading ? null : _submit,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF1C5AA6),
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  child: c.isLoading
+                                      ? const CircularProgressIndicator(color: Colors.white)
+                                      : const Text(
+                                          'Kirim Pengajuan',
+                                          style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                                        ),
+                                ),
                               ],
                             ),
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: c.isLoading ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1C5AA6),
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                            ),
-                            child: c.isLoading
-                                ? const CircularProgressIndicator(color: Colors.white)
-                                : const Text(
-                                    'Kirim Pengajuan',
-                                    style: TextStyle(fontSize: 16, color: Colors.white),
-                                  ),
                           ),
                         ],
                       ),

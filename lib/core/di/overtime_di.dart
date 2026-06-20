@@ -59,7 +59,7 @@ void registerOvertimeDi(GetIt sl) {
   );
 
   // Controllers
-  sl.registerFactory<OvertimeController>(
+  sl.registerLazySingleton<OvertimeController>(
     () => OvertimeController(
       getOvertimeList: sl<GetOvertimeListUseCase>(),
       createOvertime: sl<CreateOvertimeUseCase>(),

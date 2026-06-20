@@ -34,6 +34,16 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
   }
 
   @override
+  void didUpdateWidget(OvertimeListPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        widget.controller.init();
+      });
+    }
+  }
+
+  @override
   /// Method `build` returning `Widget`.
   /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
@@ -125,8 +135,8 @@ class _OvertimeListPageState extends State<OvertimeListPage> {
               ? null
               : FloatingActionButton(
                   onPressed: () async {
-                    final reload = await context.push('/overtime-add');
-                    if (reload == true && mounted) {
+                    await context.push('/overtime-add');
+                    if (mounted) {
                       c.fetchOvertimes();
                     }
                   },
@@ -200,105 +210,171 @@ class _OvertimeCard extends StatelessWidget {
   const _OvertimeCard({required this.overtime, required this.controller});
 
   @override
-  /// Method `build` returning `Widget`.
-  /// Handles logic operations related to `build`.
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
+    final statusText = _getStatusText(overtime.status);
+    final statusColor = _getStatusColor(overtime.status);
+    final hasButtons = controller.isOwner && overtime.isPending;
+
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: ListTile(
-        title: Text(
-          overtime.overtimeDate != null
-              ? DateFormat('dd MMMM yyyy', 'id_ID').format(overtime.overtimeDate!)
-              : 'Tanggal Lembur',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.black.withValues(alpha: 0.05),
+          width: 1.2,
         ),
-        subtitle: Column(
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 4),
-            if (controller.isOwner) ...[
-              Text(
-                'Crew: ${overtime.userName ?? '-'}${overtime.userName != null ? '' : ' (ID: ${overtime.userId})'}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 4),
-            ],
-            Text('${overtime.startTime?.toString().substring(11, 16) ?? ''} s/d ${overtime.endTime?.toString().substring(11, 16) ?? ''}'),
-            const SizedBox(height: 4),
-            Text('Alasan: ${overtime.reason ?? '-'}'),
-            if (controller.isOwner && overtime.isPending) ...[
-              const SizedBox(height: 12),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    overtime.userName ?? 'Nama Crew',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                if (!hasButtons)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      statusText.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: statusColor,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _buildDetailRow('Tanggal Mulai', _formatDateTime(overtime.startTime)),
+            const SizedBox(height: 6),
+            _buildDetailRow('Tanggal Selesai', _formatDateTime(overtime.endTime)),
+            const SizedBox(height: 6),
+            _buildDetailRow('Keterangan', overtime.reason ?? '-'),
+            if (hasButtons) ...[
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  OutlinedButton(
+                  _buildCircleActionButton(
                     onPressed: () => _showConfirmDialog(context, false),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      side: const BorderSide(color: Colors.red),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text('Tolak'),
+                    icon: Icons.close,
+                    color: Colors.red,
                   ),
-                  const SizedBox(width: 8),
-                  ElevatedButton(
+                  const SizedBox(width: 16),
+                  _buildCircleActionButton(
                     onPressed: () => _showConfirmDialog(context, true),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: const Text('Terima'),
+                    icon: Icons.check,
+                    color: Colors.green,
                   ),
                 ],
               ),
             ],
           ],
         ),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          decoration: BoxDecoration(
-            color: _getStatusColor(overtime.status).withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            overtime.status?.toUpperCase() ?? 'PENDING',
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-              color: _getStatusColor(overtime.status),
-            ),
-          ),
-        ),
       ),
     );
   }
 
-  /// Method `_showConfirmDialog` returning `void`.
-  /// Handles logic operations related to `_showConfirmDialog`.
+  String _formatDateTime(DateTime? dateTime) {
+    if (dateTime == null) return '-';
+    return DateFormat('dd MMMM yyyy, HH:mm', 'id_ID').format(dateTime.toLocal());
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 120,
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+        const Text(
+          ' : ',
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Expanded(
+          child: Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCircleActionButton({
+    required VoidCallback onPressed,
+    required IconData icon,
+    required Color color,
+  }) {
+    return InkWell(
+      onTap: onPressed,
+      borderRadius: BorderRadius.circular(22),
+      child: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.12),
+          shape: BoxShape.circle,
+          border: Border.all(color: color, width: 1.5),
+        ),
+        child: Icon(icon, color: color, size: 20),
+      ),
+    );
+  }
+
   void _showConfirmDialog(BuildContext context, bool approve) {
     showDialog(
       context: context,
       builder: (dialogCtx) => AlertDialog(
-        title: Text(approve ? 'Terima Pengajuan' : 'Tolak Pengajuan'),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Text(approve ? 'Terima Pengajuan' : 'Tolak Pengajuan', style: const TextStyle(fontWeight: FontWeight.bold)),
         content: Text(approve
             ? 'Apakah Anda yakin ingin menyetujui pengajuan lembur ini?'
             : 'Apakah Anda yakin ingin menolak pengajuan lembur ini?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogCtx),
-            child: const Text('Batal'),
+            child: const Text('Batal', style: TextStyle(color: Colors.grey)),
           ),
           TextButton(
             onPressed: () async {
@@ -330,6 +406,17 @@ class _OvertimeCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _getStatusText(String? status) {
+    switch (status?.toLowerCase()) {
+      case 'approved':
+        return 'Diterima';
+      case 'rejected':
+        return 'Ditolak';
+      default:
+        return 'Pending';
+    }
   }
 
   Color _getStatusColor(String? status) {

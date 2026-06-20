@@ -154,10 +154,16 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
       return '$h:$m';
     }
 
+    final localOffset = DateTime.now().timeZoneOffset;
+    final hours = localOffset.inHours.abs().toString().padLeft(2, '0');
+    final minutes = (localOffset.inMinutes.abs() % 60).toString().padLeft(2, '0');
+    final sign = localOffset.isNegative ? '-' : '+';
+    final offsetStr = '$sign$hours:$minutes';
+
     final success = await widget.controller.submitOvertime(
       date: dateStr,
-      startTime: formatTime(_startTime!),
-      endTime: formatTime(_endTime!),
+      startTime: '${dateStr}T${formatTime(_startTime!)}:00$offsetStr',
+      endTime: '${dateStr}T${formatTime(_endTime!)}:00$offsetStr',
       reason: _reasonController.text.trim(),
     );
 
@@ -307,22 +313,26 @@ class _OvertimeFormPageState extends State<OvertimeFormPage> {
                                   ),
                                   validator: (v) => v == null || v.isEmpty ? 'Wajib diisi' : null,
                                 ),
+                                const SizedBox(height: 24),
+                                ElevatedButton(
+                                  onPressed: c.isLoading ? null : _submit,
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF1C5AA6),
+                                    padding: const EdgeInsets.symmetric(vertical: 16),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    elevation: 0,
+                                  ),
+                                  child: c.isLoading
+                                      ? const CircularProgressIndicator(color: Colors.white)
+                                      : const Text(
+                                          'Kirim Pengajuan',
+                                          style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+                                        ),
+                                ),
                               ],
                             ),
-                          ),
-                          const SizedBox(height: 24),
-                          ElevatedButton(
-                            onPressed: c.isLoading ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF1C5AA6),
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                            ),
-                            child: c.isLoading
-                                ? const CircularProgressIndicator(color: Colors.white)
-                                : const Text(
-                                    'Kirim Pengajuan',
-                                    style: TextStyle(fontSize: 16, color: Colors.white),
-                                  ),
                           ),
                         ],
                       ),
