@@ -145,11 +145,13 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
                                   const SizedBox(height: 8),
                                   Row(
                                     children: [
-                                      _buildStatCard('Dinas', c.outOfOfficeCount),
+                                      const Expanded(flex: 1, child: SizedBox()),
                                       const SizedBox(width: 8),
-                                      _buildStatCard('Cuti', c.leaveCount),
+                                      _buildStatCard('Dinas', c.outOfOfficeCount, flex: 2),
                                       const SizedBox(width: 8),
-                                      const Expanded(child: SizedBox()),
+                                      _buildStatCard('Cuti', c.leaveCount, flex: 2),
+                                      const SizedBox(width: 8),
+                                      const Expanded(flex: 1, child: SizedBox()),
                                     ],
                                   ),
                                 ],
@@ -283,11 +285,12 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
 
   /// Method `_buildStatCard` returning `Widget`.
   /// Handles logic operations related to `_buildStatCard`.
-  Widget _buildStatCard(String title, int count) {
+  Widget _buildStatCard(String title, int count, {int flex = 1}) {
     final isAlertLeave = title == 'Cuti' && count >= 16;
     final valueColor = isAlertLeave ? const Color(0xFFEF4444) : const Color(0xFF0F172A);
 
     return Expanded(
+      flex: flex,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(
@@ -337,15 +340,17 @@ class _CrewDetailPageState extends State<CrewDetailPage> {
     final statusLower = (h.status ?? '').toLowerCase().trim();
     Color statusColor;
     if (statusLower == 'tepat waktu' || statusLower == 'hadir') {
-      statusColor = const Color(0xFF22C55E); // Green
+      statusColor = const Color(0xFF1C85E8); // Biru (hadir)
     } else if (statusLower == 'telat') {
-      statusColor = const Color(0xFFFACC15); // Yellow
-    } else if (statusLower == 'cuti') {
-      statusColor = const Color(0xFF3B82F6); // Blue
-    } else if (statusLower == 'tidak hadir') {
-      statusColor = const Color(0xFFEF4444); // Red
+      statusColor = const Color(0xFFFACC15); // Kuning (telat)
     } else if (statusLower == 'lembur') {
-      statusColor = const Color(0xFFF97316); // Orange
+      statusColor = const Color(0xFF22C55E); // Hijau (lembur)
+    } else if (statusLower == 'dinas') {
+      statusColor = const Color(0xFFF97316); // Orange (dinas)
+    } else if (statusLower == 'cuti') {
+      statusColor = const Color(0xFFEF4444); // Merah (cuti)
+    } else if (statusLower == 'tidak hadir') {
+      statusColor = const Color(0xFFEF4444); // Merah (tidak hadir)
     } else {
       statusColor = const Color(0xFF64748B); // Fallback gray
     }

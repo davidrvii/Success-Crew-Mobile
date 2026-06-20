@@ -43,7 +43,7 @@ class App extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: 'Attendance App',
+        title: 'Success Crew',
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,
         themeMode: ThemeMode.light, // Di-force ke light mode karena background screen di-hardcode putih/terang

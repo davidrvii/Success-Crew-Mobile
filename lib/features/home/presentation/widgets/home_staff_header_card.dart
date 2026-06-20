@@ -120,12 +120,12 @@ class HomeStaffHeaderCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                _IconChip(
-                  icon: Icons.notifications_none_rounded,
-                  badge: unreadCount > 0 ? unreadCount : null,
-                  onTap: onTapNotifications,
-                ),
-                const SizedBox(width: 8),
+                // _IconChip(
+                //   icon: Icons.notifications_none_rounded,
+                //   badge: unreadCount > 0 ? unreadCount : null,
+                //   onTap: onTapNotifications,
+                // ),
+                // const SizedBox(width: 8),
                 _IconChip(
                   icon: Icons.person_outline_rounded,
                   onTap: onTapProfile,

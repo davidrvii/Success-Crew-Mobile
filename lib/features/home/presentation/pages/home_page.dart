@@ -202,7 +202,7 @@ class _HomePageState extends State<HomePage> {
             child: _RequestPill(
               title: 'Dinas',
               count: c.pendingOutOfOffice,
-              background: const Color(0xFF3B82F6), // Blue
+              background: const Color(0xFFF97316), // Orange
               onTap: widget.onTapOutOfOffice,
             ),
           ),
@@ -256,7 +256,7 @@ class _HomePageState extends State<HomePage> {
             child: _RequestPill(
               title: 'Dinas',
               count: c.pendingOutOfOffice,
-              background: const Color(0xFF3B82F6), // Blue
+              background: const Color(0xFFF97316), // Orange
               onTap: widget.onTapOutOfOffice,
             ),
           ),
@@ -603,11 +603,13 @@ class _OwnerAttendanceCard extends StatelessWidget {
         // Row 2: Displays auxiliary attendance types (Dinas, Cuti) with alignment spacer
         Row(
           children: [
-            _buildStatCard('Dinas', outOfOffice),
+            const Expanded(flex: 1, child: SizedBox()),
             const SizedBox(width: 8),
-            _buildStatCard('Cuti', leave),
+            _buildStatCard('Dinas', outOfOffice, flex: 2),
             const SizedBox(width: 8),
-            const Expanded(child: SizedBox()), // Empty spacer to balance layout grid
+            _buildStatCard('Cuti', leave, flex: 2),
+            const SizedBox(width: 8),
+            const Expanded(flex: 1, child: SizedBox()),
           ],
         ),
       ],
@@ -616,11 +618,12 @@ class _OwnerAttendanceCard extends StatelessWidget {
 
   /// Method `_buildStatCard` returning `Widget`.
   /// Handles logic operations related to `_buildStatCard`.
-  Widget _buildStatCard(String title, int count) {
+  Widget _buildStatCard(String title, int count, {int flex = 1}) {
     final isAlertLeave = title == 'Cuti' && count >= 16;
     final valueColor = isAlertLeave ? const Color(0xFFEF4444) : const Color(0xFF0F172A);
 
     return Expanded(
+      flex: flex,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 14),
         decoration: BoxDecoration(

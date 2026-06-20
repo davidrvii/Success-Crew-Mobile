@@ -46,12 +46,12 @@ class HomeOwnerHeaderCard extends StatelessWidget {
             child: _HeaderIdentity(name: name, role: role),
           ),
           const SizedBox(width: 12),
-          _IconChip(
-            icon: Icons.notifications_none_rounded,
-            badge: unreadCount > 0 ? unreadCount : null,
-            onTap: onTapNotifications,
-          ),
-          const SizedBox(width: 10),
+          // _IconChip(
+          //   icon: Icons.notifications_none_rounded,
+          //   badge: unreadCount > 0 ? unreadCount : null,
+          //   onTap: onTapNotifications,
+          // ),
+          // const SizedBox(width: 10),
           _IconChip(icon: Icons.person_outline_rounded, onTap: onTapProfile),
         ],
       ),
