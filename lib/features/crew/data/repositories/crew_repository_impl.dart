@@ -66,70 +66,18 @@ class CrewRepositoryImpl implements CrewRepository {
     final res = await _remote.getCrewAttendanceHistory(userId);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
-    final items = res.data?.data?.attendance ?? const <AttendanceDto>[];
+    final data = res.data?.data;
+    final items = data?.attendance ?? const <AttendanceDto>[];
     final mapped = items.map(_mapDtoToEntity).toList();
-
-    // Calculate stats filtered by the current calendar year
-    final now = DateTime.now();
-    final currentYear = now.year;
-
-    final currentYearEntries = mapped.where((a) {
-      if (a.attendanceDate == null) return false;
-      return a.attendanceDate!.toLocal().year == currentYear;
-    }).toList();
-
-    final actualPresentCount = currentYearEntries.where((a) {
-      final statusLower = (a.status ?? '').toLowerCase().trim();
-      return a.checkInAt != null && statusLower != 'tidak hadir';
-    }).length;
-
-    final lateCount = currentYearEntries.where((a) {
-      final statusLower = (a.status ?? '').toLowerCase().trim();
-      return statusLower == 'telat';
-    }).length;
-
-    final overtimeCount = currentYearEntries.fold<int>(0, (sum, a) {
-      final ot = a.overtime ?? 0;
-      if (ot > 0) return sum + ot;
-
-      // Fallback
-      if (a.checkInAt == null || a.checkOutAt == null) return sum;
-      final diff = a.checkOutAt!.difference(a.checkInAt!);
-      final hours = diff.inHours;
-      final calcOt = hours > 8 ? hours - 8 : 0;
-      return sum + calcOt;
-    });
-
-    int leaveCount = 0;
-    int outOfOfficeCount = 0;
-
-    final historyList = res.data?.data?.history;
-    if (historyList != null) {
-      for (final h in historyList) {
-        if (h.date != null && h.date!.toLocal().year == currentYear) {
-          final statusLower = (h.status ?? '').toLowerCase().trim();
-          final isApproved = statusLower == 'approved' || statusLower == 'diterima';
-          if (isApproved) {
-            if (h.type == 'leave') {
-              leaveCount++;
-            } else if (h.type == 'out_of_office') {
-              outOfOfficeCount++;
-            }
-          }
-        }
-      }
-    }
-
-    final presentCount = actualPresentCount + outOfOfficeCount;
 
     return ApiResponse.success(
       AttendanceHistoryData(
         history: mapped,
-        presentCount: presentCount,
-        lateCount: lateCount,
-        leaveCount: leaveCount,
-        overtimeCount: overtimeCount,
-        outOfOfficeCount: outOfOfficeCount,
+        presentCount: data?.totalAttendance ?? 0,
+        lateCount: data?.totalLate ?? 0,
+        leaveCount: data?.totalLeave ?? 0,
+        overtimeCount: data?.totalOvertime ?? 0,
+        outOfOfficeCount: data?.totalOutOfOffice ?? 0,
       ),
     );
   }
