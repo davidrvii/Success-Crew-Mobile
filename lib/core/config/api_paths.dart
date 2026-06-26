@@ -44,6 +44,7 @@ class ApiPaths {
   static const String attendanceCheckOut = '/attendance/checkout';
 
   static String attendanceCrew(int userId) => '/attendance/crew/$userId';
+  static String attendanceCrewSummary(int userId) => '/attendance/crew/summary/$userId';
   static String attendanceDetail(int id) => '/attendance/detail/$id';
   static String attendanceUpdate(int id) => '/attendance/update/$id';
   static String attendanceDelete(int id) => '/attendance/delete/$id';

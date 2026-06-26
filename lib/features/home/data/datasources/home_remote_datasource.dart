@@ -114,7 +114,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   /// Handles logic operations related to `getAttendanceCrew`.
   Future<ApiResponse<HomeAttendanceResponse>> getAttendanceCrew(int userId) {
     return _get(
-      path: ApiPaths.attendanceCrew(userId),
+      path: ApiPaths.attendanceCrewSummary(userId),
       parser: HomeAttendanceResponse.fromJson,
     );
   }
