@@ -61,7 +61,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
     // Determine action text, button color, and clickability depending on status:
     // 1. Not checked in: 'Check In', Red, Clickable.
     // 2. Checked in: 'Check Out', Green, Clickable.
-    // 3. Checked out: 'Selesai', Grey, Clickable disabled (unclickable).
+    // 3. Checked out: 'Done', Grey, Clickable disabled (unclickable).
     Color btnColor = const Color(0xFFEF4444); // Red initially
     bool isClickable = true;
 
@@ -81,7 +81,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        // ─── Rounded Rectangle 2: Bottom Card (biru muda, dibelakang) ───
+        // ─── Rounded Rectangle 2: Bottom Card (light blue, behind) ───
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
@@ -110,7 +110,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
                       checkInStr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: hasCheckIn ? 1.0 : 0.5),
-                        fontSize: 22,
+                        fontSize: 20,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -127,12 +127,12 @@ class HomeStaffHeaderCard extends StatelessWidget {
                         checkOutStr,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: hasCheckOut ? 1.0 : 0.5),
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
-                    // Absen Fingerprint Button (rounded rectangle, pressed 3s)
+                    // Attendance Fingerprint Button (rounded rectangle, hold for 3s)
                     IgnorePointer(
                       ignoring: !isClickable || isLoading,
                       child: HoldToActionButton(
@@ -177,7 +177,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
           ),
         ),
 
-        // ─── Rounded Rectangle 1: Top Card (biru tema, didepan) ───
+        // ─── Rounded Rectangle 1: Top Card (theme blue, in front) ───
         Positioned(
           left: 0,
           right: 0,

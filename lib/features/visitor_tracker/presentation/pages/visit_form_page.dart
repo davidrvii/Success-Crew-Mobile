@@ -32,7 +32,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
   final _companyController = TextEditingController(); // perusahaan/instansi
   final _notesController = TextEditingController(); // catatan kunjungan 
   final _interestController = TextEditingController(); // interest pengunjung 
-  final _visitSalesController = TextEditingController(); // visit sales 
+  final _visitSalesController = TextEditingController(); // sales 
 
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
@@ -412,14 +412,14 @@ class _VisitFormPageState extends State<VisitFormPage> {
                             ),
                             const SizedBox(height: 16),
 
-                            // Visit Sales (default logged in user)
+                            // Sales (default logged in user)
                             TextFormField(
                               controller: _visitSalesController,
                               decoration: const InputDecoration(
-                                labelText: 'Visit Sales',
+                                labelText: 'Sales',
                                 border: OutlineInputBorder(),
                               ),
-                              validator: (v) => v == null || v.trim().isEmpty ? 'Visit sales wajib diisi' : null,
+                              validator: (v) => v == null || v.trim().isEmpty ? 'Sales wajib diisi' : null,
                             ),
                             const SizedBox(height: 32),
 
