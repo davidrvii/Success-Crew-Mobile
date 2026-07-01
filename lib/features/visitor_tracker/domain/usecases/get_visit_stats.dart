@@ -13,7 +13,7 @@ class GetVisitStatsUseCase {
 
   /// Method `call` returning `Future<ApiResponse<VisitStats>>`.
   /// Handles logic operations related to `call`.
-  Future<ApiResponse<VisitStats>> call() {
-    return _repo.getVisitStats();
+  Future<ApiResponse<VisitStats>> call({String? location}) {
+    return _repo.getVisitStats(location: location);
   }
 }

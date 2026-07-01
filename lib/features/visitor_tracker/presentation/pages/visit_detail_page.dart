@@ -637,7 +637,8 @@ class _VisitSummaryCard extends StatelessWidget {
         _RowText(label: 'Tanggal', value: date),
         _RowText(label: 'Jam datang', value: time),
         _RowText(label: 'Status kunjungan', value: status),
-        _RowText(label: 'Visit Sales', value: v?.visitSales ?? '-'),
+        _RowText(label: 'Sales', value: v?.visitSales ?? '-'),
+        _RowText(label: 'Toko', value: v?.visitLocation ?? '-'),
       ],
     );
   }

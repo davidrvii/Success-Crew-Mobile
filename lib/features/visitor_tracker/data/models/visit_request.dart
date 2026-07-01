@@ -19,6 +19,7 @@ class VisitRequest {
   final String? visitDesc;
   final DateTime? createdAt;
   final String? visitSales;
+  final String? visitLocation;
 
   const VisitRequest({
     this.userId,
@@ -33,6 +34,7 @@ class VisitRequest {
     this.visitDesc,
     this.createdAt,
     this.visitSales,
+    this.visitLocation,
   });
 
   Map<String, dynamic> toJson() {
@@ -70,6 +72,9 @@ class VisitRequest {
     if (visitSales != null) {
       data['visit_sales'] = visitSales;
       data['sales_name'] = visitSales;
+    }
+    if (visitLocation != null) {
+      data['visit_location'] = visitLocation;
     }
 
     return data;

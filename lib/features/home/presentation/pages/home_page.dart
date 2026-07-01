@@ -193,6 +193,46 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildLocationFilter() {
+    return PopupMenuButton<String>(
+      initialValue: c.selectedLocation,
+      onSelected: (String loc) {
+        c.changeLocation(loc);
+      },
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        const PopupMenuItem<String>(value: 'Semua', child: Text('Semua')),
+        const PopupMenuItem<String>(value: 'Bogor', child: Text('Bogor')),
+        const PopupMenuItem<String>(value: 'Cibubur', child: Text('Cibubur')),
+      ],
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.black.withValues(alpha: 0.1),
+            width: 1,
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              c.selectedLocation,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF475569),
+              ),
+            ),
+            const SizedBox(width: 4),
+            const Icon(Icons.arrow_drop_down, size: 16, color: Color(0xFF475569)),
+          ],
+        ),
+      ),
+    );
+  }
+
   /// Method `_buildVisitorCharts` returning `List<Widget>`.
   /// Handles logic operations related to `_buildVisitorCharts`.
   List<Widget> _buildVisitorCharts() {
@@ -266,7 +306,13 @@ class _HomePageState extends State<HomePage> {
   /// Handles logic operations related to `_buildOwnerContent`.
   List<Widget> _buildOwnerContent() {
     return [
-      const _SectionTitle('Kinerja Minggu Ini'),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const _SectionTitle('Kinerja Minggu Ini'),
+          _buildLocationFilter(),
+        ],
+      ),
       const SizedBox(height: 12),
       _OwnerSummaryGrid(
         visitorsToday: c.visitorsToday,
@@ -320,7 +366,13 @@ class _HomePageState extends State<HomePage> {
   /// Handles logic operations related to `_buildStaffContent`.
   List<Widget> _buildStaffContent() {
     return [
-      const _SectionTitle('Kinerja Minggu Ini'),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const _SectionTitle('Kinerja Minggu Ini'),
+          _buildLocationFilter(),
+        ],
+      ),
       const SizedBox(height: 12),
       _OwnerSummaryGrid(
         visitorsToday: c.visitorsToday,

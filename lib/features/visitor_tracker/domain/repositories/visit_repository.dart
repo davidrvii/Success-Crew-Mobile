@@ -27,7 +27,7 @@ abstract class VisitRepository {
   Future<ApiResponse<List<Visit>>> getVisitList();
   /// Method `getVisitStats` returning `Future<ApiResponse<VisitStats>>`.
   /// Handles logic operations related to `getVisitStats`.
-  Future<ApiResponse<VisitStats>> getVisitStats();
+  Future<ApiResponse<VisitStats>> getVisitStats({String? location});
   /// Method `getVisitDetail` returning `Future<ApiResponse<Visit>>`.
   /// Handles logic operations related to `getVisitDetail`.
   Future<ApiResponse<Visit>> getVisitDetail(int visitId);

@@ -24,6 +24,7 @@ class Visit {
   final String? visitType;
   final String? visitSales;
   final String? visitDesc;
+  final String? visitLocation;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -46,6 +47,7 @@ class Visit {
     this.visitType,
     this.visitSales,
     this.visitDesc,
+    this.visitLocation,
     this.createdAt,
     this.updatedAt,
     this.followUps,

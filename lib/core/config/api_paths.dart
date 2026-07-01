@@ -84,6 +84,8 @@ class ApiPaths {
   static const String visitAll = '/visit/all';
   static const String visitList = '/visit/list';
   static const String visitStats = '/visit/stats';
+  static const String visitStatsBogor = '/visit/stats/bogor';
+  static const String visitStatsCibubur = '/visit/stats/cibubur';
   static const String visitAdd = '/visit/add';
 
   // ─── VISITOR ROUTES (/visitor) ───

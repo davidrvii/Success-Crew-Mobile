@@ -83,11 +83,16 @@ flutter_launcher_icons:
   remove_alpha_ios: true
 
 flutter_native_splash:
-  color: "#0037A0"
-  image: "assets/icon/icon.png"
+  color: "#0238A4"
+  image: "assets/icon/splash.png"
   android: true
   ios: true
   fullscreen: true
+
+  android_12:
+    color: "#0238A4"
+    image: "assets/icon/splash.png"
+    icon_background_color: "#0238A4"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

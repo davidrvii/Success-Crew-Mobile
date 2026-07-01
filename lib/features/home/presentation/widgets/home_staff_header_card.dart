@@ -110,7 +110,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
                       checkInStr,
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: hasCheckIn ? 1.0 : 0.5),
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -127,7 +127,7 @@ class HomeStaffHeaderCard extends StatelessWidget {
                         checkOutStr,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: hasCheckOut ? 1.0 : 0.5),
-                          fontSize: 20,
+                          fontSize: 18,
                           fontWeight: FontWeight.w500,
                         ),
                       ),

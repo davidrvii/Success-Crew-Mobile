@@ -41,6 +41,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
   String _selectedMethod = 'Walk In';
   int? _userId;
   int? _selectedVisitorId;
+  String? _selectedLocation = 'Bogor';
 
   @override
   /// Method `initState` returning `void`.
@@ -139,6 +140,7 @@ class _VisitFormPageState extends State<VisitFormPage> {
       userId: _userId,
       visitorId: _selectedVisitorId,
       visitSales: _visitSalesController.text.trim(),
+      visitLocation: _selectedLocation,
     );
 
     if (success && mounted) {
@@ -413,15 +415,34 @@ class _VisitFormPageState extends State<VisitFormPage> {
                             const SizedBox(height: 16),
 
                             // Sales (default logged in user)
-                            TextFormField(
-                              controller: _visitSalesController,
-                              decoration: const InputDecoration(
-                                labelText: 'Sales',
-                                border: OutlineInputBorder(),
-                              ),
-                              validator: (v) => v == null || v.trim().isEmpty ? 'Sales wajib diisi' : null,
-                            ),
-                            const SizedBox(height: 32),
+                             TextFormField(
+                               controller: _visitSalesController,
+                               decoration: const InputDecoration(
+                                 labelText: 'Sales',
+                                 border: OutlineInputBorder(),
+                               ),
+                               validator: (v) => v == null || v.trim().isEmpty ? 'Sales wajib diisi' : null,
+                             ),
+                             const SizedBox(height: 16),
+
+                             DropdownButtonFormField<String>(
+                               value: _selectedLocation,
+                               decoration: const InputDecoration(
+                                 labelText: 'Lokasi Toko',
+                                 border: OutlineInputBorder(),
+                               ),
+                               items: const [
+                                 DropdownMenuItem(value: 'Bogor', child: Text('Bogor')),
+                                 DropdownMenuItem(value: 'Cibubur', child: Text('Cibubur')),
+                               ],
+                               onChanged: (val) {
+                                 setState(() {
+                                   _selectedLocation = val;
+                                 });
+                               },
+                               validator: (v) => v == null || v.isEmpty ? 'Lokasi toko wajib diisi' : null,
+                             ),
+                             const SizedBox(height: 32),
 
                             ElevatedButton(
                               onPressed: c.isLoading ? null : _submit,

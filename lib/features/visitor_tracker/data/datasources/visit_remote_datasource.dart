@@ -29,7 +29,7 @@ abstract class VisitRemoteDataSource {
   Future<ApiResponse<VisitListResponse>> getVisitList();
   /// Method `getVisitStats` returning `Future<ApiResponse<VisitStatsResponse>>`.
   /// Handles logic operations related to `getVisitStats`.
-  Future<ApiResponse<VisitStatsResponse>> getVisitStats();
+  Future<ApiResponse<VisitStatsResponse>> getVisitStats({String? location});
   /// Method `getVisitDetail` returning `Future<ApiResponse<VisitDetailResponse>>`.
   /// Handles logic operations related to `getVisitDetail`.
   Future<ApiResponse<VisitDetailResponse>> getVisitDetail(int visitId);
@@ -228,9 +228,14 @@ class VisitRemoteDataSourceImpl implements VisitRemoteDataSource {
   @override
   /// Method `getVisitStats` returning `Future<ApiResponse<VisitStatsResponse>>`.
   /// Handles logic operations related to `getVisitStats`.
-  Future<ApiResponse<VisitStatsResponse>> getVisitStats() {
+  Future<ApiResponse<VisitStatsResponse>> getVisitStats({String? location}) {
+    final path = location == 'bogor'
+        ? ApiPaths.visitStatsBogor
+        : location == 'cibubur'
+            ? ApiPaths.visitStatsCibubur
+            : ApiPaths.visitStats;
     return ApiResponse.guard(
-      request: () => _client.get(ApiPaths.visitStats),
+      request: () => _client.get(path),
       parser: (json) =>
           VisitStatsResponse.fromJson(json as Map<String, dynamic>),
     );

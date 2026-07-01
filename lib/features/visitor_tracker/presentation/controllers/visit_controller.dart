@@ -95,6 +95,7 @@ class VisitorController extends ChangeNotifier {
     required int? userId,
     int? visitorId,
     String? visitSales,
+    String? visitLocation,
   }) async {
     isLoading = true;
     errorMessage = null;
@@ -113,6 +114,7 @@ class VisitorController extends ChangeNotifier {
       visitDesc: visitDesc,
       createdAt: createdAt,
       visitSales: visitSales,
+      visitLocation: visitLocation,
     );
 
     final res = await _createVisit(req);

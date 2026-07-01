@@ -60,6 +60,7 @@ class VisitRepositoryImpl implements VisitRepository {
     visitType: m.visitType,
     visitDesc: m.visitDesc,
     visitSales: m.visitSales,
+    visitLocation: m.visitLocation,
     createdAt: m.createdAt,
     updatedAt: m.updatedAt,
     followUps: m.followUps?.map((f) => _mapFollowUp(f, m.visitId)).toList(),
@@ -174,8 +175,8 @@ class VisitRepositoryImpl implements VisitRepository {
   @override
   /// Method `getVisitStats` returning `Future<ApiResponse<VisitStats>>`.
   /// Handles logic operations related to `getVisitStats`.
-  Future<ApiResponse<VisitStats>> getVisitStats() async {
-    final res = await _remote.getVisitStats();
+  Future<ApiResponse<VisitStats>> getVisitStats({String? location}) async {
+    final res = await _remote.getVisitStats(location: location);
     if (!res.isSuccess) return ApiResponse.failure(res.error!);
 
     final statsModel = res.data?.stats;

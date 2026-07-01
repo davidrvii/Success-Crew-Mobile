@@ -26,6 +26,7 @@ class VisitModel {
   final String? visitType;
   final String? visitDesc;
   final String? visitSales;
+  final String? visitLocation;
 
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -48,6 +49,7 @@ class VisitModel {
     this.visitType,
     this.visitDesc,
     this.visitSales,
+    this.visitLocation,
     this.createdAt,
     this.updatedAt,
     this.followUps,
@@ -72,6 +74,7 @@ class VisitModel {
       visitType: json['visit_type'] as String?,
       visitDesc: json['visit_desc'] as String?,
       visitSales: json['visit_sales'] as String? ?? json['sales_name'] as String? ?? json['user_name'] as String?,
+      visitLocation: json['visit_location'] as String?,
       createdAt: _dt(json['created_at']),
       updatedAt: _dt(json['updated_at']),
       followUps: (json['Follow UP'] as List?)

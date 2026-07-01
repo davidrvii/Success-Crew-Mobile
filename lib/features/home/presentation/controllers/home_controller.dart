@@ -58,6 +58,10 @@ class HomeController extends ChangeNotifier {
   /// Getter for `isInitialLoading` returning `bool`.
   bool get isInitialLoading => _isLoading && (_summary == null || _visitStats == null);
 
+  String _selectedLocation = 'Semua';
+  /// Getter for `selectedLocation` returning `String`.
+  String get selectedLocation => _selectedLocation;
+
   int _requestToken = 0;
 
   /// Method `init` returning `Future<void>`.
@@ -78,7 +82,7 @@ class HomeController extends ChangeNotifier {
 
     final results = await Future.wait([
       _getHomeSummaryUseCase(),
-      _getVisitStatsUseCase(),
+      _getVisitStatsUseCase(location: _selectedLocation == 'Semua' ? null : _selectedLocation.toLowerCase()),
     ]);
 
     if (myToken != _requestToken) return;
@@ -114,7 +118,7 @@ class HomeController extends ChangeNotifier {
 
     final results = await Future.wait([
       _refreshHomeSummaryUseCase(),
-      _getVisitStatsUseCase(),
+      _getVisitStatsUseCase(location: _selectedLocation == 'Semua' ? null : _selectedLocation.toLowerCase()),
     ]);
 
     if (myToken != _requestToken) return;
@@ -139,6 +143,32 @@ class HomeController extends ChangeNotifier {
   /// Method `retry` returning `Future<void>`.
   /// Handles logic operations related to `retry`.
   Future<void> retry() => load();
+
+  /// Method `changeLocation` returning `Future<void>`.
+  /// Handles logic operations related to `changeLocation`.
+  Future<void> changeLocation(String location) async {
+    if (_selectedLocation == location) return;
+    _selectedLocation = location;
+    notifyListeners();
+
+    final myToken = ++_requestToken;
+    _setLoading(true);
+    _setError(null);
+
+    final res = await _getVisitStatsUseCase(
+      location: location == 'Semua' ? null : location.toLowerCase(),
+    );
+
+    if (myToken != _requestToken) return;
+
+    if (res.isSuccess) {
+      _visitStats = res.data;
+      _setError(null);
+    } else {
+      _setError(res.error);
+    }
+    _setLoading(false);
+  }
 
   /// Method `clearError` returning `void`.
   /// Handles logic operations related to `clearError`.
